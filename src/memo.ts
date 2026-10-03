@@ -7,5 +7,5 @@ export function requiresMemo(state: AccountState): boolean {
   if (!state.exists) return false;
   const raw = state.data[MEMO_REQUIRED_KEY];
   if (raw === undefined) return false;
-  return Buffer.from(raw, "base64").toString("utf8") === "1";
+  return atob(raw) === "1";
 }

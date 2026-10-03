@@ -57,7 +57,16 @@
 
           <div class="actions">
             <button type="submit" class="button button-primary" id="check-button">Check address</button>
-            <button type="button" class="button button-quiet" id="example">Try an exchange deposit address</button>
+          </div>
+
+          <div class="presets">
+            <span class="presets-label">Try an example:</span>
+            <div class="preset-group">
+              <button type="button" class="preset-chip" data-preset="binance">Binance (needs memo)</button>
+              <button type="button" class="preset-chip" data-preset="smart-wallet">Smart wallet to exchange</button>
+              <button type="button" class="preset-chip" data-preset="trustline">Missing trustline</button>
+              <button type="button" class="preset-chip" data-preset="federation">Federation address</button>
+            </div>
           </div>
         </form>
       </section>
@@ -78,7 +87,117 @@
           <h3>A smart wallet cannot add a memo</h3>
           <p>Passkey wallets pay through smart contracts, and those payments have no memo field. Sending from one to an exchange that needs a memo is likely to go missing. Stellagate tells you to send from a regular account instead, or to use the exchange's M-address if it offers one.</p>
         </div>
-        <p class="developers">Building a wallet? The same checks are an open-source TypeScript library. <a href="{{repo}}">Read the code and the evidence</a>.</p>
+      </section>
+
+      <section class="gap">
+        <h2>The memo gap</h2>
+        <div class="stat-card">
+          <p class="stat-number">87%</p>
+          <p class="stat-label">of memo-required exchange accounts do not set the SEP-29 flag on chain.</p>
+        </div>
+        <p>Most exchanges never set it. A survey of 107 pooled deposit accounts tagged as memo-required across the public directory showed that 93 major services, including Binance, Kraken, Bitstamp, and Coinbase Deposits, never configure the SEP-29 flag on chain. Funds sit uncredited. A wallet checking only the on-chain flag misses almost all of them. Stellagate combines SEP-29 on-chain data, the public directory, and SEP-2 federation lookup into a single send-time check.</p>
+      </section>
+
+      <section class="evidence">
+        <h2>Verified on testnet</h2>
+        <p class="section-intro">We ran each scenario through Stellagate, and then we attempted the payment on the network anyway. Every block verdict matched a payment the network refused. That is the point. The one exception is an uninitialised contract address, where the network accepted the transfer and left the tokens stranded. Stellagate blocks that before you send.</p>
+
+        <div class="table-wrap">
+          <table class="evidence-table">
+            <thead>
+              <tr>
+                <th scope="col">Scenario</th>
+                <th scope="col">Stellagate</th>
+                <th scope="col">Network result</th>
+                <th scope="col">Transaction</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SEP-29 account, memo given</td>
+                <td><span class="badge badge-go">ok</span></td>
+                <td>Payment accepted</td>
+                <td><a href="https://stellar.expert/explorer/testnet/tx/0413d6019e269dfc59450238f9df62998f26ce48e490c5d047147c08159490d1" target="_blank" rel="noopener">0413d601</a></td>
+              </tr>
+              <tr>
+                <td>Missing trustline for asset</td>
+                <td><span class="badge badge-stop">block</span></td>
+                <td><code>tx_failed, op_no_trust</code></td>
+                <td><a href="https://stellar.expert/explorer/testnet/tx/d7f807caff09093a48f48146584a84127a1e71995d3a0d3df105f667220021f2" target="_blank" rel="noopener">d7f807ca</a></td>
+              </tr>
+              <tr>
+                <td>Over trustline limit</td>
+                <td><span class="badge badge-stop">block</span></td>
+                <td><code>tx_failed, op_line_full</code></td>
+                <td><a href="https://stellar.expert/explorer/testnet/tx/b88d4025cecdb1afdb87c272ed408540fe5aa3c2c72d3e0dc596397908a001ad" target="_blank" rel="noopener">b88d4025</a></td>
+              </tr>
+              <tr>
+                <td>Trustline not authorised by issuer</td>
+                <td><span class="badge badge-stop">block</span></td>
+                <td><code>tx_failed, op_not_authorized</code></td>
+                <td><a href="https://stellar.expert/explorer/testnet/tx/21a37b87d6e1cc0e8e5b3cb8538d8aebd63ea3d5573113f4ab16e6841024bb5f" target="_blank" rel="noopener">21a37b87</a></td>
+              </tr>
+              <tr>
+                <td>Unfunded account, classic asset</td>
+                <td><span class="badge badge-stop">block</span></td>
+                <td><code>tx_failed, op_no_destination</code></td>
+                <td><a href="https://stellar.expert/explorer/testnet/tx/e7ab5249133ce061213c3d8eebe0101ec64066415fdba46d9d49aa57e08370d5" target="_blank" rel="noopener">e7ab5249</a></td>
+              </tr>
+              <tr>
+                <td>Contract address with nothing deployed</td>
+                <td><span class="badge badge-stop">block</span></td>
+                <td>Accepted, tokens stranded</td>
+                <td><a href="https://stellar.expert/explorer/testnet/tx/301a734ca54956b7274211f8592f60b451e4b25bee33b8fab18faab676653740" target="_blank" rel="noopener">301a734c</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">All 15 scenarios and 22 transaction hashes are documented in the repository. Reproduce them anytime with <code>node scripts/testnet-evidence.mjs</code>.</p>
+      </section>
+
+      <section class="developers">
+        <h2>For wallet and dapp developers</h2>
+        <p class="section-intro">Run the check before transaction building. Stellagate returns a status, machine-readable reason codes, and plain-language fixes you can present directly in your send flow.</p>
+
+        <div class="code-block-wrap">
+          <div class="code-block-header">
+            <span class="code-lang">TypeScript</span>
+          </div>
+          <pre class="code-block"><code>import { check } from "@stellagate/core";
+
+const verdict = await check({
+  to: "GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6",
+  from: "CC2BO6ZMFVILIJVGW777H3HB4GUKWQ7E5Y4NODWJXTIJBDKHLKPWSN4C",
+  asset: "native",
+  network: "public",
+});
+
+if (verdict.status === "block") {
+  // Stop flow and show verdict.reasons[0].message and .fix
+}</code></pre>
+        </div>
+
+        <div class="verdict-guide">
+          <div class="guide-item">
+            <span class="badge badge-stop">block</span>
+            <p>Stop the payment when blocked. The transaction will fail on chain, or arrive at a pooled exchange account where funds cannot be credited.</p>
+          </div>
+          <div class="guide-item">
+            <span class="badge badge-caution">warn</span>
+            <p>Confirm on warnings. The account needs funding first, or a contract is paying a muxed address that some exchanges do not credit yet.</p>
+          </div>
+          <div class="guide-item">
+            <span class="badge badge-go">ok</span>
+            <p>Safe to proceed. Destination exists, memo requirements are met, and the address can hold the asset.</p>
+          </div>
+        </div>
+
+        <p class="code-note">Building a wallet? The core library is open source. <a href="{{repo}}">Read the repository and full evidence</a>.</p>
+      </section>
+
+      <section class="security">
+        <h2>Client-side only, zero servers</h2>
+        <p>Every check runs in your browser. Stellagate makes direct HTTPS calls to public Horizon servers, Stellar RPC nodes, and public directory endpoints. We run no server of our own. Secret keys are detected on paste and wiped from the input immediately. They never reach the network or the browser address bar.</p>
       </section>
     </main>
     <!--footer-->

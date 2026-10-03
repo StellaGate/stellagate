@@ -8,7 +8,35 @@ import { initNotice } from "./notice.ts";
 let core: Promise<typeof import("@stellagate/core")> | undefined;
 const loadCore = () => (core ??= import("@stellagate/core"));
 
-const EXAMPLE = "GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6"; // Binance Deposits, memo required
+interface Preset {
+  to: string;
+  memo?: string;
+  asset?: string;
+  amount?: string;
+  from?: string;
+  network?: "public" | "testnet";
+}
+
+const PRESETS: Record<string, Preset> = {
+  binance: {
+    to: "GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6",
+    network: "public",
+  },
+  "smart-wallet": {
+    to: "GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6",
+    from: "CC2BO6ZMFVILIJVGW777H3HB4GUKWQ7E5Y4NODWJXTIJBDKHLKPWSN4C",
+    network: "public",
+  },
+  trustline: {
+    to: "GDEYWHHTB6OA5XWIUO6YT4CZ6NCECHACLL53CKRZU5A6TJH4RGSM4ZTU",
+    asset: "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+    network: "testnet",
+  },
+  federation: {
+    to: "help*lobstr.co",
+    network: "public",
+  },
+};
 const FIELDS = ["to", "memo", "asset", "amount", "from"] as const;
 
 const form = document.querySelector<HTMLFormElement>("#check-form")!;
@@ -227,11 +255,28 @@ form.addEventListener("submit", (e) => {
   void run();
 });
 
-document.querySelector("#example")!.addEventListener("click", () => {
+function applyPreset(name: string) {
+  const p = PRESETS[name];
+  if (!p) return;
   for (const f of FIELDS) input(f).value = "";
-  input("to").value = EXAMPLE;
-  (form.querySelector('input[value="public"]') as HTMLInputElement).checked = true;
+  input("to").value = p.to;
+  if (p.memo) input("memo").value = p.memo;
+  if (p.asset) input("asset").value = p.asset;
+  if (p.amount) input("amount").value = p.amount;
+  if (p.from) input("from").value = p.from;
+  const netRadio = form.querySelector(`input[value="${p.network ?? "public"}"]`) as HTMLInputElement | null;
+  if (netRadio) netRadio.checked = true;
+  if (p.memo || p.asset || p.amount || p.from) {
+    (document.querySelector("#details") as HTMLDetailsElement).open = true;
+  }
   void run();
+}
+
+document.querySelectorAll<HTMLButtonElement>(".preset-chip").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const key = btn.dataset.preset;
+    if (key) applyPreset(key);
+  });
 });
 
 // Enter submits from the address box; Shift+Enter is not needed for a one-line value.

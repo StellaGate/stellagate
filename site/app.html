@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Stellagate App: check a Stellar destination</title>
+    <meta name="description" content="Check a Stellar address before you send. Verify memo requirements, account existence, and asset holdability." />
+    <link rel="icon" href="data:," />
+    <script type="module" src="./src/app.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <a class="wordmark" href="./">Stellagate</a>
+      <div style="display:flex;align-items:center;gap:var(--space-4);">
+        <a class="header-link" href="./">Overview</a>
+        <a class="header-link" href="{{repo}}">Source on GitHub</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="guilloche" aria-hidden="true"></div>
+        <h1>Check a Stellar address before you send, not after.</h1>
+        <p class="lede">Exchange deposits without a memo, wallets that cannot hold the asset, smart wallets that cannot reach an exchange. Find out here first. Check before signing.</p>
+
+        <form id="check-form" class="check-form" novalidate>
+          <div class="field">
+            <label class="field-label" for="to">Address you are sending to</label>
+            <textarea id="to" name="to" class="address-input" rows="2" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="G..., M..., C... or name*domain" required></textarea>
+          </div>
+
+          <fieldset class="network">
+            <legend class="field-label">Network</legend>
+            <div class="segmented">
+              <label><input type="radio" name="network" value="public" checked /><span>Main network</span></label>
+              <label><input type="radio" name="network" value="testnet" /><span>Test network</span></label>
+            </div>
+          </fieldset>
+
+          <details class="details" id="details">
+            <summary>Add the memo, asset or your wallet for a fuller check</summary>
+            <div class="details-grid">
+              <div class="field">
+                <label class="field-label" for="memo">Memo</label>
+                <input id="memo" name="memo" type="text" autocomplete="off" spellcheck="false" />
+                <p class="hint">The memo or tag the exchange showed you, if any.</p>
+              </div>
+              <div class="field">
+                <label class="field-label" for="asset">Asset</label>
+                <input id="asset" name="asset" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters" placeholder="XLM" />
+                <p class="hint">XLM, or CODE:ISSUER for anything else, such as USDC:GA5Z...KZVN.</p>
+              </div>
+              <div class="field">
+                <label class="field-label" for="amount">Amount</label>
+                <input id="amount" name="amount" type="text" inputmode="decimal" autocomplete="off" />
+              </div>
+              <div class="field">
+                <label class="field-label" for="from">Your wallet address</label>
+                <input id="from" name="from" type="text" autocomplete="off" spellcheck="false" placeholder="G... or C..." />
+                <p class="hint">Smart wallets (C...) cannot attach a memo. This lets the check catch that.</p>
+              </div>
+            </div>
+          </details>
+
+          <div class="actions">
+            <button type="submit" class="button button-primary" id="check-button">Check address</button>
+          </div>
+
+          <div class="presets">
+            <span class="presets-label">Try an example:</span>
+            <div class="preset-group">
+              <button type="button" class="preset-chip" data-preset="binance">Binance (needs memo)</button>
+              <button type="button" class="preset-chip" data-preset="smart-wallet">Smart wallet to exchange</button>
+              <button type="button" class="preset-chip" data-preset="trustline">Missing trustline</button>
+              <button type="button" class="preset-chip" data-preset="federation">Federation address</button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section class="verdict" id="verdict" aria-live="polite" hidden></section>
+
+      <section class="security">
+        <h2>Client-side only, zero servers</h2>
+        <p>Every check runs in your browser. Stellagate makes direct HTTPS calls to public Horizon servers, Stellar RPC nodes, and public directory endpoints. We run no server of our own. That protects your privacy. Secret keys are detected on paste and wiped from the input immediately. They never reach the network or the browser address bar.</p>
+      </section>
+    </main>
+    <!--footer-->
+    <!--notice-->
+  </body>
+</html>

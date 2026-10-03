@@ -4,7 +4,6 @@ import type { CheckInput, Reason, Verdict } from "@stellagate/core";
 import { drawGuilloche } from "./guilloche.ts";
 import { initNotice } from "./notice.ts";
 
-// The Stellar SDK is large, so it loads when the visitor starts typing or checks.
 let core: Promise<typeof import("@stellagate/core")> | undefined;
 const loadCore = () => (core ??= import("@stellagate/core"));
 
@@ -37,6 +36,7 @@ const PRESETS: Record<string, Preset> = {
     network: "public",
   },
 };
+
 const FIELDS = ["to", "memo", "asset", "amount", "from"] as const;
 
 const form = document.querySelector<HTMLFormElement>("#check-form")!;
@@ -69,7 +69,6 @@ const ROWS = {
   list: ["destination_flagged", "directory_unavailable"],
 } as const;
 
-// Shown in a row when the full message is already the verdict's headline.
 const SHORT: Record<string, string> = {
   memo_required: "Yes, and no memo was given.",
   contract_sender_cannot_memo: "Yes, and a smart wallet cannot attach one.",
@@ -230,7 +229,6 @@ async function run() {
     return;
   }
   const { check, parseDestination } = lib;
-  // A pasted secret key is wiped from the field and never reaches the URL.
   const parsed = parseDestination(q.to);
   if (!parsed.ok && parsed.error === "secret_key") {
     input("to").value = "";
@@ -279,7 +277,6 @@ document.querySelectorAll<HTMLButtonElement>(".preset-chip").forEach((btn) => {
   });
 });
 
-// Enter submits from the address box; Shift+Enter is not needed for a one-line value.
 input("to").addEventListener("keydown", (e) => {
   if ((e as KeyboardEvent).key === "Enter") {
     e.preventDefault();

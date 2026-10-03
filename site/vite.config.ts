@@ -28,16 +28,30 @@ function sitePartials(isBuild: boolean): Plugin {
   };
 }
 
+function appRewritePlugin(): Plugin {
+  return {
+    name: "app-rewrite",
+    configureServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        if (req.url === "/app" || req.url === "/app/") {
+          req.url = "/app.html";
+        }
+        next();
+      });
+    },
+  };
+}
+
 export default defineConfig(({ command }) => ({
   base: process.env.BASE_PATH ?? "/",
   resolve: { alias: { "@stellagate/core": resolve(import.meta.dirname, "../src/index.ts") } },
   server: { fs: { allow: [".."] } },
-  plugins: [sitePartials(command === "build")],
+  plugins: [sitePartials(command === "build"), appRewritePlugin()],
   build: {
     target: "es2022",
     rollupOptions: {
       input: Object.fromEntries(
-        ["index", "privacy", "terms", "cookies"].map((p) => [p, resolve(import.meta.dirname, `${p}.html`)]),
+        ["index", "app", "privacy", "terms", "cookies"].map((p) => [p, resolve(import.meta.dirname, `${p}.html`)]),
       ),
     },
   },

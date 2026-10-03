@@ -3,5 +3,9 @@
   "framework": null,
   "installCommand": "npm ci && npm ci --prefix site",
   "buildCommand": "npm run build --prefix site",
-  "outputDirectory": "site/dist"
+  "outputDirectory": "site/dist",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/app", "destination": "/app.html" }
+  ]
 }

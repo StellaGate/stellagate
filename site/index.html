@@ -4,102 +4,233 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Stellagate: check a Stellar address before you send</title>
-    <meta name="description" content="Paste a Stellar address and find out, before you send, whether it needs a memo, whether it can hold your asset, and whether your wallet can reach it." />
+    <meta name="description" content="Check a Stellar address before you send, not after. Verify memo requirements, account existence, and asset holdability before anything is signed." />
     <link rel="icon" href="data:," />
-    <script type="module" src="./src/main.ts"></script>
+    <script type="module" src="./src/landing.ts"></script>
   </head>
   <body>
-    <!--header-->
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="site-header site-header-landing">
+      <a class="wordmark" href="./">Stellagate</a>
+      <nav class="nav-links">
+        <a href="#why">Why</a>
+        <a href="#gap">The Memo Gap</a>
+        <a href="#how">How it works</a>
+        <a href="#evidence">Evidence</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-link" href="{{repo}}">GitHub</a>
+        <a class="button button-primary pill-btn" href="./app.html">Launch App</a>
+      </div>
+    </header>
+
     <main id="main">
-      <section class="hero">
-        <div class="guilloche" aria-hidden="true"></div>
-        <h1>Check a Stellar address before you send, not after.</h1>
-        <p class="lede">Exchange deposits without a memo, wallets that cannot hold the asset, smart wallets that cannot reach an exchange. Find out here first.</p>
+      <!-- Hero -->
+      <section class="hero hero-landing panel-paint panel-scrim reveal">
+        <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="sky-hero" x1="0" y1="0" x2="0.3" y2="1">
+              <stop offset="0%" stop-color="#05162a" />
+              <stop offset="100%" stop-color="#0b3861" />
+            </linearGradient>
+            <filter id="brush-hero" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.009 0.045" numOctaves="4" seed="28" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="78" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+            <filter id="grain-hero">
+              <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="g" />
+              <feColorMatrix in="g" type="saturate" values="0" />
+            </filter>
+          </defs>
+          <rect width="1200" height="620" fill="url(#sky-hero)" />
+          <g filter="url(#brush-hero)">
+            <ellipse cx="180" cy="230" rx="620" ry="150" fill="#082846" opacity="0.86" />
+            <ellipse cx="410" cy="454" rx="580" ry="138" fill="#0e4b7b" opacity="0.78" />
+            <ellipse cx="640" cy="298" rx="540" ry="126" fill="#0284c7" opacity="0.70" />
+            <ellipse cx="870" cy="522" rx="500" ry="114" fill="#38bdf8" opacity="0.62" />
+            <ellipse cx="1100" cy="366" rx="460" ry="102" fill="#7dd3fc" opacity="0.54" />
+            <rect x="-100" y="430" width="1400" height="70" fill="#7dd3fc" opacity="0.7" />
+            <rect x="-100" y="472" width="1400" height="70" fill="#38bdf8" opacity="0.7" />
+            <rect x="-100" y="514" width="1400" height="70" fill="#0284c7" opacity="0.7" />
+            <rect x="-100" y="556" width="1400" height="70" fill="#0e4b7b" opacity="0.7" />
+          </g>
+          <rect width="1200" height="620" filter="url(#grain-hero)" opacity="0.16" />
+        </svg>
+        <div class="hero-content">
+          <h1>Check a Stellar address before you send, not after.</h1>
+          <p class="lede">Exchanges missing memos, wallets without trustlines, smart wallets that cannot reach pooled accounts. Stellagate runs a five-layer pre-flight check before anything is signed.</p>
 
-        <form id="check-form" class="check-form" novalidate>
-          <div class="field">
-            <label class="field-label" for="to">Address you are sending to</label>
-            <textarea id="to" name="to" class="address-input" rows="2" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="G..., M..., C... or name*domain" required></textarea>
+          <div class="hero-actions">
+            <a href="./app.html" class="button button-primary hero-btn">Launch App</a>
+            <a href="#how" class="button button-quiet hero-btn">How it works</a>
           </div>
+        </div>
 
-          <fieldset class="network">
-            <legend class="field-label">Network</legend>
-            <div class="segmented">
-              <label><input type="radio" name="network" value="public" checked /><span>Main network</span></label>
-              <label><input type="radio" name="network" value="testnet" /><span>Test network</span></label>
-            </div>
-          </fieldset>
-
-          <details class="details" id="details">
-            <summary>Add the memo, asset or your wallet for a fuller check</summary>
-            <div class="details-grid">
-              <div class="field">
-                <label class="field-label" for="memo">Memo</label>
-                <input id="memo" name="memo" type="text" autocomplete="off" spellcheck="false" />
-                <p class="hint">The memo or tag the exchange showed you, if any.</p>
-              </div>
-              <div class="field">
-                <label class="field-label" for="asset">Asset</label>
-                <input id="asset" name="asset" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters" placeholder="XLM" />
-                <p class="hint">XLM, or CODE:ISSUER for anything else, such as USDC:GA5Z...KZVN.</p>
-              </div>
-              <div class="field">
-                <label class="field-label" for="amount">Amount</label>
-                <input id="amount" name="amount" type="text" inputmode="decimal" autocomplete="off" />
-              </div>
-              <div class="field">
-                <label class="field-label" for="from">Your wallet address</label>
-                <input id="from" name="from" type="text" autocomplete="off" spellcheck="false" placeholder="G... or C..." />
-                <p class="hint">Smart wallets (C...) cannot attach a memo. This lets the check catch that.</p>
-              </div>
-            </div>
-          </details>
-
-          <div class="actions">
-            <button type="submit" class="button button-primary" id="check-button">Check address</button>
+        <!-- Interactive Hero App Mockup -->
+        <div class="app-mock">
+          <div class="app-mock-chrome" aria-hidden="true">
+            <span class="chrome-dot chrome-dot-red"></span>
+            <span class="chrome-dot chrome-dot-yellow"></span>
+            <span class="chrome-dot chrome-dot-green"></span>
+            <span class="chrome-title">Stellagate Pre-flight Check</span>
           </div>
+          <div class="app-mock-body">
+            <div class="app-mock-head">
+              <span class="badge badge-stop">Stop</span>
+              <p class="mock-verdict-title">Binance Deposits requires a memo (public directory).</p>
+              <p class="mock-verdict-sub">Without it, the payment may arrive and never be credited.</p>
+            </div>
 
-          <div class="presets">
-            <span class="presets-label">Try an example:</span>
-            <div class="preset-group">
-              <button type="button" class="preset-chip" data-preset="binance">Binance (needs memo)</button>
-              <button type="button" class="preset-chip" data-preset="smart-wallet">Smart wallet to exchange</button>
-              <button type="button" class="preset-chip" data-preset="trustline">Missing trustline</button>
-              <button type="button" class="preset-chip" data-preset="federation">Federation address</button>
+            <div class="app-mock-dest">
+              <span class="mock-label">Destination</span>
+              <p class="mock-address">
+                <span>GABF</span><span>QIK6</span><span>3R2N</span><span>ETJM</span>
+                <span>7T67</span><span>3EAM</span><span>ZN4R</span><span>JLLG</span>
+                <span>P3OF</span><span>UEJU</span><span>5SZV</span><span>TGWU</span>
+                <span>KULZ</span><span>JNL6</span>
+              </p>
+              <p class="mock-note">Listed in the public directory as Binance Deposits (binance.com).</p>
+            </div>
+
+            <div class="app-mock-rows">
+              <div class="mock-row">
+                <span class="badge badge-go">Fine</span>
+                <div class="mock-row-body">
+                  <span class="mock-row-q">Does it exist?</span>
+                  <span class="mock-row-a">Yes, it is live on the network.</span>
+                </div>
+              </div>
+              <div class="mock-row">
+                <span class="badge badge-stop">Stop</span>
+                <div class="mock-row-body">
+                  <span class="mock-row-q">Does it need a memo?</span>
+                  <span class="mock-row-a">Yes, and no memo was given.</span>
+                </div>
+              </div>
+              <div class="mock-row">
+                <span class="badge badge-go">Fine</span>
+                <div class="mock-row-body">
+                  <span class="mock-row-q">Is it on a warning list?</span>
+                  <span class="mock-row-a">No, it is not flagged as malicious.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="app-mock-foot">
+              <a href="./app.html" class="button button-primary mock-btn">Open in App</a>
             </div>
           </div>
-        </form>
+        </div>
       </section>
 
-      <section class="verdict" id="verdict" aria-live="polite" hidden></section>
-
-      <section class="why">
-        <h2>Why Stellar payments go missing</h2>
-        <div class="why-item">
-          <h3>The exchange needed a memo</h3>
-          <p>Exchanges keep everyone's deposits in one account and tell them apart by the memo. Send without it and the money arrives, but nobody knows it is yours. Most exchanges never mark their accounts as needing one, so a wallet cannot always warn you. Stellagate checks the account itself, and a public list of more than a hundred accounts known to need one.</p>
-        </div>
-        <div class="why-item">
-          <h3>The wallet could not hold the asset</h3>
-          <p>A Stellar account has to opt in to each asset before it can receive it, and the issuer sometimes has to approve it too. Send USDC to a wallet that has not opted in and the payment fails. Stellagate checks before you sign.</p>
-        </div>
-        <div class="why-item">
-          <h3>A smart wallet cannot add a memo</h3>
-          <p>Passkey wallets pay through smart contracts, and those payments have no memo field. Sending from one to an exchange that needs a memo is likely to go missing. Stellagate tells you to send from a regular account instead, or to use the exchange's M-address if it offers one.</p>
+      <!-- Ecosystem bar -->
+      <section class="ecosystem-strip reveal">
+        <span class="ecosystem-label">Covering the Stellar ecosystem</span>
+        <div class="ecosystem-tags">
+          <span class="ecosystem-tag">Classic G-addresses</span>
+          <span class="ecosystem-tag">Muxed M-addresses</span>
+          <span class="ecosystem-tag">Soroban C-contracts</span>
+          <span class="ecosystem-tag">SEP-29 Memo Required</span>
+          <span class="ecosystem-tag">SEP-2 Federation</span>
+          <span class="ecosystem-tag">CAP-67 Token Transfers</span>
         </div>
       </section>
 
-      <section class="gap">
-        <h2>The memo gap</h2>
+      <!-- Why -->
+      <section class="section-block reveal" id="why">
+        <div class="section-head">
+          <span class="eyebrow">The problem</span>
+          <h2>A Stellar address does not say what the receiver needs.</h2>
+        </div>
+
+        <div class="feature-cards">
+          <div class="feature-card">
+            <h3>The exchange needed a memo</h3>
+            <p>Exchanges keep everyone's deposits in one account and tell them apart by the memo. Send without it and the money arrives, but nobody knows it is yours. Most exchanges never mark their accounts as needing one, so a wallet cannot always warn you. Stellagate checks the account itself, and a public list of more than a hundred accounts known to need one.</p>
+          </div>
+
+          <div class="feature-card">
+            <h3>The wallet could not hold the asset</h3>
+            <p>A Stellar account has to opt in to each asset before it can receive it, and the issuer sometimes has to approve it too. Send USDC to a wallet that has not opted in and the payment fails. Stellagate checks before you sign.</p>
+          </div>
+
+          <div class="feature-card">
+            <h3>A smart wallet cannot add a memo</h3>
+            <p>Passkey wallets pay through smart contracts, and those payments have no memo field. Sending from one to an exchange that needs a memo is likely to go missing. Stellagate tells you to send from a regular account instead, or to use the exchange's M-address if it offers one.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Memo Gap -->
+      <section class="section-block reveal" id="gap">
+        <div class="section-head">
+          <span class="eyebrow">Research</span>
+          <h2>The memo gap</h2>
+        </div>
+
         <div class="stat-card">
           <p class="stat-number">87%</p>
           <p class="stat-label">of memo-required exchange accounts do not set the SEP-29 flag on chain.</p>
         </div>
-        <p>Most exchanges never set it. A survey of 107 pooled deposit accounts tagged as memo-required across the public directory showed that 93 major services, including Binance, Kraken, Bitstamp, and Coinbase Deposits, never configure the SEP-29 flag on chain. Funds sit uncredited. A wallet checking only the on-chain flag misses almost all of them. Stellagate combines SEP-29 on-chain data, the public directory, and SEP-2 federation lookup into a single send-time check.</p>
+
+        <p class="prose-block">Most exchanges never set it. A survey of 107 pooled deposit accounts tagged as memo-required across the public directory showed that 93 major services, including Binance, Kraken, Bitstamp, and Coinbase Deposits, never configure the SEP-29 flag on chain. Funds sit uncredited. A wallet checking only the on-chain flag misses almost all of them. Stellagate combines SEP-29 on-chain data, the public directory, and SEP-2 federation lookup into a single send-time check.</p>
       </section>
 
-      <section class="evidence">
-        <h2>Verified on testnet</h2>
+      <!-- How it Works -->
+      <section class="section-block reveal" id="how">
+        <div class="section-head">
+          <span class="eyebrow">Architecture</span>
+          <h2>How it works</h2>
+        </div>
+
+        <div class="step-tabs" role="tablist">
+          <button type="button" class="step-tab active" role="tab" aria-selected="true" data-step="1">
+            <span class="step-num">01</span>
+            <span>Parse destination</span>
+          </button>
+          <button type="button" class="step-tab" role="tab" aria-selected="false" data-step="2">
+            <span class="step-num">02</span>
+            <span>Five-layer check</span>
+          </button>
+          <button type="button" class="step-tab" role="tab" aria-selected="false" data-step="3">
+            <span class="step-num">03</span>
+            <span>Instant verdict</span>
+          </button>
+        </div>
+
+        <div class="step-panels">
+          <div class="step-panel active" data-step="1">
+            <div class="step-panel-inner">
+              <h3>Address parsing and safety checks</h3>
+              <p>Stellagate accepts raw destination strings: classic accounts (G...), muxed addresses (M...), Soroban contracts (C...), and SEP-2 federation names (user*domain.com). Muxed IDs are unpacked into base accounts. Pasted secret keys are refused immediately and never reach a network request or the URL.</p>
+            </div>
+          </div>
+
+          <div class="step-panel" data-step="2" hidden>
+            <div class="step-panel-inner">
+              <h3>Direct network and directory verification</h3>
+              <p>The library queries Horizon, Stellar RPC, and directory records in parallel. It inspects SEP-29 account flags, directory memo tags, classic asset trustline authorization and limits, Soroban Stellar Asset Contract deployments, and contract-sender compatibility.</p>
+            </div>
+          </div>
+
+          <div class="step-panel" data-step="3" hidden>
+            <div class="step-panel-inner">
+              <h3>Standardised verdict and actionable fix</h3>
+              <p>Returns a simple status: block, warn, or ok. If blocked, you get a machine-readable reason code, a plain-language explanation, and the exact corrective action to present to your user.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testnet Evidence -->
+      <section class="section-block reveal" id="evidence">
+        <div class="section-head">
+          <span class="eyebrow">Empirical proof</span>
+          <h2>Verified on testnet</h2>
+        </div>
+
         <p class="section-intro">We ran each scenario through Stellagate, and then we attempted the payment on the network anyway. Every block verdict matched a payment the network refused. That is the point. The one exception is an uninitialised contract address, where the network accepted the transfer and left the tokens stranded. Stellagate blocks that before you send.</p>
 
         <div class="table-wrap">
@@ -155,8 +286,13 @@
         <p class="table-note">All 15 scenarios and 22 transaction hashes are documented in the repository. Reproduce them anytime with <code>node scripts/testnet-evidence.mjs</code>.</p>
       </section>
 
-      <section class="developers">
-        <h2>For wallet and dapp developers</h2>
+      <!-- Developers -->
+      <section class="section-block reveal" id="developers">
+        <div class="section-head">
+          <span class="eyebrow">Integration</span>
+          <h2>For wallet and dapp developers</h2>
+        </div>
+
         <p class="section-intro">Run the check before transaction building. Stellagate returns a status, machine-readable reason codes, and plain-language fixes you can present directly in your send flow.</p>
 
         <div class="code-block-wrap">
@@ -195,9 +331,92 @@ if (verdict.status === "block") {
         <p class="code-note">Building a wallet? The core library is open source. <a href="{{repo}}">Read the repository and full evidence</a>.</p>
       </section>
 
-      <section class="security">
-        <h2>Client-side only, zero servers</h2>
-        <p>Every check runs in your browser. Stellagate makes direct HTTPS calls to public Horizon servers, Stellar RPC nodes, and public directory endpoints. We run no server of our own. Secret keys are detected on paste and wiped from the input immediately. They never reach the network or the browser address bar.</p>
+      <!-- FAQ -->
+      <section class="section-block reveal" id="faq">
+        <div class="section-head">
+          <span class="eyebrow">FAQ</span>
+          <h2>Questions answered</h2>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>Does Stellagate hold or relay funds?</span>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-answer" hidden>
+              <p>No. Stellagate never signs, submits, or takes custody of funds. It performs read-only checks against public nodes before your wallet signs.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>Why is SEP-29 not enough on its own?</span>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-answer" hidden>
+              <p>Only 14 of 107 memo-required exchange accounts configure the SEP-29 flag on chain. Stellagate checks both the on-chain flag and public directory records to catch unflagged exchanges.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>Can a smart wallet pay an exchange?</span>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-answer" hidden>
+              <p>Only if the exchange provides a muxed address or does not require a memo. Contract transactions on Soroban cannot carry a classic memo. Stellagate flags this mismatch before the transaction fails.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>What does it cost?</span>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-answer" hidden>
+              <p>Stellagate is free and open-source software under the Apache-2.0 licence. There are no fees and no protocol tokens.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Closing CTA -->
+      <section class="closing-cta panel-paint panel-scrim reveal">
+        <svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="sky-cta" x1="0" y1="0" x2="0.3" y2="1">
+              <stop offset="0%" stop-color="#041224" />
+              <stop offset="100%" stop-color="#092a4a" />
+            </linearGradient>
+            <filter id="brush-cta" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.009 0.045" numOctaves="4" seed="35" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="78" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+            <filter id="grain-cta">
+              <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="g" />
+              <feColorMatrix in="g" type="saturate" values="0" />
+            </filter>
+          </defs>
+          <rect width="1200" height="460" fill="url(#sky-cta)" />
+          <g filter="url(#brush-cta)">
+            <ellipse cx="200" cy="180" rx="600" ry="140" fill="#061f38" opacity="0.86" />
+            <ellipse cx="500" cy="320" rx="550" ry="130" fill="#0c3e66" opacity="0.75" />
+            <ellipse cx="800" cy="200" rx="500" ry="120" fill="#0284c7" opacity="0.65" />
+            <ellipse cx="1050" cy="340" rx="450" ry="100" fill="#38bdf8" opacity="0.55" />
+            <rect x="-100" y="320" width="1400" height="60" fill="#38bdf8" opacity="0.6" />
+            <rect x="-100" y="360" width="1400" height="60" fill="#0284c7" opacity="0.65" />
+            <rect x="-100" y="400" width="1400" height="60" fill="#0c3e66" opacity="0.7" />
+          </g>
+          <rect width="1200" height="460" filter="url(#grain-cta)" opacity="0.16" />
+        </svg>
+
+        <h2>Check before you send, not after.</h2>
+        <p class="lede">Stop losing funds to missing memos and unconfigured trustlines. Run a check now in your browser.</p>
+        <div class="cta-actions">
+          <a href="./app.html" class="button button-primary">Launch App</a>
+          <a href="{{repo}}" class="button button-quiet">View Source</a>
+        </div>
       </section>
     </main>
     <!--footer-->

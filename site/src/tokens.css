@@ -1,0 +1,98 @@
+/* Design foundations. Rationale and rules in ../DESIGN.md. Use these tokens; no arbitrary values. */
+
+@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+:root {
+  color-scheme: light dark;
+
+  /* Type: HIG iOS scale at default size, in rem. Hierarchy by weight and colour first. */
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --font-display: "Archivo Variable", var(--font-text);
+  --font-address: "IBM Plex Mono", ui-monospace, monospace;
+
+  --text-large-title: 2.25rem;  /* 36 */
+  --text-title-2: 1.75rem;      /* 28 */
+  --text-title-3: 1.1875rem;    /* 19 */
+  --text-body: 1rem;            /* 16, also headline at 600 */
+  --text-caption: 0.875rem;     /* 14 */
+  --text-footnote: 0.8125rem;   /* 13, the floor for anything read */
+
+  --leading-tight: 1.1;   /* titles, labels, rows */
+  --leading-prose: 1.55;  /* running text */
+
+  /* Spacing: 4px base, 8px rhythm. */
+  --space-1: 0.25rem;  /* 4 */
+  --space-2: 0.5rem;   /* 8 */
+  --space-3: 0.75rem;  /* 12 */
+  --space-4: 1rem;     /* 16, phone edge margin */
+  --space-5: 1.25rem;  /* 20 */
+  --space-6: 1.5rem;   /* 24 */
+  --space-8: 2rem;     /* 32 */
+  --space-10: 2.5rem;  /* 40 */
+  --space-12: 3rem;    /* 48 */
+  --space-16: 4rem;    /* 64 */
+
+  /* Targets: a hit region, not a visual size. */
+  --target-min: 2.75rem; /* 44 */
+
+  /* Radius: small for controls, large for the verdict panel. Nothing else is rounded. */
+  --radius-control: 0.375rem;
+  --radius-panel: 0.75rem;
+
+  /* Motion: arrive with ease-out, leave with ease-in. */
+  --duration-state: 150ms;
+  --duration-reveal: 280ms;
+  --ease-arrive: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-leave: cubic-bezier(0.4, 0, 1, 1);
+
+  --measure: 42rem; /* content column, under 80 characters of body text */
+
+  /* Colour, light. Ratios against --bg; all text tokens clear 4.5:1. */
+  --bg: #eef1ec;             /* security paper */
+  --field: #fafbf8;          /* input and panel surface */
+  --label: #15213b;          /* ink, 14.0:1 */
+  --label-secondary: #454f66; /* 7.2:1 */
+  --label-tertiary: #5e6779;  /* 5.0:1 */
+  --separator: #c9cfc4;      /* decorative hairline only */
+  --border-control: #6f776b; /* control edges, 4.1:1 */
+  --accent: #2a41bf;         /* links, focus ring, 7.1:1 */
+  --go: #1c6640;
+  --go-bg: #dceadf;
+  --caution: #875000;
+  --caution-bg: #f4e6cb;
+  --stop: #a1231a;
+  --stop-bg: #f5ddd9;
+  --guilloche: rgb(21 33 59 / 0.13);
+  --glass: rgb(250 251 248 / 0.9);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1a2e;
+    --field: #16233b;
+    --label: #e8ece6;
+    --label-secondary: #b4bcca;
+    --label-tertiary: #959fb1;
+    --separator: #2c3a55;
+    --border-control: #71809e;
+    --accent: #a3b4ff;
+    --go: #74d19c;
+    --go-bg: #163a2b;
+    --caution: #f2b65c;
+    --caution-bg: #3d2e12;
+    --stop: #ff9180;
+    --stop-bg: #45201d;
+    --guilloche: rgb(232 236 230 / 0.1);
+    --glass: rgb(22 35 59 / 0.94);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

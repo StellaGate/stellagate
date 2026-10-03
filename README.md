@@ -81,7 +81,7 @@ Stellagate never signs, submits or holds funds.
 | Malicious and unsafe account flags | Done, tested |
 | Contract-account sender compatibility | Done, tested |
 | Trustline and SAC holdability check | Done, tested, exercised on testnet |
-| Public check page | Planned |
+| Public check page, with terms, privacy and cookie pages | Built in `site/`, not yet deployed |
 | Exchange records with deposit evidence | Planned |
 | npm release | Planned, not yet published |
 | Upstream proposal to js-stellar-sdk | Planned |
@@ -147,6 +147,19 @@ npm test          # unit tests, offline
 npm run build
 node scripts/testnet-evidence.mjs   # rerun the testnet evidence, about a minute
 ```
+
+The check page lives in `site/`. It imports the library source directly and runs every
+check in the visitor's browser, so there is no server.
+
+```bash
+cd site && npm install
+npm run dev                          # http://localhost:5173
+CONTACT_EMAIL=you@example.org npm run build
+```
+
+The build refuses to run without a contact address, because the privacy policy names one.
+Set `contactEmail` in `site/site.config.json` or the `CONTACT_EMAIL` variable. `BASE_PATH`
+sets the path the site is served under (`/stellagate/` on GitHub Pages, `/` elsewhere).
 
 ## Data sources
 

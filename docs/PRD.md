@@ -2,7 +2,8 @@
 
 Status: 2026-10-03. Milestones 1 to 3 are built: address parsing, memo checks, trustline and
 Stellar Asset Contract holdability, and sender-type compatibility, with testnet evidence in the
-README. The rest is planned.
+README. Milestone 4, the public check page with its legal pages, is built in `site/` and
+waiting for a contact address before it is deployed. The rest is planned.
 
 ## Problem
 

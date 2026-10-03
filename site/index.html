@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Stellagate: check a Stellar address before you send</title>
+    <meta name="description" content="Paste a Stellar address and find out, before you send, whether it needs a memo, whether it can hold your asset, and whether your wallet can reach it." />
+    <link rel="icon" href="data:," />
+    <script type="module" src="./src/main.ts"></script>
+  </head>
+  <body>
+    <!--header-->
+    <main id="main">
+      <section class="hero">
+        <div class="guilloche" aria-hidden="true"></div>
+        <h1>Check a Stellar address before you send, not after.</h1>
+        <p class="lede">Exchange deposits without a memo, wallets that cannot hold the asset, smart wallets that cannot reach an exchange. Find out here first.</p>
+
+        <form id="check-form" class="check-form" novalidate>
+          <div class="field">
+            <label class="field-label" for="to">Address you are sending to</label>
+            <textarea id="to" name="to" class="address-input" rows="2" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="G..., M..., C... or name*domain" required></textarea>
+          </div>
+
+          <fieldset class="network">
+            <legend class="field-label">Network</legend>
+            <div class="segmented">
+              <label><input type="radio" name="network" value="public" checked /><span>Main network</span></label>
+              <label><input type="radio" name="network" value="testnet" /><span>Test network</span></label>
+            </div>
+          </fieldset>
+
+          <details class="details" id="details">
+            <summary>Add the memo, asset or your wallet for a fuller check</summary>
+            <div class="details-grid">
+              <div class="field">
+                <label class="field-label" for="memo">Memo</label>
+                <input id="memo" name="memo" type="text" autocomplete="off" spellcheck="false" />
+                <p class="hint">The memo or tag the exchange showed you, if any.</p>
+              </div>
+              <div class="field">
+                <label class="field-label" for="asset">Asset</label>
+                <input id="asset" name="asset" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters" placeholder="XLM" />
+                <p class="hint">XLM, or CODE:ISSUER for anything else, such as USDC:GA5Z...KZVN.</p>
+              </div>
+              <div class="field">
+                <label class="field-label" for="amount">Amount</label>
+                <input id="amount" name="amount" type="text" inputmode="decimal" autocomplete="off" />
+              </div>
+              <div class="field">
+                <label class="field-label" for="from">Your wallet address</label>
+                <input id="from" name="from" type="text" autocomplete="off" spellcheck="false" placeholder="G... or C..." />
+                <p class="hint">Smart wallets (C...) cannot attach a memo. This lets the check catch that.</p>
+              </div>
+            </div>
+          </details>
+
+          <div class="actions">
+            <button type="submit" class="button button-primary" id="check-button">Check address</button>
+            <button type="button" class="button button-quiet" id="example">Try an exchange deposit address</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="verdict" id="verdict" aria-live="polite" hidden></section>
+
+      <section class="why">
+        <h2>Why Stellar payments go missing</h2>
+        <div class="why-item">
+          <h3>The exchange needed a memo</h3>
+          <p>Exchanges keep everyone's deposits in one account and tell them apart by the memo. Send without it and the money arrives, but nobody knows it is yours. Most exchanges never mark their accounts as needing one, so a wallet cannot always warn you. Stellagate checks the account itself, and a public list of more than a hundred accounts known to need one.</p>
+        </div>
+        <div class="why-item">
+          <h3>The wallet could not hold the asset</h3>
+          <p>A Stellar account has to opt in to each asset before it can receive it, and the issuer sometimes has to approve it too. Send USDC to a wallet that has not opted in and the payment fails. Stellagate checks before you sign.</p>
+        </div>
+        <div class="why-item">
+          <h3>A smart wallet cannot add a memo</h3>
+          <p>Passkey wallets pay through smart contracts, and those payments have no memo field. Sending from one to an exchange that needs a memo is likely to go missing. Stellagate tells you to send from a regular account instead, or to use the exchange's M-address if it offers one.</p>
+        </div>
+        <p class="developers">Building a wallet? The same checks are an open-source TypeScript library. <a href="{{repo}}">Read the code and the evidence</a>.</p>
+      </section>
+    </main>
+    <!--footer-->
+    <!--notice-->
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Terms of use | Stellagate</title>
+    <link rel="icon" href="data:," />
+    <script type="module" src="./src/page.ts"></script>
+  </head>
+  <body>
+    <!--header-->
+    <main id="main" class="legal">
+      <h1>Terms of use</h1>
+      <p class="updated">Last updated {{updated}}</p>
+      <p class="review">This page has not been reviewed by a lawyer. It describes what the site actually does, as plainly as we can.</p>
+      <h2>What Stellagate is</h2>
+      <p>A free page that looks up public Stellar data about an address and tells you about problems it finds before you send a payment. It never asks for your secret key, never signs or sends anything, and never holds funds.</p>
+
+      <h2>It is a check, not a guarantee</h2>
+      <p>The result is only as good as the public data behind it. An exchange may need a memo without being listed anywhere. An issuer can change its rules after you check. A service the page relies on may be down or wrong. "Looks fine" means nothing we checked found a problem. It does not promise the payment will be credited.</p>
+      <p>Always use the address and memo the receiver gives you, and for a large amount, send a small test payment first.</p>
+
+      <h2>No advice</h2>
+      <p>Nothing on this site is financial, legal or tax advice.</p>
+
+      <h2>Liability</h2>
+      <p>The site is provided as it is, without warranty of any kind. To the extent the law allows, the maintainers are not liable for any loss from using it or relying on its results, including lost or uncredited payments.</p>
+
+      <h2>Use of the site</h2>
+      <p>Do not use the page to overload the public services it calls, for example by running checks in bulk from a script. Use the library for that, with your own Horizon and RPC endpoints.</p>
+
+      <h2>The code</h2>
+      <p>Stellagate's source code is open under the Apache License 2.0, which governs your use of the code itself. It is on <a href="{{repo}}">GitHub</a>.</p>
+
+      <h2>Contact</h2>
+      <p>Questions about these terms: <a href="mailto:{{contact}}">{{contact}}</a>.</p>
+    </main>
+    <!--footer-->
+    <!--notice-->
+  </body>
+</html>

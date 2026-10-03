@@ -6,6 +6,10 @@ import type { AccountSource, AccountState, DirectorySource, FederationResolver }
 
 const MEMO_REQUIRED = { "config.memo_required": Buffer.from("1").toString("base64") };
 
+function funded(data: Record<string, string> = {}): AccountState {
+  return { exists: true, data, trustlines: [], authRequired: false };
+}
+
 function fakeAccounts(states: Record<string, AccountState>): AccountSource {
   return { loadAccount: async (id) => states[id] ?? { exists: false } };
 }
@@ -18,15 +22,15 @@ const contractSender = StrKey.encodeContract(Buffer.alloc(32, 3));
 const exchangeMuxed = new MuxedAccount(new Account(exchange, "0"), "1234").accountId();
 
 const accounts = fakeAccounts({
-  [exchange]: { exists: true, data: MEMO_REQUIRED },
-  [friend]: { exists: true, data: {} },
+  [exchange]: funded(MEMO_REQUIRED),
+  [friend]: funded(),
 });
 
 describe("requiresMemo", () => {
   it("reads the SEP-29 data entry", () => {
-    expect(requiresMemo({ exists: true, data: MEMO_REQUIRED })).toBe(true);
-    expect(requiresMemo({ exists: true, data: { "config.memo_required": Buffer.from("0").toString("base64") } })).toBe(false);
-    expect(requiresMemo({ exists: true, data: {} })).toBe(false);
+    expect(requiresMemo(funded(MEMO_REQUIRED))).toBe(true);
+    expect(requiresMemo(funded({ "config.memo_required": Buffer.from("0").toString("base64") }))).toBe(false);
+    expect(requiresMemo(funded())).toBe(false);
     expect(requiresMemo({ exists: false })).toBe(false);
   });
 });
@@ -122,9 +126,9 @@ describe("check with the public directory", () => {
   const binanceLike = Keypair.random().publicKey();
   const scam = Keypair.random().publicKey();
   const plainAccounts = fakeAccounts({
-    [binanceLike]: { exists: true, data: {} },
-    [scam]: { exists: true, data: {} },
-    [friend]: { exists: true, data: {} },
+    [binanceLike]: funded(),
+    [scam]: funded(),
+    [friend]: funded(),
   });
   const directory: DirectorySource = {
     lookup: async (a) =>

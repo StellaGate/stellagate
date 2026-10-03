@@ -1,7 +1,7 @@
 {
   "name": "@stellagate/core",
   "version": "0.1.0",
-  "description": "Check a Stellar destination before you send: memo requirements, address types and contract-account compatibility.",
+  "description": "Check a Stellar destination before you send: memo requirements, trustlines, Stellar Asset Contract holdability and contract-account compatibility.",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",

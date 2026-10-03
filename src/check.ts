@@ -1,11 +1,17 @@
+import { Networks, type Asset } from "@stellar/stellar-sdk";
 import { isContractAddress, parseDestination, type Destination } from "./address.js";
+import { parseAsset, toStroops } from "./asset.js";
+import { classicHoldability, contractHoldability } from "./holdability.js";
 import { requiresMemo } from "./memo.js";
 import {
   HORIZON_URLS,
+  RPC_URLS,
   horizonAccountSource,
+  rpcContractSource,
   sep2Federation,
   stellarExpertDirectory,
   type AccountSource,
+  type ContractSource,
   type DirectoryEntry,
   type DirectorySource,
   type FederationResolver,
@@ -28,8 +34,14 @@ export interface CheckInput {
   from?: string;
   /** A memo the user already intends to attach. */
   memo?: string;
+  /** The asset being sent: "native" or CODE:ISSUER. Without it, holdability checks are skipped. */
+  asset?: string;
+  /** The amount being sent, in units of the asset (up to 7 decimals). Used for trustline limits. */
+  amount?: string;
   network?: "public" | "testnet";
   accounts?: AccountSource;
+  /** Reads contract state over Stellar RPC. Defaults to the public RPC on testnet; pass null to skip. */
+  contracts?: ContractSource | null;
   federation?: FederationResolver;
   /** Pass null to skip the directory lookup entirely. */
   directory?: DirectorySource | null;
@@ -62,8 +74,21 @@ export async function check(input: CheckInput): Promise<Verdict> {
     return { status: "block", reasons };
   }
 
+  let asset: Asset | undefined;
+  if (input.asset !== undefined) {
+    const a = parseAsset(input.asset);
+    if (!a.ok) reasons.push({ code: "asset_invalid", severity: "block", message: a.message });
+    else asset = a.asset;
+  }
+  const amount = input.amount === undefined ? undefined : toStroops(input.amount);
+  if (amount === null || amount === 0n) {
+    reasons.push({ code: "amount_invalid", severity: "block", message: `Not a valid amount: ${JSON.stringify(input.amount)}.` });
+  }
+  if (reasons.length) return { status: "block", reasons };
+
+  const network = input.network ?? "public";
   const destination = parsed.destination;
-  const accounts = input.accounts ?? horizonAccountSource(HORIZON_URLS[input.network ?? "public"]);
+  const accounts = input.accounts ?? horizonAccountSource(HORIZON_URLS[network]);
   const contractSender = input.from !== undefined && isContractAddress(input.from);
   let account: string | undefined;
   let memo = input.memo;
@@ -83,7 +108,7 @@ export async function check(input: CheckInput): Promise<Verdict> {
       reasons.push({
         code: "destination_contract",
         severity: "info",
-        message: "The destination is a contract. Memo rules do not apply; asset support is checked separately.",
+        message: "The destination is a contract. Memo rules do not apply.",
       });
       break;
 
@@ -131,7 +156,7 @@ export async function check(input: CheckInput): Promise<Verdict> {
   }
 
   const directory =
-    input.directory === null ? null : (input.directory ?? stellarExpertDirectory(input.network ?? "public"));
+    input.directory === null ? null : (input.directory ?? stellarExpertDirectory(network));
   let entry: DirectoryEntry | undefined;
   if (directory) {
     try {
@@ -153,7 +178,31 @@ export async function check(input: CheckInput): Promise<Verdict> {
     });
   }
 
-  if (destination.kind === "contract") return { status: statusOf(reasons), destination, entry, reasons };
+  if (destination.kind === "contract") {
+    if (asset) {
+      const contracts =
+        input.contracts === null ? null : (input.contracts ?? (network === "testnet" ? rpcContractSource(RPC_URLS.testnet) : null));
+      if (!contracts) {
+        reasons.push({
+          code: "contract_checks_skipped",
+          severity: "info",
+          message: "No Stellar RPC endpoint was given, so whether this contract can hold the asset was not checked.",
+        });
+      } else {
+        try {
+          const passphrase = network === "testnet" ? Networks.TESTNET : Networks.PUBLIC;
+          reasons.push(...(await contractHoldability(destination.contract, asset, passphrase, contracts, accounts)));
+        } catch (err) {
+          reasons.push({
+            code: "rpc_unavailable",
+            severity: "info",
+            message: `Stellar RPC could not be reached (${(err as Error).message}), so whether this contract can hold the asset was not checked.`,
+          });
+        }
+      }
+    }
+    return { status: statusOf(reasons), destination, entry, reasons };
+  }
 
   const state = await accounts.loadAccount(account!);
   const memoBySep29 = requiresMemo(state);
@@ -161,12 +210,21 @@ export async function check(input: CheckInput): Promise<Verdict> {
   const who = entry?.name ? `${entry.name} ` : "This account ";
   const via = memoBySep29 ? "(SEP-29)" : "(public directory)";
   if (!state.exists) {
-    reasons.push({
-      code: "destination_unfunded",
-      severity: "warn",
-      message: "This account does not exist on the network yet. A plain payment to it will fail.",
-      fix: "Send at least 1 XLM with a create-account operation, or ask the receiver for a funded address.",
-    });
+    reasons.push(
+      asset && !asset.isNative()
+        ? {
+            code: "destination_unfunded",
+            severity: "block",
+            message: "This account does not exist on the network yet, so it has no trustline and cannot receive this asset.",
+            fix: "Send it as a claimable balance, or ask the receiver to fund the account and add a trustline first.",
+          }
+        : {
+            code: "destination_unfunded",
+            severity: "warn",
+            message: "This account does not exist on the network yet. A plain payment to it will fail.",
+            fix: "Send at least 1 XLM with a create-account operation, or ask the receiver for a funded address.",
+          },
+    );
   } else if ((memoBySep29 || memoByDirectory) && destination.kind !== "muxed" && !memo) {
     reasons.push(
       contractSender
@@ -184,6 +242,7 @@ export async function check(input: CheckInput): Promise<Verdict> {
           },
     );
   }
+  if (state.exists && asset) reasons.push(...classicHoldability(state, account!, asset, amount ?? undefined));
 
   return { status: statusOf(reasons), destination, account, memo: federationMemo, entry, reasons };
 }

@@ -98,6 +98,13 @@ describe("check", () => {
     expect(v.reasons.map((r) => r.code)).toContain("contract_sender_cannot_memo");
   });
 
+  it("requires a memo when federation resolves to a memo-required account without supplying one", async () => {
+    const federation: FederationResolver = { resolve: async () => ({ account: exchange }) };
+    const v = await check({ to: "dave*example.com", from: classicSender, accounts, federation, directory: null });
+    expect(v.status).toBe("block");
+    expect(v.reasons.map((r) => r.code)).toEqual(["memo_required"]);
+  });
+
   it("blocks when federation lookup fails", async () => {
     const federation: FederationResolver = { resolve: async () => { throw new Error("no FEDERATION_SERVER"); } };
     const v = await check({ to: "carol*example.com", accounts, federation, directory: null });
@@ -141,6 +148,14 @@ describe("check with the public directory", () => {
     const v = await check({ to: scam, accounts: plainAccounts, directory });
     expect(v.status).toBe("block");
     expect(v.reasons.map((r) => r.code)).toContain("destination_flagged");
+  });
+
+  it("blocks a contract destination flagged as malicious", async () => {
+    const drainer = StrKey.encodeContract(Buffer.alloc(32, 11));
+    const flagged: DirectorySource = { lookup: async (a) => (a === drainer ? { name: "Drainer", tags: ["malicious"] } : null) };
+    const v = await check({ to: drainer, accounts: plainAccounts, directory: flagged });
+    expect(v.status).toBe("block");
+    expect(v.reasons.map((r) => r.code)).toEqual(["destination_contract", "destination_flagged"]);
   });
 
   it("falls back to on-chain checks when the directory is down", async () => {

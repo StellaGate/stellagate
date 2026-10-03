@@ -113,4 +113,4 @@ Issues are scoped so each one can be picked up independently. See
 
 ## License
 
-Apache-2.0 (proposed).
+Apache-2.0. See [LICENSE](LICENSE).

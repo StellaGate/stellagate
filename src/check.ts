@@ -85,7 +85,7 @@ export async function check(input: CheckInput): Promise<Verdict> {
         severity: "info",
         message: "The destination is a contract. Memo rules do not apply; asset support is checked separately.",
       });
-      return { status: statusOf(reasons), destination, reasons };
+      break;
 
     case "federation": {
       try {
@@ -135,7 +135,7 @@ export async function check(input: CheckInput): Promise<Verdict> {
   let entry: DirectoryEntry | undefined;
   if (directory) {
     try {
-      entry = (await directory.lookup(account!)) ?? undefined;
+      entry = (await directory.lookup(destination.kind === "contract" ? destination.contract : account!)) ?? undefined;
     } catch {
       reasons.push({
         code: "directory_unavailable",
@@ -153,6 +153,8 @@ export async function check(input: CheckInput): Promise<Verdict> {
     });
   }
 
+  if (destination.kind === "contract") return { status: statusOf(reasons), destination, entry, reasons };
+
   const state = await accounts.loadAccount(account!);
   const memoBySep29 = requiresMemo(state);
   const memoByDirectory = entry?.tags.includes("memo-required") ?? false;
@@ -165,7 +167,7 @@ export async function check(input: CheckInput): Promise<Verdict> {
       message: "This account does not exist on the network yet. A plain payment to it will fail.",
       fix: "Send at least 1 XLM with a create-account operation, or ask the receiver for a funded address.",
     });
-  } else if ((memoBySep29 || memoByDirectory) && destination.kind === "account" && !memo) {
+  } else if ((memoBySep29 || memoByDirectory) && destination.kind !== "muxed" && !memo) {
     reasons.push(
       contractSender
         ? {

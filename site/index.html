@@ -8,7 +8,7 @@
     <link rel="icon" href="data:," />
     <script type="module" src="./src/landing.ts"></script>
   </head>
-  <body>
+  <body class="landing-page">
     <a class="skip" href="#main">Skip to content</a>
 
     <header class="site-header site-header-landing">
@@ -28,36 +28,8 @@
 
     <main id="main">
       <!-- Hero -->
-      <section class="hero hero-landing panel-paint panel-scrim reveal">
-        <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-          <defs>
-            <linearGradient id="sky-hero" x1="0" y1="0" x2="0.3" y2="1">
-              <stop offset="0%" stop-color="#05162a" />
-              <stop offset="100%" stop-color="#0b3861" />
-            </linearGradient>
-            <filter id="brush-hero" x="-20%" y="-20%" width="140%" height="140%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.009 0.045" numOctaves="4" seed="28" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="78" xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-            <filter id="grain-hero">
-              <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="g" />
-              <feColorMatrix in="g" type="saturate" values="0" />
-            </filter>
-          </defs>
-          <rect width="1200" height="620" fill="url(#sky-hero)" />
-          <g filter="url(#brush-hero)">
-            <ellipse cx="180" cy="230" rx="620" ry="150" fill="#082846" opacity="0.86" />
-            <ellipse cx="410" cy="454" rx="580" ry="138" fill="#0e4b7b" opacity="0.78" />
-            <ellipse cx="640" cy="298" rx="540" ry="126" fill="#0284c7" opacity="0.70" />
-            <ellipse cx="870" cy="522" rx="500" ry="114" fill="#38bdf8" opacity="0.62" />
-            <ellipse cx="1100" cy="366" rx="460" ry="102" fill="#7dd3fc" opacity="0.54" />
-            <rect x="-100" y="430" width="1400" height="70" fill="#7dd3fc" opacity="0.7" />
-            <rect x="-100" y="472" width="1400" height="70" fill="#38bdf8" opacity="0.7" />
-            <rect x="-100" y="514" width="1400" height="70" fill="#0284c7" opacity="0.7" />
-            <rect x="-100" y="556" width="1400" height="70" fill="#0e4b7b" opacity="0.7" />
-          </g>
-          <rect width="1200" height="620" filter="url(#grain-hero)" opacity="0.16" />
-        </svg>
+      <section class="hero hero-landing reveal">
+        <div class="guilloche guilloche-hero" aria-hidden="true" data-variant="hero"></div>
         <div class="hero-content">
           <h1>Check a Stellar address before you send, not after.</h1>
           <p class="lede">Exchanges missing memos, wallets without trustlines, smart wallets that cannot reach pooled accounts. Stellagate runs a five-layer pre-flight check before anything is signed.</p>
@@ -382,34 +354,8 @@ if (verdict.status === "block") {
       </section>
 
       <!-- Closing CTA -->
-      <section class="closing-cta panel-paint panel-scrim reveal">
-        <svg viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-          <defs>
-            <linearGradient id="sky-cta" x1="0" y1="0" x2="0.3" y2="1">
-              <stop offset="0%" stop-color="#041224" />
-              <stop offset="100%" stop-color="#092a4a" />
-            </linearGradient>
-            <filter id="brush-cta" x="-20%" y="-20%" width="140%" height="140%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.009 0.045" numOctaves="4" seed="35" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="78" xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-            <filter id="grain-cta">
-              <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="g" />
-              <feColorMatrix in="g" type="saturate" values="0" />
-            </filter>
-          </defs>
-          <rect width="1200" height="460" fill="url(#sky-cta)" />
-          <g filter="url(#brush-cta)">
-            <ellipse cx="200" cy="180" rx="600" ry="140" fill="#061f38" opacity="0.86" />
-            <ellipse cx="500" cy="320" rx="550" ry="130" fill="#0c3e66" opacity="0.75" />
-            <ellipse cx="800" cy="200" rx="500" ry="120" fill="#0284c7" opacity="0.65" />
-            <ellipse cx="1050" cy="340" rx="450" ry="100" fill="#38bdf8" opacity="0.55" />
-            <rect x="-100" y="320" width="1400" height="60" fill="#38bdf8" opacity="0.6" />
-            <rect x="-100" y="360" width="1400" height="60" fill="#0284c7" opacity="0.65" />
-            <rect x="-100" y="400" width="1400" height="60" fill="#0c3e66" opacity="0.7" />
-          </g>
-          <rect width="1200" height="460" filter="url(#grain-cta)" opacity="0.16" />
-        </svg>
+      <section class="closing-cta reveal">
+        <div class="guilloche guilloche-hero" aria-hidden="true" data-variant="hero"></div>
 
         <h2>Check before you send, not after.</h2>
         <p class="lede">Stop losing funds to missing memos and unconfigured trustlines. Run a check now in your browser.</p>

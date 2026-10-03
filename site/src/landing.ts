@@ -3,8 +3,7 @@ import "./styles.css";
 import { drawGuilloche } from "./guilloche.ts";
 import { initNotice } from "./notice.ts";
 
-const guillocheEl = document.querySelector<HTMLElement>(".guilloche");
-if (guillocheEl) drawGuilloche(guillocheEl);
+document.querySelectorAll<HTMLElement>(".guilloche").forEach(drawGuilloche);
 
 // How It Works Step Tabs
 const stepButtons = document.querySelectorAll<HTMLButtonElement>(".step-tab");

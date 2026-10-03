@@ -48,6 +48,7 @@
   --ease-leave: cubic-bezier(0.4, 0, 1, 1);
 
   --measure: 42rem; /* content column, under 80 characters of body text */
+  --page-max: 72rem; /* wide layout for landing page container and header */
 
   /* Colour, light. Ratios against --bg; all text tokens clear 4.5:1. */
   --bg: #eef1ec;             /* security paper */

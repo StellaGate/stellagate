@@ -1,6 +1,8 @@
 # Stellagate product requirements
 
-Status: 2026-10-02. Milestone 1 (address parsing and memo checks) is built; the rest is planned.
+Status: 2026-10-03. Milestones 1 to 3 are built: address parsing, memo checks, trustline and
+Stellar Asset Contract holdability, and sender-type compatibility, with testnet evidence in the
+README. The rest is planned.
 
 ## Problem
 

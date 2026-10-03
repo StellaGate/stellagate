@@ -1,0 +1,10 @@
+# Upload only what the check page build needs.
+/*
+!/package.json
+!/package-lock.json
+!/tsconfig.json
+!/src
+!/site
+!/vercel.json
+site/node_modules
+site/dist

@@ -71,6 +71,9 @@ verdict.reasons  // [{ code: 'contract_sender_cannot_memo', severity: 'block',
 
 Stellagate never signs, submits or holds funds.
 
+Try it without installing anything at [stellagate.vercel.app](https://stellagate.vercel.app).
+The check runs in your browser.
+
 ## Status
 
 | Part | Status |
@@ -81,7 +84,7 @@ Stellagate never signs, submits or holds funds.
 | Malicious and unsafe account flags | Done, tested |
 | Contract-account sender compatibility | Done, tested |
 | Trustline and SAC holdability check | Done, tested, exercised on testnet |
-| Public check page, with terms, privacy and cookie pages | Built in `site/`, not yet deployed |
+| Public check page, with terms, privacy and cookie pages | Live at [stellagate.vercel.app](https://stellagate.vercel.app) and [stellagate.github.io/stellagate](https://stellagate.github.io/stellagate/) |
 | Exchange records with deposit evidence | Planned |
 | npm release | Planned, not yet published |
 | Upstream proposal to js-stellar-sdk | Planned |

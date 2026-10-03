@@ -1,6 +1,6 @@
 /* Design foundations. Rationale and rules in ../DESIGN.md. Use these tokens; no arbitrary values. */
 
-@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource-variable/geist/wght.css";
 @import "@fontsource/ibm-plex-mono/400.css";
 @import "@fontsource/ibm-plex-mono/500.css";
 
@@ -8,10 +8,11 @@
   color-scheme: light dark;
 
   /* Type: HIG iOS scale at default size, in rem. Hierarchy by weight and colour first. */
-  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-  --font-display: "Archivo Variable", var(--font-text);
+  --font-text: "Geist Variable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: var(--font-text);
   --font-address: "IBM Plex Mono", ui-monospace, monospace;
 
+  --text-display: 3.5rem;       /* 56, landing hero and outlined numerals only */
   --text-large-title: 2.25rem;  /* 36 */
   --text-title-2: 1.75rem;      /* 28 */
   --text-title-3: 1.1875rem;    /* 19 */
@@ -21,6 +22,7 @@
 
   --leading-tight: 1.1;   /* titles, labels, rows */
   --leading-prose: 1.55;  /* running text */
+  --tracking-display: -0.03em; /* Geist at title sizes and up */
 
   /* Spacing: 4px base, 8px rhythm. */
   --space-1: 0.25rem;  /* 4 */
@@ -37,9 +39,13 @@
   /* Targets: a hit region, not a visual size. */
   --target-min: 2.75rem; /* 44 */
 
-  /* Radius: small for controls, large for the verdict panel. Nothing else is rounded. */
+  /* Radius: small for controls, large for panels (verdict, nav bar, hero). Pills for status only. */
   --radius-control: 0.375rem;
   --radius-panel: 0.75rem;
+  --radius-pill: 999px;
+
+  /* Elevation: flat page. Raised is for the two floating layers and the hero mockup over the painting. */
+  --shadow-raised: 0 12px 32px rgb(4 14 28 / 0.18);
 
   /* Motion: arrive with ease-out, leave with ease-in. */
   --duration-state: 150ms;
@@ -48,7 +54,7 @@
   --ease-leave: cubic-bezier(0.4, 0, 1, 1);
 
   --measure: 42rem; /* content column, under 80 characters of body text */
-  --page-max: 72rem; /* wide layout for landing page container and header */
+  --page-max: 72rem; /* landing frame and header */
 
   /* Colour, light. Ratios against --bg; all text tokens clear 4.5:1. */
   --bg: #eef1ec;             /* security paper */
@@ -67,6 +73,18 @@
   --stop-bg: #f5ddd9;
   --guilloche: rgb(21 33 59 / 0.13);
   --glass: rgb(250 251 248 / 0.9);
+
+  /* Over the hero painting, in both themes. The scrim keeps white text above 7:1. */
+  --image-base: #0b1526;
+  --image-scrim: rgb(11 21 38 / 0.62);
+  --on-image: #ffffff;
+  --on-image-secondary: rgb(255 255 255 / 0.86);
+  --on-image-line: rgb(255 255 255 / 0.32);
+
+  /* Window controls on the app mockup. Decorative, hidden from assistive tech. */
+  --dot-close: #ec6a5e;
+  --dot-minimise: #f4bf4f;
+  --dot-zoom: #61c554;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -87,6 +105,7 @@
     --stop-bg: #45201d;
     --guilloche: rgb(232 236 230 / 0.1);
     --glass: rgb(22 35 59 / 0.94);
+    --shadow-raised: 0 12px 32px rgb(0 0 0 / 0.4);
   }
 }
 

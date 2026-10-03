@@ -17,6 +17,7 @@
         <a href="#why">Why</a>
         <a href="#gap">The Memo Gap</a>
         <a href="#how">How it works</a>
+        <a href="#security">Security</a>
         <a href="#evidence">Evidence</a>
         <a href="#faq">FAQ</a>
       </nav>
@@ -29,7 +30,6 @@
     <main id="main">
       <!-- Hero -->
       <section class="hero hero-landing reveal">
-        <div class="guilloche guilloche-hero" aria-hidden="true" data-variant="hero"></div>
         <div class="hero-content">
           <h1>Check a Stellar address before you send, not after.</h1>
           <p class="lede">Exchanges missing memos, wallets without trustlines, smart wallets that cannot reach pooled accounts. Stellagate runs a five-layer pre-flight check before anything is signed.</p>
@@ -196,6 +196,38 @@
         </div>
       </section>
 
+      <!-- Security & Privacy with Dedicated Guilloche -->
+      <section class="section-block reveal" id="security">
+        <div class="section-head">
+          <span class="eyebrow">Trust and privacy</span>
+          <h2>Client-side verification with mathematical precision.</h2>
+        </div>
+
+        <div class="security-card">
+          <div class="guilloche" aria-hidden="true"></div>
+          <div class="security-content">
+            <div class="security-grid">
+              <div class="security-col">
+                <h3>Direct network calls</h3>
+                <p>All pre-flight checks query public Stellar Horizon and RPC nodes directly from your browser or wallet. There are no tracking servers, no logging relays, and no third-party proxies.</p>
+              </div>
+              <div class="security-col">
+                <h3>Instant secret wiping</h3>
+                <p>If a secret key starting with S is accidentally entered into the destination field, Stellagate halts immediately, wipes the input, and emits a security block before any request leaves your device.</p>
+              </div>
+              <div class="security-col">
+                <h3>Zero custody, zero signing</h3>
+                <p>Stellagate is strictly an analytical pre-flight engine. It has no key storage, never asks for signatures, and cannot initiate or broadcast transactions.</p>
+              </div>
+            </div>
+            <div class="security-footer">
+              <span class="security-badge">Banknote-grade security motif</span>
+              <p>The geometric guilloche wave above represents the layered harmonic curves used on currency to prevent counterfeit. Here, it signifies verified, tamper-proof pre-flight checks.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Testnet Evidence -->
       <section class="section-block reveal" id="evidence">
         <div class="section-head">
@@ -355,8 +387,6 @@ if (verdict.status === "block") {
 
       <!-- Closing CTA -->
       <section class="closing-cta reveal">
-        <div class="guilloche guilloche-hero" aria-hidden="true" data-variant="hero"></div>
-
         <h2>Check before you send, not after.</h2>
         <p class="lede">Stop losing funds to missing memos and unconfigured trustlines. Run a check now in your browser.</p>
         <div class="cta-actions">

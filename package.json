@@ -1,0 +1,47 @@
+{
+  "name": "@stellagate/core",
+  "version": "0.1.0",
+  "description": "Check a Stellar destination before you send: memo requirements, address types and contract-account compatibility.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "stellar",
+    "soroban",
+    "memo",
+    "sep-29",
+    "muxed",
+    "wallet"
+  ],
+  "author": "jadonamite",
+  "license": "Apache-2.0",
+  "type": "module",
+  "dependencies": {
+    "@stellar/stellar-sdk": "^17.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  },
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/StellaGate/stellagate.git"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

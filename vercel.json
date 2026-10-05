@@ -6,6 +6,10 @@
   "outputDirectory": "site/dist",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/app", "destination": "/app.html" }
+    { "source": "/app", "destination": "/app.html" },
+    { "source": "/batch", "destination": "/batch.html" },
+    { "source": "/memo", "destination": "/memo.html" },
+    { "source": "/docs", "destination": "/docs.html" },
+    { "source": "/playground", "destination": "/playground.html" }
   ]
 }

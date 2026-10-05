@@ -8,3 +8,4 @@ coverage/
 Frame *.png
 /stellagate-*.png
 /*.jpeg
+.env*

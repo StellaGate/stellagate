@@ -7,6 +7,8 @@
  * 3. Landing page scroll observer (shows floating pill when scrolled past zero-height sentinel).
  */
 
+import { initNotice } from "./notice.ts";
+
 export interface NavOptions {
   hasFloatingPill?: boolean;
 }
@@ -14,6 +16,7 @@ export interface NavOptions {
 export function initNav(options: NavOptions = {}): void {
   initMobileMenus();
   initDropdowns();
+  initNotice();
 
   if (options.hasFloatingPill) {
     initLandingPill();

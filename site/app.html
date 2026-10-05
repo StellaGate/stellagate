@@ -8,87 +8,81 @@
     <link rel="icon" href="data:," />
     <script type="module" src="./src/app.ts"></script>
   </head>
-  <body class="app-body page-frame">
+  <body class="app-body">
     <a class="skip" href="#main">Skip to content</a>
 
-    <!-- Navigation (Echonome 3-column architecture) -->
-    <header class="app-header-wrap">
-      <div class="nav-root">
-        <div class="nav-bar nav-bar-pill">
-          <!-- Left Column: Links on desktop, Menu toggle on mobile -->
-          <div class="nav-col-left">
-            <nav class="nav-links-desktop" aria-label="Main Navigation">
-              <a href="./app.html" class="is-active">App</a>
-              <a href="./batch.html">Batch</a>
-              <a href="./memo.html">Memo Lab</a>
-              <div class="nav-dropdown">
-                <button type="button" class="nav-dropdown-trigger" aria-expanded="false" aria-haspopup="true">
-                  <span>Developer</span>
-                  <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </button>
-                <div class="nav-dropdown-menu" role="menu">
-                  <a href="./docs.html" class="nav-dropdown-item" role="menuitem">
-                    <span class="dropdown-item-title">Developer Docs</span>
-                    <span class="dropdown-item-sub">API reference, TypeScript types, and guides</span>
-                  </a>
-                  <a href="./playground.html" class="nav-dropdown-item" role="menuitem">
-                    <span class="dropdown-item-title">SDK Playground</span>
-                    <span class="dropdown-item-sub">Interactive sandbox and code generator</span>
-                  </a>
-                </div>
-              </div>
-            </nav>
-            <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-label="Open menu">
-              <span class="nav-toggle-bar nav-toggle-bar-top" aria-hidden="true"></span>
-              <span class="nav-toggle-bar nav-toggle-bar-mid" aria-hidden="true"></span>
-              <span class="nav-toggle-bar nav-toggle-bar-bot" aria-hidden="true"></span>
-            </button>
-          </div>
+    <!-- In-App Navigation (logo -> navlinks -> buttons) -->
+    <header class="app-header">
+      <div class="app-nav-bar">
+        <!-- 1. Left: Logo -->
+        <a href="./" class="app-brand" aria-label="Stellagate home">
+          <img src="./stellagate-navy.png" alt="" aria-hidden="true" class="nav-logo nav-logo-navy" width="26" height="26" />
+          <img src="./stellagate-white.png" alt="" aria-hidden="true" class="nav-logo nav-logo-white" width="26" height="26" />
+          <img src="./stellagate-black.png" alt="" aria-hidden="true" class="nav-logo nav-logo-black" width="26" height="26" />
+          <span class="app-brand-name">Stellagate</span>
+        </a>
 
-          <!-- Center Column: Absolutely Centered Brand Logo -->
-          <div class="nav-col-center">
-            <a href="./" class="nav-brand" aria-label="Stellagate home">
-              <img src="./stellagate-navy.png" alt="" aria-hidden="true" class="nav-logo nav-logo-navy" width="28" height="28" />
-              <img src="./stellagate-white.png" alt="" aria-hidden="true" class="nav-logo nav-logo-white" width="28" height="28" />
-              <img src="./stellagate-black.png" alt="" aria-hidden="true" class="nav-logo nav-logo-black" width="28" height="28" />
-              <span class="nav-brand-text">Stellagate</span>
-            </a>
-          </div>
-
-          <!-- Right Column: GitHub button & Network Indicator -->
-          <div class="nav-col-right">
-            <a href="{{repo}}" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub repository">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        <!-- 2. Middle: Navlinks -->
+        <nav class="app-nav-links" aria-label="Main Navigation">
+          <a href="./app.html" class="app-nav-link is-active">App</a>
+          <a href="./batch.html" class="app-nav-link">Batch</a>
+          <a href="./memo.html" class="app-nav-link">Memo Lab</a>
+          <div class="nav-dropdown">
+            <button type="button" class="app-nav-link nav-dropdown-trigger" aria-expanded="false" aria-haspopup="true">
+              <span>Developer</span>
+              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" />
               </svg>
-            </a>
-            <div class="app-net-pill" id="app-net-pill" role="status" aria-label="Selected network: Mainnet">
-              <span class="net-dot" aria-hidden="true"></span>
-              <span id="app-net-name">Mainnet</span>
+            </button>
+            <div class="nav-dropdown-menu" role="menu">
+              <a href="./docs.html" class="nav-dropdown-item" role="menuitem">
+                <span class="dropdown-item-title">Developer Docs</span>
+                <span class="dropdown-item-sub">API reference, TypeScript types, and guides</span>
+              </a>
+              <a href="./playground.html" class="nav-dropdown-item" role="menuitem">
+                <span class="dropdown-item-title">SDK Playground</span>
+                <span class="dropdown-item-sub">Interactive sandbox and code generator</span>
+              </a>
             </div>
           </div>
-        </div>
+        </nav>
 
-        <!-- Mobile Drawer Menu -->
-        <div class="nav-mobile-menu" aria-hidden="true">
-          <nav class="nav-mobile-links" aria-label="Sections">
-            <a href="./app.html" class="is-active">App</a>
-            <a href="./batch.html">Batch Checker</a>
-            <a href="./memo.html">Memo Lab</a>
-            <a href="./docs.html">Developer Docs</a>
-            <a href="./playground.html">SDK Playground</a>
-            <a href="./terms.html">Terms</a>
-            <a href="./privacy.html">Privacy</a>
-            <a href="{{repo}}" target="_blank" rel="noopener noreferrer">GitHub</a>
-          </nav>
+        <!-- 3. Right: Buttons & Controls -->
+        <div class="app-nav-actions nav-root">
+          <a href="{{repo}}" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub repository">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+          </a>
+          <div class="app-net-pill" id="app-net-pill" role="status" aria-label="Selected network: Mainnet">
+            <span class="net-dot" aria-hidden="true"></span>
+            <span id="app-net-name">Mainnet</span>
+          </div>
+          <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-label="Open menu">
+            <span class="nav-toggle-bar nav-toggle-bar-top" aria-hidden="true"></span>
+            <span class="nav-toggle-bar nav-toggle-bar-mid" aria-hidden="true"></span>
+            <span class="nav-toggle-bar nav-toggle-bar-bot" aria-hidden="true"></span>
+          </button>
+
+          <!-- Mobile Drawer Menu -->
+          <div class="nav-mobile-menu" aria-hidden="true">
+            <nav class="nav-mobile-links" aria-label="Sections">
+              <a href="./app.html" class="is-active">App</a>
+              <a href="./batch.html">Batch Checker</a>
+              <a href="./memo.html">Memo Lab</a>
+              <a href="./docs.html">Developer Docs</a>
+              <a href="./playground.html">SDK Playground</a>
+              <a href="./terms.html">Terms</a>
+              <a href="./privacy.html">Privacy</a>
+              <a href="{{repo}}" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </nav>
+          </div>
         </div>
       </div>
     </header>
 
     <main id="main">
-      <div class="app-card-head">
+      <div class="app-card-head app-single-check-head">
         <h1>Check a Stellar address</h1>
         <p class="lede">Verify memo requirements, account existence, and asset holdability before you sign. Check before sending.</p>
       </div>
@@ -162,7 +156,6 @@
       <section class="verdict" id="verdict" aria-live="polite" hidden></section>
     </main>
 
-    <!--footer-->
     <!--notice-->
   </body>
 </html>

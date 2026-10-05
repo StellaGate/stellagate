@@ -1,8 +1,8 @@
 import "./tokens.css";
 import "./styles.css";
 import type { CheckInput, Reason, Verdict } from "@stellagate/core";
-import { drawGuilloche } from "./guilloche.ts";
 import { initNotice } from "./notice.ts";
+import { initNav } from "./nav.ts";
 
 let core: Promise<typeof import("@stellagate/core")> | undefined;
 const loadCore = () => (core ??= import("@stellagate/core"));
@@ -42,6 +42,9 @@ const FIELDS = ["to", "memo", "asset", "amount", "from"] as const;
 const form = document.querySelector<HTMLFormElement>("#check-form")!;
 const button = document.querySelector<HTMLButtonElement>("#check-button")!;
 const verdictEl = document.querySelector<HTMLElement>("#verdict")!;
+const modal = document.querySelector<HTMLDialogElement>("#check-modal")!;
+const modalContent = document.querySelector<HTMLElement>("#modal-content")!;
+const modalCloseIcon = document.querySelector<HTMLButtonElement>("#modal-close-icon")!;
 const input = (name: string) => form.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement;
 
 type RowStatus = "fine" | "check" | "stop" | "skipped";
@@ -185,9 +188,6 @@ function render(v: Verdict, q: CheckInput) {
     }
     verdictEl.append(list);
   }
-  verdictEl.tabIndex = -1;
-  verdictEl.focus({ preventScroll: true });
-  verdictEl.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
 }
 
 function renderError(message: string) {
@@ -198,6 +198,152 @@ function renderError(message: string) {
   head.append(el("p", "verdict-word", "Could not check."), el("p", "verdict-summary", message), el("p", "verdict-fix", "Check your connection and try again."));
   verdictEl.append(head);
 }
+
+function showLoadingModal() {
+  modalContent.innerHTML = `
+    <div class="modal-loading-pane">
+      <div class="loading-radar" aria-hidden="true">
+        <svg class="radar-svg" viewBox="0 0 64 64">
+          <circle class="radar-track" cx="32" cy="32" r="28" />
+          <circle class="radar-sweep" cx="32" cy="32" r="28" />
+          <circle class="radar-inner" cx="32" cy="32" r="14" />
+          <circle class="radar-center" cx="32" cy="32" r="3" />
+        </svg>
+      </div>
+      <h2 id="modal-headline">Checking destination</h2>
+      <p>Querying ledger state and public directory</p>
+    </div>
+  `;
+  if (!modal.open) {
+    if (typeof modal.showModal === "function") {
+      modal.showModal();
+    } else {
+      modal.setAttribute("open", "");
+    }
+  }
+}
+
+function showResultModal(v: Verdict, q: CheckInput) {
+  const top = topReason(v);
+  const target = v.destination?.kind === "contract" ? v.destination.contract : v.destination?.kind === "federation" ? v.account : (v.destination?.input || q.to);
+
+  let iconSvg = "";
+  let title = "";
+  let iconClass = "";
+
+  if (v.status === "ok") {
+    iconClass = "status-ok";
+    title = "Looks fine";
+    iconSvg = `
+      <svg class="status-svg" viewBox="0 0 64 64" aria-hidden="true">
+        <circle class="svg-circle" cx="32" cy="32" r="28" fill="none" />
+        <path class="svg-check" fill="none" d="M18 33.5l9 9 19-19" />
+      </svg>
+    `;
+  } else if (v.status === "block") {
+    iconClass = "status-stop";
+    title = "Stop. Do not send.";
+    iconSvg = `
+      <svg class="status-svg" viewBox="0 0 64 64" aria-hidden="true">
+        <circle class="svg-circle" cx="32" cy="32" r="28" fill="none" />
+        <path class="svg-cross-1" fill="none" d="M20 20l24 24" />
+        <path class="svg-cross-2" fill="none" d="M44 20l-24 24" />
+      </svg>
+    `;
+  } else {
+    iconClass = "status-warn";
+    title = "Check first";
+    iconSvg = `
+      <svg class="status-svg" viewBox="0 0 64 64" aria-hidden="true">
+        <circle class="svg-circle" cx="32" cy="32" r="28" fill="none" />
+        <path class="svg-warn-line" fill="none" d="M32 18v18" />
+        <circle class="svg-warn-dot" cx="32" cy="44" r="2.5" />
+      </svg>
+    `;
+  }
+
+  let bodyHtml = "";
+  if (v.status === "ok") {
+    bodyHtml = `<p class="modal-result-summary">No blockers detected. Destination exists and can receive this asset.</p>`;
+  } else if (top) {
+    bodyHtml = `
+      <div class="modal-callout ${v.status === "warn" ? "callout-warn" : ""}">
+        <p class="modal-callout-msg">${top.message}</p>
+        ${top.fix ? `<p class="modal-callout-fix">${top.fix}</p>` : ""}
+      </div>
+    `;
+  }
+
+  const destHtml = target ? `<div class="modal-dest-addr">${chunk(target)}</div>` : "";
+
+  modalContent.innerHTML = `
+    <div class="modal-result-pane">
+      <div class="result-icon-wrap ${iconClass}">
+        ${iconSvg}
+      </div>
+      <h2 id="modal-headline">${title}</h2>
+      ${bodyHtml}
+      ${destHtml}
+      <div class="modal-actions">
+        ${target ? `<button type="button" class="button button-quiet" id="modal-copy-btn">Copy address</button>` : ""}
+        <button type="button" class="button button-primary" id="modal-done-btn">${v.status === "block" ? "Edit details" : "Done"}</button>
+      </div>
+    </div>
+  `;
+
+  const doneBtn = modalContent.querySelector<HTMLButtonElement>("#modal-done-btn");
+  doneBtn?.addEventListener("click", () => modal.close());
+
+  const copyBtn = modalContent.querySelector<HTMLButtonElement>("#modal-copy-btn");
+  if (copyBtn && target) {
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText(target).then(() => {
+        copyBtn.textContent = "Copied";
+        setTimeout(() => { copyBtn.textContent = "Copy address"; }, 1500);
+      }).catch(() => {});
+    });
+  }
+}
+
+function showModalError(message: string) {
+  modalContent.innerHTML = `
+    <div class="modal-result-pane">
+      <div class="result-icon-wrap status-stop">
+        <svg class="status-svg" viewBox="0 0 64 64" aria-hidden="true">
+          <circle class="svg-circle" cx="32" cy="32" r="28" fill="none" />
+          <path class="svg-cross-1" fill="none" d="M20 20l24 24" />
+          <path class="svg-cross-2" fill="none" d="M44 20l-24 24" />
+        </svg>
+      </div>
+      <h2 id="modal-headline">Could not check</h2>
+      <p class="modal-result-summary">${message}</p>
+      <div class="modal-actions">
+        <button type="button" class="button button-primary" id="modal-err-close">Close</button>
+      </div>
+    </div>
+  `;
+  const closeBtn = modalContent.querySelector<HTMLButtonElement>("#modal-err-close");
+  closeBtn?.addEventListener("click", () => modal.close());
+}
+
+modalCloseIcon?.addEventListener("click", () => modal.close());
+modal?.addEventListener("click", (e) => {
+  if (e.target === modal) modal.close();
+});
+
+function updateNetworkIndicator() {
+  const network = (form.elements.namedItem("network") as RadioNodeList).value as "public" | "testnet";
+  const pill = document.querySelector("#app-net-pill");
+  const nameEl = document.querySelector("#app-net-name");
+  const isTestnet = network === "testnet";
+  if (pill) {
+    pill.classList.toggle("is-testnet", isTestnet);
+    pill.setAttribute("aria-label", `Selected network: ${isTestnet ? "Testnet" : "Mainnet"}`);
+  }
+  if (nameEl) nameEl.textContent = isTestnet ? "Testnet" : "Mainnet";
+}
+
+form.querySelectorAll('input[name="network"]').forEach((r) => r.addEventListener("change", updateNetworkIndicator));
 
 function readInput(): CheckInput {
   const val = (n: string) => input(n).value.trim() || undefined;
@@ -214,15 +360,24 @@ function syncUrl(q: CheckInput) {
 
 async function run() {
   const q = readInput();
+  if (!q.to) {
+    input("to").focus();
+    return;
+  }
   button.disabled = true;
   button.textContent = "Checking...";
   form.setAttribute("aria-busy", "true");
+
+  showLoadingModal();
+
   let lib: Awaited<ReturnType<typeof loadCore>>;
   try {
     lib = await loadCore();
   } catch {
     core = undefined;
-    renderError("The checker could not be loaded.");
+    const msg = "The checker could not be loaded.";
+    renderError(msg);
+    showModalError(msg);
     button.disabled = false;
     button.textContent = "Check address";
     form.removeAttribute("aria-busy");
@@ -237,10 +392,20 @@ async function run() {
     syncUrl(q);
   }
 
+  const startTime = Date.now();
   try {
-    render(await check(q), q);
+    const v = await check(q);
+    const elapsed = Date.now() - startTime;
+    const minWait = 460;
+    if (elapsed < minWait) {
+      await new Promise((r) => setTimeout(r, minWait - elapsed));
+    }
+    render(v, q);
+    showResultModal(v, q);
   } catch (err) {
-    renderError(`The Stellar network did not answer: ${(err as Error).message}.`);
+    const msg = `The Stellar network did not answer: ${(err as Error).message}.`;
+    renderError(msg);
+    showModalError(msg);
   } finally {
     button.disabled = false;
     button.textContent = "Check address";
@@ -264,6 +429,7 @@ function applyPreset(name: string) {
   if (p.from) input("from").value = p.from;
   const netRadio = form.querySelector(`input[value="${p.network ?? "public"}"]`) as HTMLInputElement | null;
   if (netRadio) netRadio.checked = true;
+  updateNetworkIndicator();
   if (p.memo || p.asset || p.amount || p.from) {
     (document.querySelector("#details") as HTMLDetailsElement).open = true;
   }
@@ -290,9 +456,10 @@ for (const f of FIELDS) {
   if (v) input(f).value = v;
 }
 if (params.get("network") === "testnet") (form.querySelector('input[value="testnet"]') as HTMLInputElement).checked = true;
+updateNetworkIndicator();
 if (["memo", "asset", "amount", "from"].some((f) => params.get(f))) (document.querySelector("#details") as HTMLDetailsElement).open = true;
 
 form.addEventListener("focusin", () => void loadCore().catch(() => (core = undefined)), { once: true });
-drawGuilloche(document.querySelector(".guilloche")!);
+initNav();
 initNotice();
 if (params.get("to")) void run();

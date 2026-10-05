@@ -4,43 +4,115 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Stellagate: check a Stellar address before you send</title>
-    <meta name="description" content="Paste a Stellar address and find out, before you sign, whether it needs a memo, whether it can hold the asset, and whether your wallet can reach it." />
+    <meta name="description" content="Paste any Stellar address and know in seconds if it needs a memo, if it can take your asset, and if your wallet can reach it." />
     <link rel="icon" href="data:," />
     <script type="module" src="./src/landing.ts"></script>
   </head>
   <body class="landing-page">
     <a class="skip" href="#main">Skip to content</a>
 
-    <header class="topbar">
-      <div class="topbar-inner">
-        <a class="wordmark" href="./">Stellagate</a>
-        <nav class="nav-links" aria-label="Sections">
-          <a href="#why">Why</a>
-          <a href="#how">How it works</a>
-          <a href="#security">Security</a>
-          <a href="#evidence">Evidence</a>
-          <a href="#developers">Developers</a>
-          <a href="#faq">FAQ</a>
-        </nav>
-        <div class="header-actions">
-          <a class="header-link" href="{{repo}}">GitHub</a>
-          <a class="button button-primary" href="./app.html">Check an address</a>
+    <header class="landing-header">
+      <div class="nav-root">
+        <div class="nav-bar">
+          <div class="nav-col-left">
+            <nav class="nav-links-desktop" aria-label="Sections">
+              <a href="./app.html">App</a>
+            </nav>
+            <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-label="Open menu">
+              <span class="nav-toggle-bar nav-toggle-bar-top" aria-hidden="true"></span>
+              <span class="nav-toggle-bar nav-toggle-bar-mid" aria-hidden="true"></span>
+              <span class="nav-toggle-bar nav-toggle-bar-bot" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div class="nav-col-center">
+            <a href="./" class="nav-brand" aria-label="Stellagate home">
+              <img src="./stellagate-navy.png" alt="" aria-hidden="true" class="nav-logo nav-logo-navy" width="28" height="28" />
+              <img src="./stellagate-white.png" alt="" aria-hidden="true" class="nav-logo nav-logo-white" width="28" height="28" />
+              <img src="./stellagate-black.png" alt="" aria-hidden="true" class="nav-logo nav-logo-black" width="28" height="28" />
+              <span class="nav-brand-text">Stellagate</span>
+            </a>
+          </div>
+
+          <div class="nav-col-right">
+            <a href="{{repo}}" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub repository">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+            </a>
+            <a class="button button-primary" href="./app.html">Check an address</a>
+          </div>
+        </div>
+
+        <div class="nav-mobile-menu" aria-hidden="true">
+          <nav class="nav-mobile-links" aria-label="Sections">
+            <a href="./app.html">App</a>
+            <a href="./terms.html">Terms</a>
+            <a href="./privacy.html">Privacy</a>
+            <a href="{{repo}}" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </nav>
         </div>
       </div>
     </header>
 
+    <div id="nav-sentinel" aria-hidden="true"></div>
+
+    <div id="landing-pill-wrap" class="landing-pill-wrap" aria-hidden="true">
+      <div class="landing-pill-inner">
+        <div class="nav-root">
+          <div class="nav-bar nav-bar-pill" id="landing-floating-pill">
+            <div class="nav-col-left">
+              <nav class="nav-links-desktop" aria-label="Sections">
+                <a href="./app.html">App</a>
+              </nav>
+              <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-label="Open menu">
+                <span class="nav-toggle-bar nav-toggle-bar-top" aria-hidden="true"></span>
+                <span class="nav-toggle-bar nav-toggle-bar-mid" aria-hidden="true"></span>
+                <span class="nav-toggle-bar nav-toggle-bar-bot" aria-hidden="true"></span>
+              </button>
+            </div>
+
+            <div class="nav-col-center">
+              <a href="./" class="nav-brand" aria-label="Stellagate home">
+                <img src="./stellagate-white.png" alt="" aria-hidden="true" class="nav-logo nav-logo-white" width="26" height="26" />
+                <span class="nav-brand-text">Stellagate</span>
+              </a>
+            </div>
+
+            <div class="nav-col-right">
+              <a href="{{repo}}" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub repository">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                </svg>
+              </a>
+              <a class="button button-primary" href="./app.html">Check an address</a>
+            </div>
+          </div>
+
+          <div class="nav-mobile-menu" aria-hidden="true">
+            <nav class="nav-mobile-links" aria-label="Sections">
+              <a href="./app.html">App</a>
+              <a href="./terms.html">Terms</a>
+              <a href="./privacy.html">Privacy</a>
+              <a href="{{repo}}" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <main id="main" class="frame">
-      <section class="hero-landing" aria-labelledby="hero-title">
-        <div class="hero-copy">
+      <section class="hero-wrap" aria-labelledby="hero-title">
+        <div class="hero-panel">
           <h1 id="hero-title">Check a Stellar address before you send, not after.</h1>
-          <p class="lede">Paste the address. Stellagate tells you whether it needs a memo, whether it can hold the asset, and whether your wallet can reach it, before you sign anything.</p>
+          <p class="lede">Paste any address and know in seconds if it needs a memo, if it can take your asset, and if your wallet can reach it. Your money lands where you meant it.</p>
           <div class="hero-actions">
             <a href="./app.html" class="button button-primary">Check an address</a>
-            <p class="hero-note">No wallet connection, no sign-up.</p>
+            <p class="hero-note">Free. No wallet, no sign-up.</p>
           </div>
         </div>
 
-        <figure class="snapshot">
+        <a class="snapshot" href="./app.html?to=GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH" aria-label="Open this Bybit check in Stellagate">
           <div class="app-mock">
             <div class="mock-chrome">
               <span class="mock-dots" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -48,266 +120,325 @@
             </div>
             <div class="mock-body">
               <p class="mock-label">Address you are sending to</p>
-              <div class="mock-input">
-                <span class="mock-field">GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH</span>
-                <span class="mock-button" aria-hidden="true">Check address</span>
+              <p class="mock-field">GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH</p>
+              <div class="mock-controls">
+                <span class="mock-segmented"><span class="is-on">Main network</span><span>Test network</span></span>
+                <span class="mock-button">Check address</span>
               </div>
-
               <div class="mock-verdict">
                 <p class="mock-word">Stop.</p>
                 <p class="mock-summary">Bybit requires a memo (SEP-29). Without it, the payment may arrive and never be credited.</p>
                 <p class="mock-fix">Get the memo from the receiver (an exchange shows it next to the deposit address) and include it.</p>
-                <p class="mock-address" aria-label="GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH"><span>GDT7</span><span>ARDY</span><span>ZRBX</span><span>XYOC</span><span>SQ3M</span><span>UMIS</span><span>TITS</span><span>SRWZ</span><span>I6KR</span><span>2A5L</span><span>5Q3K</span><span>B4QI</span><span>ZHGY</span><span>MTIH</span></p>
-                <p class="mock-note">Listed in the public directory as Bybit (bybit.com).</p>
                 <ul class="frag-rows">
                   <li class="frag-row row-fine"><span class="frag-status">Fine</span><span class="frag-q">Does it exist?</span><span class="frag-a">Yes, it is live on the network.</span></li>
                   <li class="frag-row row-stop"><span class="frag-status">Stop</span><span class="frag-q">Does it need a memo?</span><span class="frag-a">Yes, and no memo was given.</span></li>
-                  <li class="frag-row row-skipped"><span class="frag-status">Not checked</span><span class="frag-q">Can it hold the asset?</span><span class="frag-a">Add the asset under the fuller check to find out.</span></li>
-                  <li class="frag-row row-skipped"><span class="frag-status">Not checked</span><span class="frag-q">Can your wallet send to it?</span><span class="frag-a">Add your wallet address under the fuller check to find out.</span></li>
                   <li class="frag-row row-fine"><span class="frag-status">Fine</span><span class="frag-q">Is it on a warning list?</span><span class="frag-a">No. It is not flagged in the public directory.</span></li>
                 </ul>
               </div>
             </div>
           </div>
-          <figcaption>A real result for Bybit's deposit address on 3 October 2026. <a href="./app.html?to=GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH">Run this check yourself</a>.</figcaption>
-        </figure>
+        </a>
       </section>
 
       <div class="band" aria-hidden="true"></div>
 
-      <section class="ruled" id="why" aria-labelledby="why-title">
-        <header class="ruled-head">
-          <h2 id="why-title">A Stellar address does not say what the receiver needs.</h2>
-          <p class="section-intro">Three payments that go wrong every day, and the line Stellagate shows before they do.</p>
-        </header>
-        <div class="cells cells-3">
-          <article class="cell">
-            <div class="frag"><div class="frag-row row-stop"><span class="frag-status">Stop</span><span class="frag-q">Does it need a memo?</span><span class="frag-a">Yes, and no memo was given.</span></div></div>
-            <h3>The exchange needed a memo</h3>
-            <p>Exchanges keep every customer's deposits in one account and tell them apart by the memo. Leave it off and the money arrives, but nobody can tell it is yours.</p>
-          </article>
-          <article class="cell">
-            <div class="frag"><div class="frag-row row-stop"><span class="frag-status">Stop</span><span class="frag-q">Can it hold the asset?</span><span class="frag-a">No. It has not opted in to this asset.</span></div></div>
-            <h3>The wallet could not hold the asset</h3>
-            <p>A Stellar account has to opt in to each asset before it can receive it, and some issuers have to approve it as well. Until then, the payment fails.</p>
-          </article>
-          <article class="cell">
-            <div class="frag"><div class="frag-row row-stop"><span class="frag-status">Stop</span><span class="frag-q">Does it need a memo?</span><span class="frag-a">Yes, and a smart wallet cannot attach one.</span></div></div>
-            <h3>A smart wallet cannot add a memo</h3>
-            <p>Passkey wallets pay through Soroban contracts, and those payments have no memo field. Stellagate tells you to send from a regular account, or to use the exchange's M-address if it has one.</p>
-          </article>
-        </div>
-        <div class="cells cells-2">
-          <div class="cell cell-stat">
-            <p class="stat-number">87%</p>
-            <p class="stat-label">of exchange accounts that need a memo never say so on chain.</p>
-          </div>
-          <div class="cell">
-            <p>StellarExpert's public directory lists 107 accounts that need a memo. Only 14 set the SEP-29 flag that lets a wallet warn you. Binance, Kraken and Coinbase are among the 93 that do not, so Stellagate reads the directory as well as the flag.</p>
-            <p class="cell-note">Survey of 2 October 2026. Rerun it with <code>node scripts/survey-memo-required.mjs</code>.</p>
-          </div>
-        </div>
-      </section>
-
       <section class="ruled" id="how" aria-labelledby="how-title">
         <header class="ruled-head">
           <h2 id="how-title">How it works</h2>
-          <p class="section-intro">One paste, five questions. Every check runs in your browser against the live network.</p>
+          <p class="section-intro">Paste an address. Stellagate asks the network everything that matters and answers in plain words.</p>
         </header>
         <ol class="cells cells-3 steps">
           <li class="cell step">
             <span class="step-num" aria-hidden="true">01</span>
-            <div class="frag"><div class="frag-input">GDT7 ARDY ZRBX XYOC ...</div></div>
-            <h3>Paste the address</h3>
-            <p>G, M, C or name*domain. Paste a secret key by mistake and Stellagate clears it before anything goes over the network.</p>
+            <div class="shot"><div class="frag-input">GDT7ARDYZRBXXYOCSQ3MUMIST...</div></div>
+            <h3>Paste any address</h3>
+            <p>An exchange deposit, a friend's wallet, a smart wallet or a name like lobstr*lobstr.co. Stellagate reads them all.</p>
           </li>
           <li class="cell step">
             <span class="step-num" aria-hidden="true">02</span>
-            <div class="frag"><div class="frag-row row-fine"><span class="frag-status">Fine</span><span class="frag-q">Does it exist?</span><span class="frag-a">Yes, it is live on the network.</span></div></div>
-            <h3>Does it exist?</h3>
-            <p>An account that has not been created yet cannot receive an asset, and a plain XLM payment to it fails too.</p>
+            <div class="shot"><div class="frag-row row-fine"><span class="frag-status">Fine</span><span class="frag-q">Does it exist?</span><span class="frag-a">Yes, it is live on the network.</span></div></div>
+            <h3>It finds the account</h3>
+            <p>Live on the network, or not created yet. You hear it before you send, not after.</p>
           </li>
           <li class="cell step">
             <span class="step-num" aria-hidden="true">03</span>
-            <div class="frag"><div class="frag-row row-stop"><span class="frag-status">Stop</span><span class="frag-q">Does it need a memo?</span><span class="frag-a">Yes, and no memo was given.</span></div></div>
-            <h3>Does it need a memo?</h3>
-            <p>Stellagate reads the account's own SEP-29 flag and the public directory of more than a hundred exchange accounts.</p>
+            <div class="shot"><div class="frag-row row-stop"><span class="frag-status">Stop</span><span class="frag-q">Does it need a memo?</span><span class="frag-a">Yes, and no memo was given.</span></div></div>
+            <h3>It knows the memo rules</h3>
+            <p>More than a hundred exchange accounts, including the ones that never tell your wallet they need a memo.</p>
           </li>
           <li class="cell step">
             <span class="step-num" aria-hidden="true">04</span>
-            <div class="frag"><div class="frag-row row-stop"><span class="frag-status">Stop</span><span class="frag-q">Can it hold the asset?</span><span class="frag-a">Not this much. It would pass the account's own limit.</span></div></div>
-            <h3>Can it hold the asset?</h3>
-            <p>It checks the trustline, the issuer's approval and the limit. For a contract address, it checks the asset's Stellar Asset Contract instead.</p>
+            <div class="shot"><div class="frag-row row-stop"><span class="frag-status">Stop</span><span class="frag-q">Can it hold the asset?</span><span class="frag-a">No. It has not opted in to this asset.</span></div></div>
+            <h3>It checks the asset</h3>
+            <p>Can that wallet actually hold USDC, or whatever you are sending? Stellagate knows before you sign.</p>
           </li>
           <li class="cell step">
             <span class="step-num" aria-hidden="true">05</span>
-            <div class="frag"><div class="frag-row row-check"><span class="frag-status">Check</span><span class="frag-q">Can your wallet send to it?</span><span class="frag-a">Probably, but many exchanges do not credit these yet.</span></div></div>
-            <h3>Can your wallet send to it?</h3>
-            <p>Smart wallets cannot attach a memo. If yours is one, Stellagate says so and gives you the route that works.</p>
+            <div class="shot"><div class="frag-row row-check"><span class="frag-status">Check</span><span class="frag-q">Can your wallet send to it?</span><span class="frag-a">Probably, but many exchanges do not credit these yet.</span></div></div>
+            <h3>It checks your wallet</h3>
+            <p>Paying from a smart wallet? Stellagate tells you what will work before you try it.</p>
           </li>
           <li class="cell step">
             <span class="step-num" aria-hidden="true">06</span>
-            <div class="frag"><div class="frag-row row-stop"><span class="frag-status">Stop</span><span class="frag-q">Is it on a warning list?</span><span class="frag-a">Yes. Do not send.</span></div></div>
-            <h3>Is it on a warning list?</h3>
-            <p>Accounts the public directory flags as malicious or unsafe are stopped outright, whatever else checks out.</p>
+            <div class="shot"><div class="frag-verdict"><span class="frag-word">Looks fine.</span><span class="frag-a">Nothing we checked would stop this payment.</span></div></div>
+            <h3>You get the answer</h3>
+            <p>Stop, check first, or looks fine. Every answer comes with the exact fix.</p>
           </li>
         </ol>
       </section>
 
-      <section class="ruled" id="security" aria-labelledby="security-title">
-        <div class="guilloche" aria-hidden="true"></div>
-        <header class="ruled-head">
-          <h2 id="security-title">It reads the network. It never signs.</h2>
-        </header>
-        <div class="cells cells-3">
-          <div class="cell">
-            <h3>Runs in your browser</h3>
-            <p>The checks call Horizon, Stellar RPC and the StellarExpert directory straight from your browser. Stellagate has no server of its own, so there is nothing of ours to log what you paste.</p>
-          </div>
-          <div class="cell">
-            <h3>Secret keys are refused</h3>
-            <p>Paste a secret key (it starts with S) and the check stops, clears the field and keeps the key out of the address bar. No request is made with it.</p>
-          </div>
-          <div class="cell">
-            <h3>No custody, no signing</h3>
-            <p>Stellagate never asks for a signature, holds no keys and cannot send a transaction. Your wallet does the sending.</p>
-          </div>
-        </div>
-      </section>
+      <div class="band" aria-hidden="true"></div>
 
-      <section class="ruled" id="evidence" aria-labelledby="evidence-title">
+      <section class="ruled" id="features" aria-labelledby="features-title">
         <header class="ruled-head">
-          <h2 id="evidence-title">Tested against the real network</h2>
-          <p class="section-intro">We ran each check on testnet, then sent the payment anyway. Where Stellagate said Stop over a trustline or a missing account, the network refused the payment too. Two kinds of Stop cover payments the network accepts: a deposit without its memo, and tokens sent to a contract address with nothing deployed. We sent the second. The network took it, and the tokens are stuck.</p>
-        </header>
-        <div class="table-wrap">
-          <table class="evidence-table">
-            <thead>
-              <tr>
-                <th scope="col">Scenario</th>
-                <th scope="col">Stellagate</th>
-                <th scope="col">What the network did</th>
-                <th scope="col">Transaction</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Memo-required account, memo given</td>
-                <td><span class="badge badge-go">Looks fine</span></td>
-                <td>Accepted</td>
-                <td><a href="https://stellar.expert/explorer/testnet/tx/0413d6019e269dfc59450238f9df62998f26ce48e490c5d047147c08159490d1">0413d601</a></td>
-              </tr>
-              <tr>
-                <td>No trustline for the asset</td>
-                <td><span class="badge badge-stop">Stop</span></td>
-                <td><code>op_no_trust</code></td>
-                <td><a href="https://stellar.expert/explorer/testnet/tx/d7f807caff09093a48f48146584a84127a1e71995d3a0d3df105f667220021f2">d7f807ca</a></td>
-              </tr>
-              <tr>
-                <td>Over the trustline limit</td>
-                <td><span class="badge badge-stop">Stop</span></td>
-                <td><code>op_line_full</code></td>
-                <td><a href="https://stellar.expert/explorer/testnet/tx/b88d4025cecdb1afdb87c272ed408540fe5aa3c2c72d3e0dc596397908a001ad">b88d4025</a></td>
-              </tr>
-              <tr>
-                <td>Issuer has not approved the trustline</td>
-                <td><span class="badge badge-stop">Stop</span></td>
-                <td><code>op_not_authorized</code></td>
-                <td><a href="https://stellar.expert/explorer/testnet/tx/21a37b87d6e1cc0e8e5b3cb8538d8aebd63ea3d5573113f4ab16e6841024bb5f">21a37b87</a></td>
-              </tr>
-              <tr>
-                <td>Account does not exist</td>
-                <td><span class="badge badge-stop">Stop</span></td>
-                <td><code>op_no_destination</code></td>
-                <td><a href="https://stellar.expert/explorer/testnet/tx/e7ab5249133ce061213c3d8eebe0101ec64066415fdba46d9d49aa57e08370d5">e7ab5249</a></td>
-              </tr>
-              <tr>
-                <td>Contract address with nothing deployed</td>
-                <td><span class="badge badge-stop">Stop</span></td>
-                <td>Accepted, tokens stuck</td>
-                <td><a href="https://stellar.expert/explorer/testnet/tx/301a734ca54956b7274211f8592f60b451e4b25bee33b8fab18faab676653740">301a734c</a></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="cell-note ruled-foot">All 15 scenarios and 22 transactions are in the <a href="{{repo}}#evidence">README</a>. <code>node scripts/testnet-evidence.mjs</code> reruns them in about a minute.</p>
-      </section>
-
-      <section class="ruled" id="developers" aria-labelledby="dev-title">
-        <header class="ruled-head">
-          <h2 id="dev-title">For wallet and dapp developers</h2>
-          <p class="section-intro">Call it before you build the transaction. You get a status, a reason code and a fix written for your user.</p>
+          <h2 id="features-title">Everything that loses a payment, caught</h2>
+          <p class="section-intro">One check covers what wallets miss. Memos, assets, smart wallets and scams, in a single paste.</p>
         </header>
         <div class="cells cells-2">
+          <article class="cell feature">
+            <div class="visual">
+              <div class="visual-card">
+                <p class="visual-title">Exchanges that need a memo</p>
+                <ul class="dir-list">
+                  <li><span>Binance Deposits</span><span class="badge badge-stop">Memo required</span></li>
+                  <li><span>Kraken</span><span class="badge badge-stop">Memo required</span></li>
+                  <li><span>Coinbase Deposits</span><span class="badge badge-stop">Memo required</span></li>
+                  <li><span>Bybit</span><span class="badge badge-stop">Memo required</span></li>
+                </ul>
+              </div>
+            </div>
+            <h3>Memo detection that does not miss</h3>
+            <p>Binance, Kraken and Coinbase never mark their deposit accounts as needing a memo, so most wallets cannot warn you. Stellagate knows anyway.</p>
+          </article>
+          <article class="cell feature">
+            <div class="visual">
+              <div class="visual-card">
+                <p class="frag-word frag-word-stop">Stop.</p>
+                <p class="visual-text">This account has no trustline for USDC, so it cannot receive it. The payment will fail.</p>
+                <p class="visual-fix">Ask the receiver to add a trustline for this asset, or send it as a claimable balance they can accept later.</p>
+              </div>
+            </div>
+            <h3>Assets that cannot land, stopped</h3>
+            <p>No trustline, no issuer approval, over the limit, or a smart wallet with nowhere to put it. Stellagate sees every one.</p>
+          </article>
+        </div>
+        <div class="cells cells-3">
+          <article class="cell feature">
+            <div class="visual visual-short">
+              <ul class="format-list">
+                <li><span class="mono">G...</span>Wallets and exchanges</li>
+                <li><span class="mono">M...</span>Addresses with a customer ID</li>
+                <li><span class="mono">C...</span>Smart wallets</li>
+                <li><span class="mono">name*domain</span>Pay by name</li>
+              </ul>
+            </div>
+            <h3>Every address format</h3>
+            <p>Classic, customer-ID, smart-wallet and pay-by-name addresses. Paste whatever you were given.</p>
+          </article>
+          <article class="cell feature">
+            <div class="visual visual-short">
+              <div class="frag-row row-stop"><span class="frag-status">Stop</span><span class="frag-q">Does it need a memo?</span><span class="frag-a">Yes, and a smart wallet cannot attach one.</span></div>
+            </div>
+            <h3>Built for smart wallets</h3>
+            <p>Passkey wallets cannot add a memo. Stellagate spots the mismatch and hands you the route that works.</p>
+          </article>
+          <article class="cell feature">
+            <div class="visual visual-short">
+              <div class="frag-row row-stop"><span class="frag-status">Stop</span><span class="frag-q">Is it on a warning list?</span><span class="frag-a">Yes. Do not send.</span></div>
+            </div>
+            <h3>Scam accounts, stopped on sight</h3>
+            <p>Accounts the public directory marks as scams are blocked before a single coin moves.</p>
+          </article>
+        </div>
+        <div class="cells cells-2">
+          <article class="cell feature">
+            <div class="visual visual-short">
+              <div class="frag-verdict"><span class="frag-word frag-word-stop">Stop.</span><span class="frag-a">This is a secret key, not an address. Never paste it anywhere; anyone with it controls the account.</span></div>
+            </div>
+            <h3>Catches the worst paste of all</h3>
+            <p>Paste a secret key by mistake and Stellagate wipes it on the spot, before it can go anywhere.</p>
+          </article>
+          <div class="cell cell-cta">
+            <div class="guilloche" aria-hidden="true"></div>
+            <p class="cta-title">If it can go wrong at send, Stellagate catches it first.</p>
+            <a class="button button-light" href="./app.html">Check an address</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="band" aria-hidden="true"></div>
+
+      <section class="ruled" id="use-cases" aria-labelledby="use-title">
+        <header class="ruled-head">
+          <h2 id="use-title">Use cases</h2>
+          <p class="section-intro">Wherever money moves on Stellar. Every example below opens a live check.</p>
+        </header>
+        <div class="cells cells-3">
+          <article class="cell use">
+            <span class="badge badge-stop">Stop</span>
+            <h3>Exchange deposits</h3>
+            <p>Sending to Bybit, Binance or Kraken? Find out the memo is missing before your money disappears into their pool.</p>
+            <a class="button button-soft" href="./app.html?to=GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH">Try it</a>
+          </article>
+          <article class="cell use">
+            <span class="badge badge-stop">Stop</span>
+            <h3>Smart wallet payments</h3>
+            <p>Paying an exchange from a passkey wallet? See whether it can work, and what to do when it cannot.</p>
+            <a class="button button-soft" href="./app.html?to=GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH&amp;from=CC2BO6ZMFVILIJVGW777H3HB4GUKWQ7E5Y4NODWJXTIJBDKHLKPWSN4C">Try it</a>
+          </article>
+          <article class="cell use">
+            <span class="badge badge-stop">Stop</span>
+            <h3>Withdrawals to a wallet</h3>
+            <p>Moving USDC off an exchange? Check the wallet can hold USDC before the withdrawal fails.</p>
+            <a class="button button-soft" href="./app.html?to=GARSCEEOGZ4MGOTZLQHOKJGOPK455N6SHD7SAEFFHIJDAV445GFWJGHD&amp;asset=USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN">Try it</a>
+          </article>
+          <article class="cell use">
+            <span class="badge badge-go">Looks fine</span>
+            <h3>Customer ID addresses</h3>
+            <p>Got an M-address from an exchange? Stellagate confirms your customer ID travels with the payment, no memo needed.</p>
+            <a class="button button-soft" href="./app.html?to=MDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMAAAAAAAMQDC4FFIQ">Try it</a>
+          </article>
+          <article class="cell use">
+            <span class="badge badge-go">Looks fine</span>
+            <h3>Paying by name</h3>
+            <p>Send to a name like lobstr*lobstr.co and see exactly which account it lands in.</p>
+            <a class="button button-soft" href="./app.html?to=lobstr*lobstr.co">Try it</a>
+          </article>
+          <article class="cell use">
+            <span class="badge badge-stop">Stop</span>
+            <h3>Spotting scams</h3>
+            <p>Someone sent you an address to pay? Check it before you trust it.</p>
+            <a class="button button-soft" href="./app.html?to=GA223OFHVKVAH2NBXP4AURJRVJTSOVHGBMKJNL6GRJWNN4SARVGSITYG">Try it</a>
+          </article>
+        </div>
+      </section>
+
+      <div class="band" aria-hidden="true"></div>
+
+      <section class="ruled" id="developers" aria-labelledby="dev-title">
+        <div class="cells cells-2 dev">
+          <div class="cell dev-copy">
+            <h2 id="dev-title">Built for wallets</h2>
+            <p class="section-intro">Put the same check on your send screen with one function call. You get the verdict, the reason and the fix, ready to show your users.</p>
+            <ul class="ticks">
+              <li>One call: <code>check({ to, from, asset })</code></li>
+              <li>Runs in the browser or on your server</li>
+              <li>Every address format, smart wallets included</li>
+              <li>Reasons and fixes written for people, not logs</li>
+            </ul>
+            <a class="button button-primary" href="{{repo}}">Get the library</a>
+          </div>
           <div class="cell">
-            <pre class="code-block"><code>import { check } from "@stellagate/core";
+            <div class="code-panel">
+              <div class="code-tabs" role="tablist" aria-label="Example">
+                <button type="button" role="tab" id="tab-ts" aria-selected="true" aria-controls="pane-ts">TypeScript</button>
+                <button type="button" role="tab" id="tab-json" aria-selected="false" aria-controls="pane-json" tabindex="-1">Result</button>
+              </div>
+              <pre class="code-block" id="pane-ts" role="tabpanel" aria-labelledby="tab-ts"><code>import { check } from "@stellagate/core";
 
 const verdict = await check({
   to: "GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH",
   from: userAddress,
   asset: "native",
-  network: "public",
 });
 
 if (verdict.status === "block") {
-  showStop(verdict.reasons[0].message, verdict.reasons[0].fix);
+  const [reason] = verdict.reasons;
+  showStop(reason.message, reason.fix);
 }</code></pre>
-            <p class="cell-note">Not on npm yet. The library and its tests are in the <a href="{{repo}}">repository</a>.</p>
+              <pre class="code-block" id="pane-json" role="tabpanel" aria-labelledby="tab-json" hidden><code>{
+  "status": "block",
+  "entry": { "name": "Bybit", "domain": "bybit.com" },
+  "reasons": [{
+    "code": "memo_required",
+    "message": "Bybit requires a memo (SEP-29). Without it,
+      the payment may arrive and never be credited.",
+    "fix": "Get the memo from the receiver and include it."
+  }]
+}</code></pre>
+            </div>
           </div>
-          <dl class="cell verdict-guide">
-            <div class="guide-item">
-              <dt><span class="badge badge-stop">block</span></dt>
-              <dd>Stop the send. It would fail on chain, or reach a pooled account that cannot credit it.</dd>
-            </div>
-            <div class="guide-item">
-              <dt><span class="badge badge-caution">warn</span></dt>
-              <dd>Ask the user to confirm. The account may need funding first, or a smart wallet is paying an M-address that some exchanges do not credit yet.</dd>
-            </div>
-            <div class="guide-item">
-              <dt><span class="badge badge-go">ok</span></dt>
-              <dd>Nothing Stellagate checked would stop this payment.</dd>
-            </div>
-          </dl>
         </div>
       </section>
+
+      <div class="band" aria-hidden="true"></div>
 
       <section class="ruled" id="faq" aria-labelledby="faq-title">
         <header class="ruled-head">
-          <h2 id="faq-title">Questions</h2>
+          <h2 id="faq-title">Frequently asked questions</h2>
+          <p class="section-intro">Everything you need to know before your next send.</p>
         </header>
         <div class="faq-list">
-          <details class="faq-item">
-            <summary>Does Stellagate hold or send funds?</summary>
-            <p>No. It reads public account data and gives a verdict. It never signs, submits or holds anything.</p>
+          <details class="faq-item" open>
+            <summary>What does Stellagate check?</summary>
+            <p>Whether the address exists, whether it needs a memo, whether it can hold the asset you are sending, whether your wallet can reach it, and whether it is flagged as a scam. All in one paste.</p>
           </details>
           <details class="faq-item">
-            <summary>Why is the SEP-29 flag not enough?</summary>
-            <p>Only 14 of the 107 exchange accounts known to need a memo set it. Stellagate also reads the public directory, which catches the other 93.</p>
+            <summary>Do I need to connect my wallet?</summary>
+            <p>No. Paste the address and get the answer. Nothing to connect, nothing to sign.</p>
           </details>
           <details class="faq-item">
-            <summary>Can a smart wallet pay an exchange?</summary>
-            <p>Only if the exchange gives you an M-address, or does not need a memo. Smart wallets pay through Soroban, and Soroban transactions cannot carry a memo. Many exchanges do not yet credit M-address transfers from smart wallets, so ask the exchange before you send a large amount.</p>
+            <summary>Does it work with smart wallets?</summary>
+            <p>Yes. Add your smart wallet address and Stellagate tells you whether it can pay that destination, and what to do if it cannot.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Which exchanges does it know?</summary>
+            <p>Every exchange account in StellarExpert's public directory that needs a memo. That is more than a hundred, including Binance, Kraken, Bybit and Coinbase.</p>
           </details>
           <details class="faq-item">
             <summary>What does it cost?</summary>
-            <p>Nothing. It is open source under the Apache-2.0 licence, with no fees and no token.</p>
+            <p>Nothing. Stellagate is free and open source.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can I add it to my wallet or app?</summary>
+            <p>Yes. The library is open source on GitHub, and one function call runs the whole check.</p>
           </details>
         </div>
       </section>
 
-      <section class="closing" aria-labelledby="closing-title">
-        <div class="guilloche" aria-hidden="true"></div>
-        <h2 id="closing-title">Check before you send.</h2>
-        <p class="section-intro">Paste the address and get an answer in a few seconds.</p>
-        <div class="cta-actions">
-          <a href="./app.html" class="button button-primary">Check an address</a>
-          <a href="{{repo}}" class="button button-quiet">View the source</a>
+      <section class="closing-wrap" aria-labelledby="closing-title">
+        <div class="closing-panel">
+          <div class="guilloche" aria-hidden="true"></div>
+          <h2 id="closing-title">Send with certainty.</h2>
+          <p>Paste an address and know before you sign. Free, instant, no sign-up.</p>
+          <a class="button button-light" href="./app.html">Check an address</a>
         </div>
       </section>
 
-      <p class="wordmark-outline" aria-hidden="true">Stellagate</p>
+      <footer class="landing-footer">
+        <div class="footer-cols">
+          <div class="footer-brand">
+            <a class="brand" href="./"><span class="brand-mark" aria-hidden="true"></span><span>Stellagate</span></a>
+            <p>Check a Stellar address before you send, not after.</p>
+          </div>
+          <nav aria-label="Product">
+            <p class="footer-head">Product</p>
+            <a href="./app.html">Check an address</a>
+            <a href="#how">How it works</a>
+            <a href="#use-cases">Use cases</a>
+          </nav>
+          <nav aria-label="Developers">
+            <p class="footer-head">Developers</p>
+            <a href="{{repo}}" target="_blank" rel="noopener noreferrer" class="footer-link-with-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+              <span>GitHub</span>
+            </a>
+            <a href="#developers">The library</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+          <nav aria-label="Legal">
+            <p class="footer-head">Legal</p>
+            <a href="./terms.html">Terms</a>
+            <a href="./privacy.html">Privacy</a>
+            <a href="./cookies.html">Cookies</a>
+          </nav>
+        </div>
+        <p class="wordmark-outline" aria-hidden="true">Stellagate</p>
+        <p class="footer-base">&copy; 2026 Stellagate. Open source under Apache-2.0.</p>
+      </footer>
     </main>
-    <!--footer-->
     <!--notice-->
   </body>
 </html>

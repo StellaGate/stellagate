@@ -91,6 +91,21 @@ const SHORT: Record<string, string> = {
 const HEADLINE = { block: "Stop.", warn: "Check first.", ok: "Looks fine." } as const;
 const STATUS_WORD: Record<RowStatus, string> = { fine: "Fine", check: "Check", stop: "Stop", skipped: "Not checked" };
 
+// Phosphor fill icons (256 viewBox); the word stays as screen-reader text.
+const STATUS_ICON: Record<RowStatus, string> = {
+  fine: "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm45.66,85.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z",
+  stop: "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm37.66,130.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32L139.31,128Z",
+  check: "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm-8,56a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm8,104a12,12,0,1,1,12-12A12,12,0,0,1,128,184Z",
+  skipped: "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm40,112H88a8,8,0,0,1,0-16h80a8,8,0,0,1,0,16Z",
+};
+
+function statusIcon(status: RowStatus): HTMLElement {
+  const wrap = el("span", "row-status");
+  wrap.innerHTML = `<svg viewBox="0 0 256 256" aria-hidden="true" focusable="false"><path d="${STATUS_ICON[status]}"/></svg>`;
+  wrap.append(el("span", "sr-only", STATUS_WORD[status]));
+  return wrap;
+}
+
 function buildRows(v: Verdict, q: CheckInput): Row[] {
   const top = topReason(v);
   const fromReason = (question: string, r: Reason): Row => {
@@ -179,7 +194,7 @@ function render(v: Verdict, q: CheckInput) {
     const list = el("ul", "rows");
     for (const row of buildRows(v, q)) {
       const li = el("li", `row row-${row.status}`);
-      li.append(el("span", "row-status", STATUS_WORD[row.status]));
+      li.append(statusIcon(row.status));
       const body = el("div", "row-body");
       body.append(el("p", "row-question", row.question), el("p", "row-answer", row.answer));
       if (row.fix && row.status !== "skipped") body.append(el("p", "row-fix", row.fix));
@@ -199,19 +214,25 @@ function renderError(message: string) {
   verdictEl.append(head);
 }
 
+const SCALLOP_ROSETTE_PATH =
+  "M 36.29 11.95 A 14.50 14.50 0 0 1 59.71 11.95 A 14.50 14.50 0 0 1 78.66 25.72 A 14.50 14.50 0 0 1 85.90 48.00 A 14.50 14.50 0 0 1 78.66 70.28 A 14.50 14.50 0 0 1 59.71 84.05 A 14.50 14.50 0 0 1 36.29 84.05 A 14.50 14.50 0 0 1 17.34 70.28 A 14.50 14.50 0 0 1 10.10 48.00 A 14.50 14.50 0 0 1 17.34 25.72 A 14.50 14.50 0 0 1 36.29 11.95 Z";
+
 function showLoadingModal() {
   modalContent.innerHTML = `
     <div class="modal-loading-pane">
-      <div class="loading-radar" aria-hidden="true">
-        <svg class="radar-svg" viewBox="0 0 64 64">
-          <circle class="radar-track" cx="32" cy="32" r="28" />
-          <circle class="radar-sweep" cx="32" cy="32" r="28" />
-          <circle class="radar-inner" cx="32" cy="32" r="14" />
-          <circle class="radar-center" cx="32" cy="32" r="3" />
-        </svg>
+      <div class="modal-loading-scene" aria-hidden="true">
+        <div class="radar-ring radar-ring-3"></div>
+        <div class="radar-ring radar-ring-2"></div>
+        <div class="radar-ring radar-ring-1"></div>
+        <div class="radar-pulse-wave radar-pulse-wave-1"></div>
+        <div class="radar-pulse-wave radar-pulse-wave-2"></div>
+        <div class="center-puck">
+          <img src="./stellagate-navy.png" alt="" class="puck-logo puck-logo-navy" width="32" height="32" />
+          <img src="./stellagate-white.png" alt="" class="puck-logo puck-logo-white" width="32" height="32" />
+        </div>
       </div>
-      <h2 id="modal-headline">Checking destination</h2>
-      <p>Querying ledger state and public directory</p>
+      <h2 id="modal-headline" class="modal-headline">Checking destination</h2>
+      <p class="modal-text">Querying ledger state and public directory</p>
     </div>
   `;
   if (!modal.open) {
@@ -227,80 +248,93 @@ function showResultModal(v: Verdict, q: CheckInput) {
   const top = topReason(v);
   const target = v.destination?.kind === "contract" ? v.destination.contract : v.destination?.kind === "federation" ? v.account : (v.destination?.input || q.to);
 
+  let badgeClass = "";
   let iconSvg = "";
   let title = "";
-  let iconClass = "";
+  let text = "";
+  let buttonLabel = "Done";
 
   if (v.status === "ok") {
-    iconClass = "status-ok";
-    title = "Looks fine";
+    badgeClass = "badge-ok";
+    title = "Successful";
+    text = "No blockers detected. Destination exists and can receive this asset.";
     iconSvg = `
-      <svg class="status-svg" viewBox="0 0 64 64" aria-hidden="true">
-        <circle class="svg-circle" cx="32" cy="32" r="28" fill="none" />
-        <path class="svg-check" fill="none" d="M18 33.5l9 9 19-19" />
+      <svg class="rosette-svg" viewBox="0 0 96 96" aria-hidden="true">
+        <path class="rosette-shape" d="${SCALLOP_ROSETTE_PATH}" />
+        <path class="check-path" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" d="M33 49 L43 59 L64 38" />
       </svg>
     `;
+    buttonLabel = "Done";
   } else if (v.status === "block") {
-    iconClass = "status-stop";
+    badgeClass = "badge-stop";
     title = "Stop. Do not send.";
+    text = top ? top.message : "Payment would fail on the Stellar network.";
     iconSvg = `
-      <svg class="status-svg" viewBox="0 0 64 64" aria-hidden="true">
-        <circle class="svg-circle" cx="32" cy="32" r="28" fill="none" />
-        <path class="svg-cross-1" fill="none" d="M20 20l24 24" />
-        <path class="svg-cross-2" fill="none" d="M44 20l-24 24" />
+      <svg class="rosette-svg" viewBox="0 0 96 96" aria-hidden="true">
+        <path class="rosette-shape" d="${SCALLOP_ROSETTE_PATH}" />
+        <path class="cross-path cross-path-1" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round" d="M36 36 L60 60" />
+        <path class="cross-path cross-path-2" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round" d="M60 36 L36 60" />
       </svg>
     `;
+    buttonLabel = "Edit details";
   } else {
-    iconClass = "status-warn";
+    badgeClass = "badge-warn";
     title = "Check first";
+    text = top ? top.message : "Verify destination requirements before sending.";
     iconSvg = `
-      <svg class="status-svg" viewBox="0 0 64 64" aria-hidden="true">
-        <circle class="svg-circle" cx="32" cy="32" r="28" fill="none" />
-        <path class="svg-warn-line" fill="none" d="M32 18v18" />
-        <circle class="svg-warn-dot" cx="32" cy="44" r="2.5" />
+      <svg class="rosette-svg" viewBox="0 0 96 96" aria-hidden="true">
+        <path class="rosette-shape" d="${SCALLOP_ROSETTE_PATH}" />
+        <path class="warn-path" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round" d="M48 31 L48 51" />
+        <circle class="warn-dot" fill="currentColor" cx="48" cy="61" r="3.5" />
       </svg>
     `;
+    buttonLabel = "Done";
   }
 
-  let bodyHtml = "";
-  if (v.status === "ok") {
-    bodyHtml = `<p class="modal-result-summary">No blockers detected. Destination exists and can receive this asset.</p>`;
-  } else if (top) {
-    bodyHtml = `
-      <div class="modal-callout ${v.status === "warn" ? "callout-warn" : ""}">
-        <p class="modal-callout-msg">${top.message}</p>
-        ${top.fix ? `<p class="modal-callout-fix">${top.fix}</p>` : ""}
-      </div>
-    `;
-  }
+  const fixHtml = top?.fix && v.status !== "ok" ? `
+    <div class="modal-callout ${v.status === "warn" ? "callout-warn" : ""}">
+      <p class="modal-callout-msg">${top.fix}</p>
+    </div>
+  ` : "";
 
-  const destHtml = target ? `<div class="modal-dest-addr">${chunk(target)}</div>` : "";
+  const destHtml = target ? `
+    <div class="modal-dest-pill" id="modal-copy-pill" role="button" tabindex="0" title="Click to copy address">
+      <span class="dest-pill-text">${target}</span>
+      <span class="dest-pill-badge" id="modal-copy-status">Copy</span>
+    </div>
+  ` : "";
 
   modalContent.innerHTML = `
     <div class="modal-result-pane">
-      <div class="result-icon-wrap ${iconClass}">
+      <div class="badge-container ${badgeClass}">
         ${iconSvg}
       </div>
-      <h2 id="modal-headline">${title}</h2>
-      ${bodyHtml}
+      <h2 id="modal-headline" class="modal-headline">${title}</h2>
+      <p class="modal-text">${text}</p>
+      ${fixHtml}
       ${destHtml}
-      <div class="modal-actions">
-        ${target ? `<button type="button" class="button button-quiet" id="modal-copy-btn">Copy address</button>` : ""}
-        <button type="button" class="button button-primary" id="modal-done-btn">${v.status === "block" ? "Edit details" : "Done"}</button>
-      </div>
+      <button type="button" class="modal-pill-btn" id="modal-done-btn">${buttonLabel}</button>
     </div>
   `;
 
   const doneBtn = modalContent.querySelector<HTMLButtonElement>("#modal-done-btn");
   doneBtn?.addEventListener("click", () => modal.close());
 
-  const copyBtn = modalContent.querySelector<HTMLButtonElement>("#modal-copy-btn");
-  if (copyBtn && target) {
-    copyBtn.addEventListener("click", () => {
+  const copyPill = modalContent.querySelector<HTMLElement>("#modal-copy-pill");
+  const copyStatus = modalContent.querySelector<HTMLElement>("#modal-copy-status");
+  if (copyPill && copyStatus && target) {
+    const handleCopy = () => {
       navigator.clipboard.writeText(target).then(() => {
-        copyBtn.textContent = "Copied";
-        setTimeout(() => { copyBtn.textContent = "Copy address"; }, 1500);
+        copyStatus.textContent = "Copied";
+        setTimeout(() => { copyStatus.textContent = "Copy"; }, 1500);
       }).catch(() => {});
+    };
+    copyPill.addEventListener("click", handleCopy);
+    copyPill.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleCopy();
+      }
     });
   }
 }
@@ -308,23 +342,21 @@ function showResultModal(v: Verdict, q: CheckInput) {
 function showModalError(message: string) {
   modalContent.innerHTML = `
     <div class="modal-result-pane">
-      <div class="result-icon-wrap status-stop">
-        <svg class="status-svg" viewBox="0 0 64 64" aria-hidden="true">
-          <circle class="svg-circle" cx="32" cy="32" r="28" fill="none" />
-          <path class="svg-cross-1" fill="none" d="M20 20l24 24" />
-          <path class="svg-cross-2" fill="none" d="M44 20l-24 24" />
+      <div class="badge-container badge-stop">
+        <svg class="rosette-svg" viewBox="0 0 96 96" aria-hidden="true">
+          <path class="rosette-shape" d="${SCALLOP_ROSETTE_PATH}" />
+          <path class="cross-path" fill="none" d="M36 36 L60 60 M60 36 L36 60" />
         </svg>
       </div>
-      <h2 id="modal-headline">Could not check</h2>
-      <p class="modal-result-summary">${message}</p>
-      <div class="modal-actions">
-        <button type="button" class="button button-primary" id="modal-err-close">Close</button>
-      </div>
+      <h2 id="modal-headline" class="modal-headline">Could not check</h2>
+      <p class="modal-text">${message}</p>
+      <button type="button" class="modal-pill-btn" id="modal-err-close">Close</button>
     </div>
   `;
   const closeBtn = modalContent.querySelector<HTMLButtonElement>("#modal-err-close");
   closeBtn?.addEventListener("click", () => modal.close());
 }
+
 
 modalCloseIcon?.addEventListener("click", () => modal.close());
 modal?.addEventListener("click", (e) => {
@@ -396,7 +428,7 @@ async function run() {
   try {
     const v = await check(q);
     const elapsed = Date.now() - startTime;
-    const minWait = 460;
+    const minWait = 700;
     if (elapsed < minWait) {
       await new Promise((r) => setTimeout(r, minWait - elapsed));
     }

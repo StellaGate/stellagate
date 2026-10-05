@@ -6,3 +6,5 @@ coverage/
 .vercel
 .impeccable
 Frame *.png
+/stellagate-*.png
+/*.jpeg

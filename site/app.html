@@ -8,7 +8,7 @@
     <link rel="icon" href="data:," />
     <script type="module" src="./src/app.ts"></script>
   </head>
-  <body class="app-body">
+  <body class="app-body landing-page inner-page">
     <a class="skip" href="#main">Skip to content</a>
 
     <!-- In-App Navigation (logo -> navlinks -> buttons) -->
@@ -81,79 +81,85 @@
       </div>
     </header>
 
-    <main id="main">
-      <div class="app-card-head app-single-check-head">
+    <main id="main" class="frame">
+      <header class="ruled-head page-head">
         <h1>Check a Stellar address</h1>
-        <p class="lede">Verify memo requirements, account existence, and asset holdability before you sign. Check before sending.</p>
-      </div>
+        <p class="section-intro">Paste it and know in seconds if it needs a memo, if it can take your asset, and if your wallet can reach it.</p>
+      </header>
 
-      <form id="check-form" class="check-form" novalidate>
-        <div class="field">
-          <label class="field-label" for="to">Destination address</label>
-          <textarea id="to" name="to" class="address-input" rows="2" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="G..., M..., C... or name*domain" required></textarea>
-        </div>
-
-        <fieldset class="network">
-          <legend class="field-label">Network</legend>
-          <div class="segmented">
-            <label><input type="radio" name="network" value="public" checked /><span>Main network</span></label>
-            <label><input type="radio" name="network" value="testnet" /><span>Test network</span></label>
-          </div>
-        </fieldset>
-
-        <details class="details" id="details">
-          <summary>Add memo, asset, or wallet for fuller check</summary>
-          <div class="details-grid">
+      <section class="ruled tool-section" id="tool">
+        <div class="tool-body">
+          <form id="check-form" class="check-form" novalidate>
             <div class="field">
-              <label class="field-label" for="memo">Memo</label>
-              <input id="memo" name="memo" type="text" autocomplete="off" spellcheck="false" />
-              <p class="hint">The memo or tag the exchange showed you, if any.</p>
+              <label class="field-label" for="to">Destination address</label>
+              <textarea id="to" name="to" class="address-input" rows="2" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="G..., M..., C... or name*domain" required></textarea>
             </div>
-            <div class="field">
-              <label class="field-label" for="asset">Asset</label>
-              <input id="asset" name="asset" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters" placeholder="XLM" />
-              <p class="hint">XLM, or CODE:ISSUER for anything else, such as USDC:GA5Z...KZVN.</p>
-            </div>
-            <div class="field">
-              <label class="field-label" for="amount">Amount</label>
-              <input id="amount" name="amount" type="text" inputmode="decimal" autocomplete="off" />
-            </div>
-            <div class="field">
-              <label class="field-label" for="from">Your wallet address</label>
-              <input id="from" name="from" type="text" autocomplete="off" spellcheck="false" placeholder="G... or C..." />
-              <p class="hint">Smart wallets (C...) cannot attach a memo. This lets the check catch that.</p>
-            </div>
-          </div>
-        </details>
 
-        <div class="actions">
-          <button type="submit" class="button button-primary" id="check-button">Check address</button>
+            <fieldset class="network">
+              <legend class="field-label">Network</legend>
+              <div class="segmented">
+                <label><input type="radio" name="network" value="public" checked /><span>Main network</span></label>
+                <label><input type="radio" name="network" value="testnet" /><span>Test network</span></label>
+              </div>
+            </fieldset>
+
+            <details class="details" id="details">
+              <summary>Add memo, asset, or wallet for fuller check</summary>
+              <div class="details-grid">
+                <div class="field">
+                  <label class="field-label" for="memo">Memo</label>
+                  <input id="memo" name="memo" type="text" autocomplete="off" spellcheck="false" />
+                  <p class="hint">The memo or tag the exchange showed you, if any.</p>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="asset">Asset</label>
+                  <input id="asset" name="asset" type="text" autocomplete="off" spellcheck="false" autocapitalize="characters" placeholder="XLM" />
+                  <p class="hint">XLM, or CODE:ISSUER for anything else, such as USDC:GA5Z...KZVN.</p>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="amount">Amount</label>
+                  <input id="amount" name="amount" type="text" inputmode="decimal" autocomplete="off" />
+                </div>
+                <div class="field">
+                  <label class="field-label" for="from">Your wallet address</label>
+                  <input id="from" name="from" type="text" autocomplete="off" spellcheck="false" placeholder="G... or C..." />
+                  <p class="hint">Smart wallets (C...) cannot attach a memo. This lets the check catch that.</p>
+                </div>
+              </div>
+            </details>
+
+            <div class="actions">
+              <button type="submit" class="button button-primary" id="check-button">Check address</button>
+            </div>
+
+            <div class="presets">
+              <span class="presets-label">Try an example:</span>
+              <div class="preset-group">
+                <button type="button" class="preset-chip" data-preset="binance">Binance (needs memo)</button>
+                <button type="button" class="preset-chip" data-preset="smart-wallet">Smart wallet to exchange</button>
+                <button type="button" class="preset-chip" data-preset="trustline">Missing trustline</button>
+                <button type="button" class="preset-chip" data-preset="federation">Federation address</button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Pre-flight Check Modal Dialog -->
+          <dialog id="check-modal" class="check-modal" aria-labelledby="modal-headline" aria-modal="true">
+            <div class="modal-box">
+              <button type="button" class="modal-close" id="modal-close-icon" aria-label="Close dialog">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+              <div id="modal-content"></div>
+            </div>
+          </dialog>
+
+          <section class="verdict" id="verdict" aria-live="polite" hidden></section>
         </div>
+      </section>
 
-        <div class="presets">
-          <span class="presets-label">Try an example:</span>
-          <div class="preset-group">
-            <button type="button" class="preset-chip" data-preset="binance">Binance (needs memo)</button>
-            <button type="button" class="preset-chip" data-preset="smart-wallet">Smart wallet to exchange</button>
-            <button type="button" class="preset-chip" data-preset="trustline">Missing trustline</button>
-            <button type="button" class="preset-chip" data-preset="federation">Federation address</button>
-          </div>
-        </div>
-      </form>
-
-      <!-- Pre-flight Check Modal Dialog -->
-      <dialog id="check-modal" class="check-modal" aria-labelledby="modal-headline" aria-modal="true">
-        <div class="modal-box">
-          <button type="button" class="modal-close" id="modal-close-icon" aria-label="Close dialog">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          </button>
-          <div id="modal-content"></div>
-        </div>
-      </dialog>
-
-      <section class="verdict" id="verdict" aria-live="polite" hidden></section>
+      <!--footer-->
     </main>
 
     <!--notice-->

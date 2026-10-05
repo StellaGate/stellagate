@@ -1,5 +1,8 @@
 import "./tokens.css";
 import "./styles.css";
+import "./landing.css";
+import "./system.css";
+import "./inner.css";
 import { initNav } from "./nav.ts";
 
 initNav();

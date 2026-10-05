@@ -1,0 +1,91 @@
+/* Tool pages: their in-app header, then the landing page's look below it (ruled frame, hairline cells,
+   pill controls, light code, shared footer). Loaded after styles.css, landing.css and system.css.
+   Values come from tokens.css only. */
+
+/* The frame replaces app-body's own main padding */
+body.inner-page > main.frame, body.inner-page > .frame { max-width: none; padding: 0; margin-top: 0; }
+/* Their header keeps its layout; its contents line up with the frame's side rules */
+.inner-page .app-nav-bar { max-width: none; width: min(80rem, 100% - 2 * max(var(--space-4), env(safe-area-inset-left))); margin-inline: auto; padding-inline: var(--space-6); }
+@media (min-width: 48rem) { .inner-page .app-nav-bar { padding-inline: var(--space-10); } }
+body.inner-page { display: block; }
+
+/* Page title block, the same shape as a landing section head */
+.page-head h1 { font-size: var(--text-large-title); font-weight: 500; line-height: 1.1; letter-spacing: -0.03em; max-width: 22ch; }
+@media (min-width: 48rem) { .page-head h1 { font-size: var(--text-section); } }
+
+/* The tool sits in a ruled section, padded like a landing cell */
+.tool-body { padding: var(--space-12) var(--cell-pad) var(--space-16); }
+.tool-body:has(> .memo-lab-grid, > .playground-layout) { padding: 0; }
+
+/* Type: one standard */
+.inner-page h2, .inner-page h3 { font-weight: 500; letter-spacing: -0.01em; }
+.inner-page .field-label, .inner-page .row-question, .inner-page .presets-label { font-weight: 500; }
+.inner-page .field-label .field-hint { display: block; margin-top: var(--space-1); font-size: var(--text-caption); font-weight: 400; color: var(--label-tertiary); }
+.inner-page .segmented input:checked + span { font-weight: 500; }
+.inner-page .verdict-word { font-weight: 600; letter-spacing: -0.03em; }
+
+/* Fully rounded controls */
+.inner-page .preset-chip, .inner-page .segmented, .inner-page .copy-code-btn { border-radius: var(--radius-pill); }
+.inner-page .segmented { width: fit-content; }
+
+/* Boxed cards become hairline cells */
+.inner-page :is(.batch-card, .memo-card, .playground-panel) { background: transparent; border: 0; border-radius: 0; box-shadow: none; }
+.inner-page .batch-card { padding: 0; margin: 0; }
+.inner-page :is(.memo-lab-grid, .playground-layout) { gap: 0; max-width: none; }
+.inner-page :is(.memo-card, .playground-panel) { padding: var(--cell-pad); }
+.inner-page .memo-card + .memo-card, .inner-page .playground-panel + .playground-panel { border-top: 1px solid var(--separator); }
+@media (min-width: 48rem) {
+  .inner-page .memo-lab-grid { grid-template-columns: 1fr 1fr; }
+  .inner-page .memo-card-wide { grid-column: 1 / -1; }
+  .inner-page .memo-card:nth-child(2) { border-top: 0; border-left: 1px solid var(--separator); }
+}
+@media (min-width: 60rem) {
+  .inner-page .playground-panel + .playground-panel { border-top: 0; border-left: 1px solid var(--separator); }
+}
+
+/* Batch: form rhythm, and result counters as one ruled strip */
+.inner-page .batch-form { display: grid; gap: var(--space-8); }
+.inner-page .batch-toolbar { display: grid; gap: var(--space-5); }
+.inner-page .batch-input-wrap { display: grid; gap: var(--space-2); }
+.inner-page .batch-textarea { font-family: var(--font-address); font-size: var(--text-caption); line-height: 1.6; }
+.inner-page .batch-input-meta { font-size: var(--text-caption); color: var(--label-tertiary); }
+.inner-page .batch-kpi-grid { gap: 0; border: 1px solid var(--separator); border-radius: var(--radius-control); overflow: hidden; }
+.inner-page .kpi-card { background: transparent; border: 0; border-radius: 0; }
+.inner-page .kpi-card + .kpi-card { border-left: 1px solid var(--separator); }
+
+/* Check page: form and verdict share the cell's left edge */
+.inner-page .tool-body > #check-form { max-width: var(--measure); margin-inline: 0; margin-top: 0; }
+.inner-page .tool-body > .verdict { max-width: 52rem; margin: var(--space-10) 0 0; }
+
+/* Code: the landing page's light panel, syntax in the semantic colours */
+.inner-page .code-block-wrap {
+  background: var(--field); color: var(--label);
+  border: 1px solid var(--separator); border-radius: var(--radius-control); box-shadow: none;
+}
+.inner-page .code-header { background: color-mix(in srgb, var(--field) 70%, var(--bg)); border-bottom: 1px solid var(--separator); }
+.inner-page .code-tab { color: var(--label-tertiary); }
+.inner-page .copy-code-btn { background: transparent; color: var(--accent); border: 1px solid var(--separator); padding: var(--space-1) var(--space-3); }
+.inner-page .copy-code-btn:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.inner-page .code-pre-fill { background: var(--field); color: var(--label); border: 1px solid var(--separator); }
+.inner-page .code-pre { font-size: var(--text-caption); }
+.inner-page :is(.code-pre, .code-pre-fill) { max-width: 100%; overflow-x: auto; }
+.inner-page .token-keyword { color: var(--accent); }
+.inner-page .token-string { color: var(--go); }
+.inner-page .token-comment { color: var(--label-tertiary); }
+
+/* Docs: sidebar and content inside the frame, divided by a hairline */
+.inner-page .docs-container { max-width: none; margin: 0; padding: 0; gap: 0; }
+.inner-page .docs-sidebar { padding: var(--space-12) var(--space-6); border-right: 1px solid var(--separator); }
+.inner-page .docs-content { max-width: none; padding: var(--space-12) var(--cell-pad) var(--space-16); }
+
+/* Status icons in tool output */
+.inner-page .verdict-badge-large { display: inline-flex; align-items: center; gap: var(--space-2); background: none; padding: 0; font-weight: 500; }
+.inner-page .batch-table .status-icon { width: var(--space-6); height: var(--space-6); }
+
+/* Check modal: the same ink primary button and regular-weight fix text as everywhere else */
+.inner-page .modal-pill-btn { background: var(--label); color: var(--bg); font-weight: 500; }
+.inner-page .modal-pill-btn:hover { background: color-mix(in srgb, var(--label) 88%, var(--bg)); }
+.inner-page .modal-callout { font-weight: 400; }
+
+/* Grid children may shrink; wide code scrolls inside its own box */
+.inner-page :is(.tool-body, .memo-card, .playground-panel, .playground-view, .docs-content, .batch-card) { min-width: 0; }

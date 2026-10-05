@@ -8,7 +8,7 @@
     <link rel="icon" href="data:," />
     <script type="module" src="./src/batch.ts"></script>
   </head>
-  <body class="app-body">
+  <body class="app-body landing-page inner-page">
     <a class="skip" href="#main">Skip to content</a>
 
     <!-- In-App Navigation (logo -> navlinks -> buttons) -->
@@ -78,104 +78,110 @@
       </div>
     </header>
 
-    <main id="main">
-      <div class="app-card-head">
-        <h1>Batch destination checker</h1>
-        <p class="lede">Verify multiple Stellar destinations, memo requirements, and asset holdabilities at once. Built for treasuries, payroll distributions, and airdrops.</p>
-      </div>
+    <main id="main" class="frame">
+      <header class="ruled-head page-head">
+        <h1>Check every address at once</h1>
+        <p class="section-intro">Paste a whole payout list. Stellagate checks every line before a single payment goes out. Built for payroll, treasuries and airdrops.</p>
+      </header>
 
-      <div class="batch-card">
-        <form id="batch-form" class="batch-form">
-          <div class="batch-toolbar">
-            <div class="batch-presets">
-              <span class="presets-label">Samples:</span>
-              <button type="button" class="preset-chip" id="load-sample-btn">Sample payroll &amp; exchange batch</button>
-              <button type="button" class="preset-chip" id="clear-btn">Clear</button>
-            </div>
-            <div class="batch-network">
-              <div class="network-toggle" role="radiogroup" aria-label="Network">
-                <label><input type="radio" name="network" value="public" checked /><span>Mainnet</span></label>
-                <label><input type="radio" name="network" value="testnet" /><span>Testnet</span></label>
+      <section class="ruled tool-section" id="tool">
+        <div class="tool-body">
+          <div class="batch-card">
+            <form id="batch-form" class="batch-form">
+              <div class="batch-toolbar">
+                <div class="batch-presets">
+                  <span class="presets-label">Samples:</span>
+                  <button type="button" class="preset-chip" id="load-sample-btn">Sample payroll &amp; exchange batch</button>
+                  <button type="button" class="preset-chip" id="clear-btn">Clear</button>
+                </div>
+                <div class="batch-network">
+                  <div class="network-toggle segmented" role="radiogroup" aria-label="Network">
+                    <label><input type="radio" name="network" value="public" checked /><span>Mainnet</span></label>
+                    <label><input type="radio" name="network" value="testnet" /><span>Testnet</span></label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="batch-input-wrap">
+                <label for="batch-input" class="field-label">
+                  <span>Addresses to check</span>
+                  <span class="field-hint">One per line, or CSV formatted: Address, Asset, Amount, Memo</span>
+                </label>
+                <textarea
+                  id="batch-input"
+                  class="batch-textarea"
+                  rows="7"
+                  placeholder="Paste destination addresses, one per line.&#10;GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH&#10;GARSCEEOGZ4MGOTZLQHOKJGOPK455N6SHD7SAEFFHIJDAV445GFWJGHD, USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN, 100&#10;MDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMAAAAAAAMQDC4FFIQ&#10;GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"
+                  spellcheck="false"
+                  required
+                ></textarea>
+                <div class="batch-input-meta">
+                  <span id="line-counter">0 addresses detected</span>
+                </div>
+              </div>
+
+              <div class="batch-submit-row">
+                <button type="submit" class="button button-primary" id="batch-submit-btn">Run batch check</button>
+                <span id="batch-progress-text" class="batch-progress-text" hidden>Checking destinations...</span>
+              </div>
+            </form>
+          </div>
+
+          <!-- Batch Results Section -->
+          <section id="batch-results" class="batch-results" hidden>
+            <!-- KPI Summary Cards -->
+            <div class="batch-kpi-grid">
+              <div class="kpi-card">
+                <span class="kpi-num" id="kpi-total">0</span>
+                <span class="kpi-label">Total checked</span>
+              </div>
+              <div class="kpi-card kpi-ok">
+                <span class="kpi-num" id="kpi-ok">0</span>
+                <span class="kpi-label">Ready to send</span>
+              </div>
+              <div class="kpi-card kpi-block">
+                <span class="kpi-num" id="kpi-block">0</span>
+                <span class="kpi-label">Blockers detected</span>
+              </div>
+              <div class="kpi-card kpi-warn">
+                <span class="kpi-num" id="kpi-warn">0</span>
+                <span class="kpi-label">Warnings</span>
               </div>
             </div>
-          </div>
 
-          <div class="batch-input-wrap">
-            <label for="batch-input" class="field-label">
-              <span>Addresses to check</span>
-              <span class="field-hint">One per line, or CSV formatted: Address, Asset, Amount, Memo</span>
-            </label>
-            <textarea
-              id="batch-input"
-              class="batch-textarea"
-              rows="7"
-              placeholder="Paste destination addresses, one per line.&#10;GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH&#10;GARSCEEOGZ4MGOTZLQHOKJGOPK455N6SHD7SAEFFHIJDAV445GFWJGHD, USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN, 100&#10;MDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMAAAAAAAMQDC4FFIQ&#10;GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"
-              spellcheck="false"
-              required
-            ></textarea>
-            <div class="batch-input-meta">
-              <span id="line-counter">0 addresses detected</span>
+            <!-- Action Bar -->
+            <div class="batch-action-bar">
+              <div class="batch-filters">
+                <button type="button" class="filter-chip is-active" data-filter="all">All (<span id="count-all">0</span>)</button>
+                <button type="button" class="filter-chip" data-filter="block">Blockers (<span id="count-block">0</span>)</button>
+                <button type="button" class="filter-chip" data-filter="ok">Ready (<span id="count-ok">0</span>)</button>
+              </div>
+              <div class="batch-export-actions">
+                <button type="button" class="button button-soft" id="export-csv-btn">Export CSV</button>
+                <button type="button" class="button button-soft" id="copy-ready-btn">Copy ready addresses</button>
+              </div>
             </div>
-          </div>
 
-          <div class="batch-submit-row">
-            <button type="submit" class="button button-primary" id="batch-submit-btn">Run batch check</button>
-            <span id="batch-progress-text" class="batch-progress-text" hidden>Checking destinations...</span>
-          </div>
-        </form>
-      </div>
-
-      <!-- Batch Results Section -->
-      <section id="batch-results" class="batch-results" hidden>
-        <!-- KPI Summary Cards -->
-        <div class="batch-kpi-grid">
-          <div class="kpi-card">
-            <span class="kpi-num" id="kpi-total">0</span>
-            <span class="kpi-label">Total checked</span>
-          </div>
-          <div class="kpi-card kpi-ok">
-            <span class="kpi-num" id="kpi-ok">0</span>
-            <span class="kpi-label">Ready to send</span>
-          </div>
-          <div class="kpi-card kpi-block">
-            <span class="kpi-num" id="kpi-block">0</span>
-            <span class="kpi-label">Blockers detected</span>
-          </div>
-          <div class="kpi-card kpi-warn">
-            <span class="kpi-num" id="kpi-warn">0</span>
-            <span class="kpi-label">Warnings</span>
-          </div>
-        </div>
-
-        <!-- Action Bar -->
-        <div class="batch-action-bar">
-          <div class="batch-filters">
-            <button type="button" class="filter-chip is-active" data-filter="all">All (<span id="count-all">0</span>)</button>
-            <button type="button" class="filter-chip" data-filter="block">Blockers (<span id="count-block">0</span>)</button>
-            <button type="button" class="filter-chip" data-filter="ok">Ready (<span id="count-ok">0</span>)</button>
-          </div>
-          <div class="batch-export-actions">
-            <button type="button" class="button button-soft" id="export-csv-btn">Export CSV</button>
-            <button type="button" class="button button-soft" id="copy-ready-btn">Copy ready addresses</button>
-          </div>
-        </div>
-
-        <!-- Results Table -->
-        <div class="batch-table-wrap">
-          <table class="batch-table" id="batch-table">
-            <thead>
-              <tr>
-                <th scope="col" style="width: 110px;">Status</th>
-                <th scope="col">Destination</th>
-                <th scope="col">Type</th>
-                <th scope="col">Verdict &amp; Details</th>
-                <th scope="col" style="width: 140px; text-align: right;">Action</th>
-              </tr>
-            </thead>
-            <tbody id="batch-table-body"></tbody>
-          </table>
+            <!-- Results Table -->
+            <div class="batch-table-wrap">
+              <table class="batch-table" id="batch-table">
+                <thead>
+                  <tr>
+                    <th scope="col" style="width: 110px;">Status</th>
+                    <th scope="col">Destination</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Verdict &amp; Details</th>
+                    <th scope="col" style="width: 140px; text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="batch-table-body"></tbody>
+              </table>
+            </div>
+          </section>
         </div>
       </section>
+
+      <!--footer-->
     </main>
 
     <!--notice-->

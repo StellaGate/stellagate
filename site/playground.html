@@ -8,7 +8,7 @@
     <link rel="icon" href="data:," />
     <script type="module" src="./src/playground.ts"></script>
   </head>
-  <body class="app-body">
+  <body class="app-body landing-page inner-page">
     <a class="skip" href="#main">Skip to content</a>
 
     <!-- In-App Navigation (logo -> navlinks -> buttons) -->
@@ -78,114 +78,120 @@
       </div>
     </header>
 
-    <main id="main">
-      <div class="app-card-head">
-        <h1>SDK Playground &amp; Sandbox</h1>
-        <p class="lede">Test @stellagate/core interactively in your browser. Compose pre-flight inputs, observe real-time verdicts, and generate production TypeScript code.</p>
-      </div>
+    <main id="main" class="frame">
+      <header class="ruled-head page-head">
+        <h1>SDK Playground</h1>
+        <p class="section-intro">Try the library in your browser. Set the inputs, watch the verdict come back, and copy the code into your wallet.</p>
+      </header>
 
-      <div class="playground-layout">
-        <!-- Left Pane: Parameters & Inputs -->
-        <section class="playground-panel" aria-labelledby="head-params">
-          <div class="playground-panel-head">
-            <h2 id="head-params">1. Request Parameters</h2>
-            <div class="playground-presets-row">
-              <span class="presets-label">Presets:</span>
-              <button type="button" class="preset-chip" id="preset-binance">Binance (blocked)</button>
-              <button type="button" class="preset-chip" id="preset-binance-memo">Binance + memo</button>
-              <button type="button" class="preset-chip" id="preset-contract">Soroban SAC</button>
-              <button type="button" class="preset-chip" id="preset-federation">Federation</button>
-            </div>
-          </div>
-
-          <form id="playground-form" class="playground-form" novalidate>
-            <div class="form-field">
-              <label for="pg-to" class="field-label">Destination Address (to)</label>
-              <input type="text" id="pg-to" class="text-input mono-font" placeholder="G..., M..., C..., or user*domain.com" value="GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6" required />
-            </div>
-
-            <div class="form-row-2">
-              <div class="form-field">
-                <label for="pg-from" class="field-label">Sender account (optional)</label>
-                <input type="text" id="pg-from" class="text-input mono-font" placeholder="Optional G... or C..." />
+      <section class="ruled tool-section" id="tool">
+        <div class="tool-body">
+          <div class="playground-layout">
+            <!-- Left Pane: Parameters & Inputs -->
+            <section class="playground-panel" aria-labelledby="head-params">
+              <div class="playground-panel-head">
+                <h2 id="head-params">1. Request Parameters</h2>
+                <div class="playground-presets-row">
+                  <span class="presets-label">Presets:</span>
+                  <button type="button" class="preset-chip" id="preset-binance">Binance (blocked)</button>
+                  <button type="button" class="preset-chip" id="preset-binance-memo">Binance + memo</button>
+                  <button type="button" class="preset-chip" id="preset-contract">Soroban SAC</button>
+                  <button type="button" class="preset-chip" id="preset-federation">Federation</button>
+                </div>
               </div>
-              <div class="form-field">
-                <label for="pg-memo" class="field-label">Payment memo (optional)</label>
-                <input type="text" id="pg-memo" class="text-input mono-font" placeholder="Optional text or ID" />
+
+              <form id="playground-form" class="playground-form" novalidate>
+                <div class="form-field">
+                  <label for="pg-to" class="field-label">Destination Address (to)</label>
+                  <input type="text" id="pg-to" class="text-input mono-font" placeholder="G..., M..., C..., or user*domain.com" value="GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6" required />
+                </div>
+
+                <div class="form-row-2">
+                  <div class="form-field">
+                    <label for="pg-from" class="field-label">Sender account (optional)</label>
+                    <input type="text" id="pg-from" class="text-input mono-font" placeholder="Optional G... or C..." />
+                  </div>
+                  <div class="form-field">
+                    <label for="pg-memo" class="field-label">Payment memo (optional)</label>
+                    <input type="text" id="pg-memo" class="text-input mono-font" placeholder="Optional text or ID" />
+                  </div>
+                </div>
+
+                <div class="form-row-2">
+                  <div class="form-field">
+                    <label for="pg-asset" class="field-label">Asset</label>
+                    <input type="text" id="pg-asset" class="text-input mono-font" value="native" placeholder="native or CODE:ISSUER" />
+                  </div>
+                  <div class="form-field">
+                    <label for="pg-amount" class="field-label">Amount</label>
+                    <input type="text" id="pg-amount" class="text-input mono-font" placeholder="e.g. 100" />
+                  </div>
+                </div>
+
+                <div class="form-row-network">
+                  <span class="field-label">Network Environment</span>
+                  <div class="network-toggle-group segmented">
+                    <label class="network-radio-label">
+                      <input type="radio" name="pg-network" value="public" checked />
+                      <span>Public Mainnet</span>
+                    </label>
+                    <label class="network-radio-label">
+                      <input type="radio" name="pg-network" value="testnet" />
+                      <span>Testnet</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-submit-row">
+                  <button type="submit" id="pg-run-btn" class="button button-primary">
+                    <span>Evaluate check()</span>
+                  </button>
+                  <span id="pg-status-indicator" class="playground-status-text">Ready</span>
+                </div>
+              </form>
+            </section>
+
+            <!-- Right Pane: Output Sandbox -->
+            <section class="playground-panel" aria-labelledby="head-output">
+              <div class="playground-panel-head playground-panel-head-row">
+                <div class="playground-tabs" role="tablist">
+                  <button type="button" class="playground-tab is-active" id="tab-code" role="tab" aria-selected="true" aria-controls="view-code">TypeScript Code</button>
+                  <button type="button" class="playground-tab" id="tab-verdict" role="tab" aria-selected="false" aria-controls="view-verdict">Live Verdict</button>
+                  <button type="button" class="playground-tab" id="tab-json" role="tab" aria-selected="false" aria-controls="view-json">Raw JSON</button>
+                </div>
+                <button type="button" class="copy-code-btn" id="pg-copy-active-btn">Copy</button>
               </div>
-            </div>
 
-            <div class="form-row-2">
-              <div class="form-field">
-                <label for="pg-asset" class="field-label">Asset</label>
-                <input type="text" id="pg-asset" class="text-input mono-font" value="native" placeholder="native or CODE:ISSUER" />
+              <!-- Tab View 1: TypeScript Code -->
+              <div class="playground-view is-active" id="view-code" role="tabpanel" aria-labelledby="tab-code">
+                <pre class="code-pre code-pre-fill"><code id="code-snippet-output"></code></pre>
               </div>
-              <div class="form-field">
-                <label for="pg-amount" class="field-label">Amount</label>
-                <input type="text" id="pg-amount" class="text-input mono-font" placeholder="e.g. 100" />
-              </div>
-            </div>
 
-            <div class="form-row-network">
-              <span class="field-label">Network Environment</span>
-              <div class="network-toggle-group">
-                <label class="network-radio-label">
-                  <input type="radio" name="pg-network" value="public" checked />
-                  <span>Public Mainnet</span>
-                </label>
-                <label class="network-radio-label">
-                  <input type="radio" name="pg-network" value="testnet" />
-                  <span>Testnet</span>
-                </label>
-              </div>
-            </div>
-
-            <div class="form-submit-row">
-              <button type="submit" id="pg-run-btn" class="button button-primary">
-                <span>Evaluate check()</span>
-              </button>
-              <span id="pg-status-indicator" class="playground-status-text">Ready</span>
-            </div>
-          </form>
-        </section>
-
-        <!-- Right Pane: Output Sandbox -->
-        <section class="playground-panel" aria-labelledby="head-output">
-          <div class="playground-panel-head playground-panel-head-row">
-            <div class="playground-tabs" role="tablist">
-              <button type="button" class="playground-tab is-active" id="tab-code" role="tab" aria-selected="true" aria-controls="view-code">TypeScript Code</button>
-              <button type="button" class="playground-tab" id="tab-verdict" role="tab" aria-selected="false" aria-controls="view-verdict">Live Verdict</button>
-              <button type="button" class="playground-tab" id="tab-json" role="tab" aria-selected="false" aria-controls="view-json">Raw JSON</button>
-            </div>
-            <button type="button" class="copy-code-btn" id="pg-copy-active-btn">Copy</button>
-          </div>
-
-          <!-- Tab View 1: TypeScript Code -->
-          <div class="playground-view is-active" id="view-code" role="tabpanel" aria-labelledby="tab-code">
-            <pre class="code-pre code-pre-fill"><code id="code-snippet-output"></code></pre>
-          </div>
-
-          <!-- Tab View 2: Formatted Verdict -->
-          <div class="playground-view" id="view-verdict" role="tabpanel" aria-labelledby="tab-verdict" hidden>
-            <div class="verdict-summary-card" id="verdict-summary-card">
-              <div class="verdict-badge-row">
-                <span class="verdict-badge-large badge-block" id="verdict-status-badge">BLOCK</span>
-                <span class="verdict-time" id="verdict-latency-label">0ms</span>
-              </div>
-              <p class="verdict-summary-text" id="verdict-summary-text">Ready to run. Click Evaluate check() or change inputs.</p>
+              <!-- Tab View 2: Formatted Verdict -->
+              <div class="playground-view" id="view-verdict" role="tabpanel" aria-labelledby="tab-verdict" hidden>
+                <div class="verdict-summary-card" id="verdict-summary-card">
+                  <div class="verdict-badge-row">
+                    <span class="verdict-badge-large badge-block" id="verdict-status-badge">BLOCK</span>
+                    <span class="verdict-time" id="verdict-latency-label">0ms</span>
+                  </div>
+                  <p class="verdict-summary-text" id="verdict-summary-text">Ready to run. Click Evaluate check() or change inputs.</p>
               
-              <div class="verdict-reasons-container" id="verdict-reasons-container">
-                <!-- Dynamically populated reason rows -->
+                  <div class="verdict-reasons-container" id="verdict-reasons-container">
+                    <!-- Dynamically populated reason rows -->
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <!-- Tab View 3: Raw JSON -->
-          <div class="playground-view" id="view-json" role="tabpanel" aria-labelledby="tab-json" hidden>
-            <pre class="code-pre code-pre-fill"><code id="json-snippet-output">{\n  "status": "idle"\n}</code></pre>
+              <!-- Tab View 3: Raw JSON -->
+              <div class="playground-view" id="view-json" role="tabpanel" aria-labelledby="tab-json" hidden>
+                <pre class="code-pre code-pre-fill"><code id="json-snippet-output">{\n  "status": "idle"\n}</code></pre>
+              </div>
+            </section>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <!--footer-->
     </main>
 
     <!--notice-->

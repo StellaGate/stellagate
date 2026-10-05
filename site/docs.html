@@ -8,7 +8,7 @@
     <link rel="icon" href="data:," />
     <script type="module" src="./src/docs.ts"></script>
   </head>
-  <body class="app-body docs-body">
+  <body class="app-body docs-body landing-page inner-page">
     <a class="skip" href="#main">Skip to content</a>
 
     <!-- In-App Navigation (logo -> navlinks -> buttons) -->
@@ -78,6 +78,7 @@
       </div>
     </header>
 
+    <div class="frame">
     <div class="docs-container">
       <!-- Left Sidebar Navigation -->
       <aside class="docs-sidebar" aria-label="Documentation Navigation">
@@ -127,15 +128,15 @@
         <section id="quickstart" class="docs-section">
           <h2>Quick Start</h2>
           <p>
-            Stellagate runs client-side in the browser, in Node.js, Cloudflare Workers, and Deno. It has zero external dependencies other than standard fetch and crypto primitives.
+            Stellagate runs in the browser and in Node.js 20 or later. It is built on <code>@stellar/stellar-sdk</code> and talks only to public Stellar services.
           </p>
 
           <div class="code-block-wrap">
             <div class="code-header">
               <span class="code-tab">Terminal</span>
-              <button type="button" class="copy-code-btn" data-copy="npm install @stellagate/core">Copy</button>
+              <button type="button" class="copy-code-btn" data-copy="npm install github:StellaGate/stellagate">Copy</button>
             </div>
-            <pre class="code-pre"><code>npm install @stellagate/core</code></pre>
+            <pre class="code-pre"><code>npm install github:StellaGate/stellagate</code></pre>
           </div>
 
           <h3>Verify an Address in 3 Lines</h3>
@@ -291,12 +292,12 @@ if (verdict.status === "block") {
         <section id="check-function" class="docs-section">
           <h2>API Reference: check()</h2>
           <p>
-            The primary entrypoint. Evaluates all safety checks concurrently with bounded timeouts and offline fallbacks.
+            The one function you need. It parses the address, looks up the account and the public directory, and returns a verdict with plain-language reasons. If the directory or RPC cannot be reached, it says so in the reasons rather than failing.
           </p>
 
           <h3>Signature</h3>
           <div class="code-block-wrap">
-            <pre class="code-pre"><code><span class="token-keyword">function</span> check(input: CheckInput, options?: CheckOptions): Promise&lt;Verdict&gt;;</code></pre>
+            <pre class="code-pre"><code><span class="token-keyword">function</span> check(input: CheckInput): Promise&lt;Verdict&gt;;</code></pre>
           </div>
 
           <h3 id="check-input">CheckInput Interface</h3>
@@ -314,24 +315,29 @@ if (verdict.status === "block") {
   amount?: <span class="token-keyword">string</span>;
   <span class="token-comment">/** Target network: 'public' or 'testnet' (default: 'public') */</span>
   network?: <span class="token-string">"public"</span> | <span class="token-string">"testnet"</span>;
+  <span class="token-comment">/** Optional data sources; defaults use public Horizon, RPC and StellarExpert */</span>
+  accounts?: AccountSource;
+  contracts?: ContractSource | <span class="token-keyword">null</span>;
+  federation?: FederationResolver;
+  directory?: DirectorySource | <span class="token-keyword">null</span>;
 }</code></pre>
           </div>
 
           <h3 id="verdict-interface">Verdict Interface</h3>
           <div class="code-block-wrap">
             <pre class="code-pre"><code><span class="token-keyword">interface</span> Verdict {
-  <span class="token-comment">/** Overall triage disposition */</span>
+  <span class="token-comment">/** Overall result */</span>
   status: <span class="token-string">"ok"</span> | <span class="token-string">"warn"</span> | <span class="token-string">"block"</span>;
-  <span class="token-comment">/** Human-readable explanation */</span>
-  summary: <span class="token-keyword">string</span>;
-  <span class="token-comment">/** Granular breakdown of individual check results */</span>
+  <span class="token-comment">/** Every finding, each with a code, severity, message and optional fix */</span>
   reasons: Reason[];
-  <span class="token-comment">/** Resolved destination metadata */</span>
-  destination: Destination;
-  <span class="token-comment">/** Directory record if known exchange or entity */</span>
+  <span class="token-comment">/** The parsed destination */</span>
+  destination?: Destination;
+  <span class="token-comment">/** The account the payment will reach, after muxed or federation resolution */</span>
+  account?: <span class="token-keyword">string</span>;
+  <span class="token-comment">/** A memo the destination itself supplied (federation) */</span>
+  memo?: <span class="token-keyword">string</span>;
+  <span class="token-comment">/** Directory record when the account is a known exchange or entity */</span>
   entry?: DirectoryEntry;
-  <span class="token-comment">/** Whether a memo is mandatory */</span>
-  memoRequired: <span class="token-keyword">boolean</span>;
 }</code></pre>
           </div>
         </section>
@@ -348,20 +354,25 @@ if (verdict.status === "block") {
               <span class="code-tab">TypeScript</span>
               <button type="button" class="copy-code-btn" data-copy='import { check, horizonAccountSource, rpcContractSource } from "@stellagate/core";
 
-const verdict = await check(input, {
+const verdict = await check({
+  ...input,
   accounts: horizonAccountSource("https://stellar-horizon.my-enterprise.com"),
-  contracts: rpcContractSource("https://stellar-rpc.my-enterprise.com")
+  contracts: rpcContractSource("https://stellar-rpc.my-enterprise.com"),
 });'>Copy</button>
             </div>
             <pre class="code-pre"><code><span class="token-keyword">import</span> { check, horizonAccountSource, rpcContractSource } <span class="token-keyword">from</span> <span class="token-string">"@stellagate/core"</span>;
 
-<span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check(input, {
+<span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check({
+  ...input,
   accounts: horizonAccountSource(<span class="token-string">"https://stellar-horizon.my-enterprise.com"</span>),
-  contracts: rpcContractSource(<span class="token-string">"https://stellar-rpc.my-enterprise.com"</span>)
+  contracts: rpcContractSource(<span class="token-string">"https://stellar-rpc.my-enterprise.com"</span>),
 });</code></pre>
           </div>
         </section>
       </main>
+    </div>
+
+      <!--footer-->
     </div>
 
     <!--notice-->

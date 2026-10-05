@@ -8,7 +8,7 @@
     <link rel="icon" href="data:," />
     <script type="module" src="./src/memo-lab.ts"></script>
   </head>
-  <body class="app-body">
+  <body class="app-body landing-page inner-page">
     <a class="skip" href="#main">Skip to content</a>
 
     <!-- In-App Navigation (logo -> navlinks -> buttons) -->
@@ -78,171 +78,177 @@
       </div>
     </header>
 
-    <main id="main">
-      <div class="app-card-head">
-        <h1>Stellar Memo Lab &amp; Validator</h1>
-        <p class="lede">Test, validate, and encode Stellar payment memos. Prevent lost exchange deposits, character encoding traps, and transaction submission failures.</p>
-      </div>
+    <main id="main" class="frame">
+      <header class="ruled-head page-head">
+        <h1>Memo Lab</h1>
+        <p class="section-intro">Build a memo and check it before it goes out. See how many bytes your text takes, whether an ID fits, and what a valid hash looks like.</p>
+      </header>
 
-      <div class="memo-lab-grid">
-        <!-- 1. Memo Text Validator (28 bytes UTF-8) -->
-        <section class="memo-card" aria-labelledby="head-text">
-          <div class="memo-card-head">
-            <h2 id="head-text">1. Memo Text (28-byte UTF-8)</h2>
-            <span id="badge-text" class="badge badge-go">Valid</span>
+      <section class="ruled tool-section" id="tool">
+        <div class="tool-body">
+          <div class="memo-lab-grid">
+            <!-- 1. Memo Text Validator (28 bytes UTF-8) -->
+            <section class="memo-card" aria-labelledby="head-text">
+              <div class="memo-card-head">
+                <h2 id="head-text">1. Memo Text (28-byte UTF-8)</h2>
+                <span id="badge-text" class="badge badge-go">Valid</span>
+              </div>
+              <p class="memo-desc">Stellar restricts text memos to <strong>exactly 28 bytes</strong> in UTF-8. Non-ASCII characters (accents, umlauts, symbols) consume 2 to 4 bytes each.</p>
+
+              <div class="memo-input-wrap">
+                <label for="memo-text-input" class="field-label">Memo text</label>
+                <input type="text" id="memo-text-input" class="text-input" placeholder="e.g. Invoice-10492" value="Invoice-10492" />
+              </div>
+
+              <div class="memo-meter-wrap">
+                <div class="meter-bar">
+                  <div class="meter-fill" id="meter-text-fill" style="--meter-scale: 0.46;"></div>
+                </div>
+                <div class="meter-labels">
+                  <span id="meter-text-count">13 / 28 bytes</span>
+                  <span id="meter-char-count">13 characters</span>
+                </div>
+              </div>
+
+              <div class="memo-hex-preview" id="memo-hex-preview">
+                <span class="mono-label">UTF-8 Hex:</span>
+                <code id="memo-hex-code">49 6e 76 6f 69 63 65 2d 31 30 34 39 32</code>
+              </div>
+
+              <div class="memo-presets">
+                <span class="presets-label">Test samples:</span>
+                <button type="button" class="preset-chip" id="sample-text-ascii">Order #8821</button>
+                <button type="button" class="preset-chip" id="sample-text-unicode">Crédit / Café (multi-byte)</button>
+                <button type="button" class="preset-chip" id="sample-text-overflow">This memo string is way too long for Stellar</button>
+              </div>
+            </section>
+
+            <!-- 2. Memo ID Validator (uint64) -->
+            <section class="memo-card" aria-labelledby="head-id">
+              <div class="memo-card-head">
+                <h2 id="head-id">2. Memo ID (64-bit Unsigned Integer)</h2>
+                <span id="badge-id" class="badge badge-go">Valid uint64</span>
+              </div>
+              <p class="memo-desc">Exchanges (Binance, Coinbase, Kraken) use 64-bit integers (`0` to `18,446,744,073,709,551,615`). Negatives, decimals, and numbers above 2^64-1 fail.</p>
+
+              <div class="memo-input-wrap">
+                <label for="memo-id-input" class="field-label">Memo ID integer</label>
+                <input type="text" id="memo-id-input" class="text-input" placeholder="e.g. 109283741" value="109283741" />
+              </div>
+
+              <div class="memo-id-breakdown" id="memo-id-breakdown">
+                <div class="id-row">
+                  <span class="id-row-label">Decimal:</span>
+                  <code class="id-row-val" id="id-val-dec">109283741</code>
+                </div>
+                <div class="id-row">
+                  <span class="id-row-label">Hexadecimal:</span>
+                  <code class="id-row-val" id="id-val-hex">0x0683899d</code>
+                </div>
+                <div class="id-row">
+                  <span class="id-row-label">BigInt Range:</span>
+                  <span class="id-row-status" id="id-val-status">Within valid range</span>
+                </div>
+              </div>
+
+              <div class="memo-presets">
+                <span class="presets-label">Test samples:</span>
+                <button type="button" class="preset-chip" id="sample-id-binance">102938472 (Standard ID)</button>
+                <button type="button" class="preset-chip" id="sample-id-max">18446744073709551615 (Max uint64)</button>
+                <button type="button" class="preset-chip" id="sample-id-overflow">18446744073709551616 (Overflow)</button>
+              </div>
+            </section>
+
+            <!-- 3. Memo Hash & Return (32-byte Hex / Base64) -->
+            <section class="memo-card memo-card-wide" aria-labelledby="head-hash">
+              <div class="memo-card-head">
+                <h2 id="head-hash">3. Memo Hash &amp; Memo Return (32-byte Cryptographic Digest)</h2>
+                <span id="badge-hash" class="badge badge-go">Valid 32-byte Hash</span>
+              </div>
+              <p class="memo-desc">Used for cryptographic proofs, bridge transfers, and payment returns. Stellar expects exactly 32 bytes (64 hex characters or 44 base64 characters).</p>
+
+              <div class="hash-inputs-grid">
+                <div class="memo-input-wrap">
+                  <label for="hash-hex-input" class="field-label">
+                    <span>Hexadecimal (64 chars)</span>
+                    <button type="button" class="field-copy-btn" id="copy-hex-btn">Copy</button>
+                  </label>
+                  <input type="text" id="hash-hex-input" class="text-input mono-font" value="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" />
+                </div>
+
+                <div class="memo-input-wrap">
+                  <label for="hash-b64-input" class="field-label">
+                    <span>Base64 (44 chars)</span>
+                    <button type="button" class="field-copy-btn" id="copy-b64-btn">Copy</button>
+                  </label>
+                  <input type="text" id="hash-b64-input" class="text-input mono-font" value="47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=" />
+                </div>
+              </div>
+
+              <div class="memo-presets">
+                <span class="presets-label">Presets:</span>
+                <button type="button" class="preset-chip" id="sample-hash-sha">SHA-256 of empty string</button>
+                <button type="button" class="preset-chip" id="sample-hash-random">Generate random 32-byte hash</button>
+              </div>
+            </section>
+
+            <!-- 4. Exchange Memo Cheatsheet -->
+            <section class="memo-card memo-card-wide" aria-labelledby="head-cheatsheet">
+              <div class="memo-card-head">
+                <h2 id="head-cheatsheet">Exchange Memo Rules &amp; Directory Guide</h2>
+              </div>
+              <p class="memo-desc">Centralized exchanges use shared omnibus accounts. If you omit or miss your account memo, funds pool in the exchange wallet and require manual proof-of-ownership recovery.</p>
+
+              <div class="batch-table-wrap">
+                <table class="batch-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Destination</th>
+                      <th scope="col">Required Memo Type</th>
+                      <th scope="col">Format</th>
+                      <th scope="col">Common Risk</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Binance</strong></td>
+                      <td><span class="badge badge-go">Memo ID</span></td>
+                      <td>9 to 10 digit positive integer</td>
+                      <td>Omitting memo requires deposit recovery fee and video proof</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Coinbase</strong></td>
+                      <td><span class="badge badge-go">Memo ID</span></td>
+                      <td>Numeric routing ID</td>
+                      <td>Payments without memo stay pending in Coinbase custody</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Kraken</strong></td>
+                      <td><span class="badge badge-go">Memo ID</span></td>
+                      <td>Numeric user ID</td>
+                      <td>Kraken hot wallet rejects unmemoed deposits</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Bybit</strong></td>
+                      <td><span class="badge badge-go">Memo ID</span></td>
+                      <td>Numeric integer ID</td>
+                      <td>Requires support ticket and transaction hash to allocate</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Personal Wallets (Lobstr, Freighter)</strong></td>
+                      <td><span class="badge badge-soft">Optional</span></td>
+                      <td>None required</td>
+                      <td>You own the secret key, no memo needed</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
           </div>
-          <p class="memo-desc">Stellar restricts text memos to <strong>exactly 28 bytes</strong> in UTF-8. Non-ASCII characters (accents, umlauts, symbols) consume 2 to 4 bytes each.</p>
+        </div>
+      </section>
 
-          <div class="memo-input-wrap">
-            <label for="memo-text-input" class="field-label">Memo text</label>
-            <input type="text" id="memo-text-input" class="text-input" placeholder="e.g. Invoice-10492" value="Invoice-10492" />
-          </div>
-
-          <div class="memo-meter-wrap">
-            <div class="meter-bar">
-              <div class="meter-fill" id="meter-text-fill" style="--meter-scale: 0.46;"></div>
-            </div>
-            <div class="meter-labels">
-              <span id="meter-text-count">13 / 28 bytes</span>
-              <span id="meter-char-count">13 characters</span>
-            </div>
-          </div>
-
-          <div class="memo-hex-preview" id="memo-hex-preview">
-            <span class="mono-label">UTF-8 Hex:</span>
-            <code id="memo-hex-code">49 6e 76 6f 69 63 65 2d 31 30 34 39 32</code>
-          </div>
-
-          <div class="memo-presets">
-            <span class="presets-label">Test samples:</span>
-            <button type="button" class="preset-chip" id="sample-text-ascii">Order #8821</button>
-            <button type="button" class="preset-chip" id="sample-text-unicode">Crédit / Café (multi-byte)</button>
-            <button type="button" class="preset-chip" id="sample-text-overflow">This memo string is way too long for Stellar</button>
-          </div>
-        </section>
-
-        <!-- 2. Memo ID Validator (uint64) -->
-        <section class="memo-card" aria-labelledby="head-id">
-          <div class="memo-card-head">
-            <h2 id="head-id">2. Memo ID (64-bit Unsigned Integer)</h2>
-            <span id="badge-id" class="badge badge-go">Valid uint64</span>
-          </div>
-          <p class="memo-desc">Exchanges (Binance, Coinbase, Kraken) use 64-bit integers (`0` to `18,446,744,073,709,551,615`). Negatives, decimals, and numbers above 2^64-1 fail.</p>
-
-          <div class="memo-input-wrap">
-            <label for="memo-id-input" class="field-label">Memo ID integer</label>
-            <input type="text" id="memo-id-input" class="text-input" placeholder="e.g. 109283741" value="109283741" />
-          </div>
-
-          <div class="memo-id-breakdown" id="memo-id-breakdown">
-            <div class="id-row">
-              <span class="id-row-label">Decimal:</span>
-              <code class="id-row-val" id="id-val-dec">109283741</code>
-            </div>
-            <div class="id-row">
-              <span class="id-row-label">Hexadecimal:</span>
-              <code class="id-row-val" id="id-val-hex">0x0683899d</code>
-            </div>
-            <div class="id-row">
-              <span class="id-row-label">BigInt Range:</span>
-              <span class="id-row-status" id="id-val-status">Within valid range</span>
-            </div>
-          </div>
-
-          <div class="memo-presets">
-            <span class="presets-label">Test samples:</span>
-            <button type="button" class="preset-chip" id="sample-id-binance">102938472 (Standard ID)</button>
-            <button type="button" class="preset-chip" id="sample-id-max">18446744073709551615 (Max uint64)</button>
-            <button type="button" class="preset-chip" id="sample-id-overflow">18446744073709551616 (Overflow)</button>
-          </div>
-        </section>
-
-        <!-- 3. Memo Hash & Return (32-byte Hex / Base64) -->
-        <section class="memo-card memo-card-wide" aria-labelledby="head-hash">
-          <div class="memo-card-head">
-            <h2 id="head-hash">3. Memo Hash &amp; Memo Return (32-byte Cryptographic Digest)</h2>
-            <span id="badge-hash" class="badge badge-go">Valid 32-byte Hash</span>
-          </div>
-          <p class="memo-desc">Used for cryptographic proofs, bridge transfers, and payment returns. Stellar expects exactly 32 bytes (64 hex characters or 44 base64 characters).</p>
-
-          <div class="hash-inputs-grid">
-            <div class="memo-input-wrap">
-              <label for="hash-hex-input" class="field-label">
-                <span>Hexadecimal (64 chars)</span>
-                <button type="button" class="field-copy-btn" id="copy-hex-btn">Copy</button>
-              </label>
-              <input type="text" id="hash-hex-input" class="text-input mono-font" value="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" />
-            </div>
-
-            <div class="memo-input-wrap">
-              <label for="hash-b64-input" class="field-label">
-                <span>Base64 (44 chars)</span>
-                <button type="button" class="field-copy-btn" id="copy-b64-btn">Copy</button>
-              </label>
-              <input type="text" id="hash-b64-input" class="text-input mono-font" value="47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=" />
-            </div>
-          </div>
-
-          <div class="memo-presets">
-            <span class="presets-label">Presets:</span>
-            <button type="button" class="preset-chip" id="sample-hash-sha">SHA-256 of empty string</button>
-            <button type="button" class="preset-chip" id="sample-hash-random">Generate random 32-byte hash</button>
-          </div>
-        </section>
-
-        <!-- 4. Exchange Memo Cheatsheet -->
-        <section class="memo-card memo-card-wide" aria-labelledby="head-cheatsheet">
-          <div class="memo-card-head">
-            <h2 id="head-cheatsheet">Exchange Memo Rules &amp; Directory Guide</h2>
-          </div>
-          <p class="memo-desc">Centralized exchanges use shared omnibus accounts. If you omit or miss your account memo, funds pool in the exchange wallet and require manual proof-of-ownership recovery.</p>
-
-          <div class="batch-table-wrap">
-            <table class="batch-table">
-              <thead>
-                <tr>
-                  <th scope="col">Destination</th>
-                  <th scope="col">Required Memo Type</th>
-                  <th scope="col">Format</th>
-                  <th scope="col">Common Risk</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Binance</strong></td>
-                  <td><span class="badge badge-go">Memo ID</span></td>
-                  <td>9 to 10 digit positive integer</td>
-                  <td>Omitting memo requires deposit recovery fee and video proof</td>
-                </tr>
-                <tr>
-                  <td><strong>Coinbase</strong></td>
-                  <td><span class="badge badge-go">Memo ID</span></td>
-                  <td>Numeric routing ID</td>
-                  <td>Payments without memo stay pending in Coinbase custody</td>
-                </tr>
-                <tr>
-                  <td><strong>Kraken</strong></td>
-                  <td><span class="badge badge-go">Memo ID</span></td>
-                  <td>Numeric user ID</td>
-                  <td>Kraken hot wallet rejects unmemoed deposits</td>
-                </tr>
-                <tr>
-                  <td><strong>Bybit</strong></td>
-                  <td><span class="badge badge-go">Memo ID</span></td>
-                  <td>Numeric integer ID</td>
-                  <td>Requires support ticket and transaction hash to allocate</td>
-                </tr>
-                <tr>
-                  <td><strong>Personal Wallets (Lobstr, Freighter)</strong></td>
-                  <td><span class="badge badge-soft">Optional</span></td>
-                  <td>None required</td>
-                  <td>You own the secret key, no memo needed</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </div>
+      <!--footer-->
     </main>
 
     <!--notice-->

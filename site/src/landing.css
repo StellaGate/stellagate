@@ -66,7 +66,7 @@
 .landing-pill-inner {
   margin-inline: auto;
   width: 100%;
-  max-width: 52rem;
+  max-width: 58rem;
 }
 
 .landing-page .button { font-size: var(--text-caption); font-weight: 500; }
@@ -78,8 +78,8 @@
 /* Side rules start below the hero: the painting panel and product shot sit free of the grid. */
 .frame > :not(.hero-wrap) { border-inline: 1px solid var(--separator); }
 @media (min-width: 48rem) { .frame { --cell-pad: var(--space-10); } }
-.ruled, .band, .closing-wrap, .landing-footer { position: relative; }
-.ruled::before, .band::before, .closing-wrap::before, .landing-footer::before {
+.ruled, .band, .closing-wrap { position: relative; }
+.ruled::before, .band::before, .closing-wrap::before {
   content: ""; position: absolute; top: 0; left: 50%; width: 100vw; transform: translateX(-50%);
   border-top: 1px solid var(--separator); pointer-events: none;
 }
@@ -88,12 +88,12 @@
 /* Hero: the painting inside a light frame with notches, after the Forma Studio reference */
 .hero-wrap { padding: var(--space-4) 0 0; }
 .hero-frame {
-  --frame: var(--field); --notch-r: var(--space-6);
-  position: relative; padding: var(--space-3); background: var(--frame);
-  border-radius: calc(var(--radius-hero) + var(--space-3));
+  --frame: var(--field); --notch-r: var(--space-6); --base-d: 2.25rem;
+  position: relative; padding: var(--space-5); background: var(--frame);
+  border-radius: calc(var(--radius-hero) + var(--space-5));
 }
 .hero-panel {
-  position: relative; overflow: hidden; border-radius: var(--radius-hero); color: var(--on-image);
+  position: relative; overflow: hidden; border-radius: var(--radius-hero) var(--radius-hero) 0 0; color: var(--on-image);
   min-height: min(44rem, 90vh); display: grid; grid-template-rows: auto auto 1fr;
   background-color: var(--image-base);
   background-image:
@@ -109,15 +109,21 @@
   top: 0; left: 50%; width: 22rem; height: 3.75rem; transform: translateX(-50%);
   clip-path: path("M0 0H352C302 0 296 60 248 60H104C56 60 50 0 0 0Z");
 }
-.notch-bottom {
-  bottom: var(--space-3); left: 50%; width: 14rem; height: 3rem; transform: translateX(-50%);
-  clip-path: path("M0 48C46 48 52 0 94 0H130C172 0 178 48 224 48Z");
-  display: grid; place-items: end center; padding-bottom: var(--space-1); color: var(--label);
+/* Bottom: the panel dips down into a thick frame band in a rounded U, with the arrow inside it */
+.hero-base { position: absolute; inset: auto 0 0; z-index: 2; display: flex; height: var(--base-d); pointer-events: none; }
+.base-fill { position: relative; flex: 1; background: var(--frame); }
+.base-left::before, .base-right::before { content: ""; position: absolute; bottom: 100%; width: var(--radius-hero); height: var(--radius-hero); }
+.base-left::before { left: 0; background: radial-gradient(circle at 100% 0, transparent var(--radius-hero), var(--frame) calc(var(--radius-hero) + 0.5px)); }
+.base-right::before { right: 0; background: radial-gradient(circle at 0 0, transparent var(--radius-hero), var(--frame) calc(var(--radius-hero) + 0.5px)); }
+.base-cut { flex: none; width: 14rem; background: var(--frame); clip-path: path("M0 0H44C74 0 80 32 112 32C144 32 150 0 180 0H224V36H0Z"); }
+.hero-down {
+  position: absolute; left: 50%; bottom: calc(var(--base-d) - var(--space-8)); z-index: 3; transform: translateX(-50%);
+  display: grid; place-items: center; width: var(--target-min); height: var(--target-min); border-radius: var(--radius-pill);
+  color: var(--on-image);
 }
-.notch-arrow { width: var(--space-6); height: var(--space-6); fill: currentColor; transition: transform var(--duration-state) var(--ease-arrive); }
-.notch-bottom:hover .notch-arrow { transform: translateY(2px); }
-.notch-bottom:focus-visible { outline: 0; }
-.notch-bottom:focus-visible .notch-arrow { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: var(--radius-pill); }
+.hero-down svg { width: var(--space-5); height: var(--space-5); fill: currentColor; transition: transform var(--duration-state) var(--ease-arrive); }
+.hero-down:hover svg { transform: translateY(2px); }
+.hero-down:focus-visible { outline-offset: -2px; }
 .notch-left, .notch-right { top: 50%; width: 1.25rem; height: 8rem; transform: translateY(-50%); }
 .notch-left { left: 0; clip-path: path("M0 0C0 34 20 38 20 64C20 90 0 94 0 128Z"); }
 .notch-right { right: 0; clip-path: path("M20 0C20 34 0 38 0 64C0 90 20 94 20 128Z"); }
@@ -139,15 +145,6 @@
 .hero-cta { padding-inline: var(--space-8); font-size: var(--text-body) !important; }
 .hero-note { font-size: var(--text-caption); color: var(--on-image-secondary); }
 
-.social-btn { color: var(--on-image); border-color: var(--on-image-line); }
-
-.social-btn {
-  display: grid; place-items: center; width: var(--target-min); height: var(--target-min);
-  border: 1px solid var(--separator); border-radius: var(--radius-pill); color: var(--label);
-  transition: background-color var(--duration-state) var(--ease-arrive);
-}
-.social-btn:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
-.social-btn svg { width: var(--space-5); height: var(--space-5); fill: currentColor; }
 
 /* Product shot under the hero, framed by accent corner marks */
 .snapshot {
@@ -394,26 +391,4 @@
 .closing-panel h2 { font-size: var(--text-large-title); font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; }
 @media (min-width: 48rem) { .closing-panel h2 { font-size: var(--text-section); } }
 .closing-panel p { color: var(--on-image-secondary); max-width: 32em; font-size: var(--text-lead); }
-
-/* Footer: the top half of a large outlined wordmark, then one line of icons and legal links */
-.landing-footer { padding: var(--space-16) var(--cell-pad) var(--space-6); }
-.wordmark-outline {
-  --size: min(20vw, 18rem);
-  margin: 0 calc(-1 * var(--cell-pad)); height: calc(var(--size) * 0.5); overflow: hidden; text-align: center;
-  font-size: var(--size); font-weight: 500; line-height: 1; letter-spacing: -0.045em;
-  color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--accent) 50%, transparent);
-  user-select: none;
-}
-.wordmark-outline span { display: block; transform: translateY(-0.08em); }
-@supports not (-webkit-text-stroke: 1px black) { .wordmark-outline { color: var(--separator); } }
-.footer-base {
-  position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4);
-  padding-top: var(--space-5); border-top: 1px solid var(--separator);
-}
-.footer-icons { display: flex; gap: var(--space-2); }
-.footer-legal { display: flex; flex-wrap: wrap; gap: 0 var(--space-6); }
-.footer-legal a { display: inline-flex; align-items: center; min-height: var(--target-min); font-size: var(--text-caption); font-weight: 400; color: var(--label-secondary); text-decoration: none; }
-.footer-legal a:hover { color: var(--label); }
-.footer-legal .legal-icon { width: var(--target-min); justify-content: center; }
-.legal-icon svg { width: var(--space-5); height: var(--space-5); fill: currentColor; }
 

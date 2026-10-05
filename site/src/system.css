@@ -1,0 +1,71 @@
+/* Shared design system for every page: footer, frame, type weights. Values from tokens.css only.
+   Type standard: headings 500, running text 400, labels 500; verdict words alone reach 600. */
+
+/* Footer: the top half of a large outlined wordmark, then one line of icons and legal links */
+.landing-footer { --cell-pad: var(--space-6); position: relative; padding: var(--space-16) var(--cell-pad) var(--space-6); }
+@media (min-width: 48rem) { .landing-footer { --cell-pad: var(--space-10); } }
+.landing-footer::before {
+  content: ""; position: absolute; top: 0; left: 50%; width: 100vw; transform: translateX(-50%);
+  border-top: 1px solid var(--separator); pointer-events: none;
+}
+.wordmark-outline {
+  --size: min(20vw, 18rem);
+  margin: 0 calc(-1 * var(--cell-pad)); height: calc(var(--size) * 0.5); overflow: hidden; text-align: center;
+  font-size: var(--size); font-weight: 500; line-height: 1; letter-spacing: -0.045em;
+  color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--accent) 50%, transparent);
+  user-select: none;
+}
+.wordmark-outline span { display: block; transform: translateY(-0.08em); }
+@supports not (-webkit-text-stroke: 1px black) { .wordmark-outline { color: var(--separator); } }
+.footer-base {
+  position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4);
+  padding-top: var(--space-5); border-top: 1px solid var(--separator);
+}
+.footer-icons { display: flex; gap: var(--space-2); }
+.footer-legal { display: flex; flex-wrap: wrap; gap: 0 var(--space-6); }
+.footer-legal a { display: inline-flex; align-items: center; min-height: var(--target-min); font-size: var(--text-caption); font-weight: 400; color: var(--label-secondary); text-decoration: none; }
+.footer-legal a:hover { color: var(--label); }
+.footer-legal .legal-icon { width: var(--target-min); justify-content: center; }
+.legal-icon svg { width: var(--space-5); height: var(--space-5); fill: currentColor; }
+
+
+
+.social-btn {
+  display: grid; place-items: center; width: var(--target-min); height: var(--target-min);
+  border: 1px solid var(--separator); border-radius: var(--radius-pill); color: var(--label);
+  transition: background-color var(--duration-state) var(--ease-arrive);
+}
+.social-btn:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
+.social-btn svg { width: var(--space-5); height: var(--space-5); fill: currentColor; }
+
+/* Frame for inner pages: the same hairline side rules as the landing page */
+body.page-frame { overflow-x: clip; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body.page-frame > main, body.page-frame > .landing-footer {
+  max-width: none; margin-inline: auto; padding-inline: var(--space-6);
+  width: min(80rem, 100% - 2 * max(var(--space-4), env(safe-area-inset-left)));
+  border-inline: 1px solid var(--separator);
+}
+@media (min-width: 48rem) { body.page-frame > main, body.page-frame > .landing-footer { padding-inline: var(--space-10); } }
+body.page-frame > main { padding-block: var(--space-12) var(--space-16); }
+body.page-frame > main > * { max-width: var(--measure); }
+body.page-frame > main > .verdict, body.page-frame > main > .check-form, body.page-frame > main > section { max-width: var(--measure); }
+body.page-frame > .landing-footer { padding-inline: var(--space-6); }
+@media (min-width: 48rem) { body.page-frame > .landing-footer { padding-inline: var(--space-10); } }
+
+/* Inner page header: the pill nav, inside the frame width */
+.page-header { position: relative; z-index: 20; width: min(80rem, 100% - 2 * max(var(--space-4), env(safe-area-inset-left))); margin-inline: auto; padding: max(var(--space-4), env(safe-area-inset-top)) 0 var(--space-4); }
+.page-header .nav-bar { max-width: 52rem; margin-inline: auto; }
+
+/* Type: one standard across pages */
+body.page-frame h1 { font-weight: 500; letter-spacing: -0.03em; font-size: var(--text-large-title); line-height: 1.1; }
+@media (min-width: 48rem) { body.page-frame h1 { font-size: var(--text-section); } }
+body.page-frame h2 { font-weight: 500; letter-spacing: -0.01em; }
+body.page-frame .field-label, body.page-frame .row-question, body.page-frame .presets-label { font-weight: 500; }
+body.page-frame .segmented input:checked + span { font-weight: 500; }
+body.page-frame .verdict-word { font-weight: 600; letter-spacing: -0.03em; }
+body.page-frame .wordmark { font-weight: 600; }
+body.page-frame .legal p, body.page-frame .legal li { font-weight: 400; }
+
+/* Fully rounded controls everywhere */
+body.page-frame .preset-chip, body.page-frame .segmented { border-radius: var(--radius-pill); }
+@media (max-width: 40rem) { .page-header .nav-col-right .button { display: none; } }

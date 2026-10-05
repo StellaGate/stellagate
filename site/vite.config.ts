@@ -33,8 +33,13 @@ function appRewritePlugin(): Plugin {
     name: "app-rewrite",
     configureServer(server) {
       server.middlewares.use((req, _res, next) => {
-        if (req.url === "/app" || req.url === "/app/") {
-          req.url = "/app.html";
+        const url = req.url?.split("?")[0];
+        const pages = ["app", "batch", "memo", "docs", "playground"];
+        for (const p of pages) {
+          if (url === `/${p}` || url === `/${p}/`) {
+            req.url = `/${p}.html` + (req.url?.includes("?") ? `?${req.url.split("?")[1]}` : "");
+            break;
+          }
         }
         next();
       });
@@ -51,7 +56,10 @@ export default defineConfig(({ command }) => ({
     target: "es2022",
     rollupOptions: {
       input: Object.fromEntries(
-        ["index", "app", "privacy", "terms", "cookies"].map((p) => [p, resolve(import.meta.dirname, `${p}.html`)]),
+        ["index", "app", "batch", "memo", "docs", "playground", "privacy", "terms", "cookies"].map((p) => [
+          p,
+          resolve(import.meta.dirname, `${p}.html`),
+        ]),
       ),
     },
   },

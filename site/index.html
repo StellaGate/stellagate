@@ -27,8 +27,28 @@
         <div class="nav-root">
           <div class="nav-bar nav-bar-pill" id="landing-floating-pill">
             <div class="nav-col-left">
-              <nav class="nav-links-desktop" aria-label="Sections">
+              <nav class="nav-links-desktop" aria-label="Main Navigation">
                 <a href="./app.html">App</a>
+                <a href="./batch.html">Batch</a>
+                <a href="./memo.html">Memo Lab</a>
+                <div class="nav-dropdown">
+                  <button type="button" class="nav-dropdown-trigger" aria-expanded="false" aria-haspopup="true">
+                    <span>Developer</span>
+                    <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+                  <div class="nav-dropdown-menu" role="menu">
+                    <a href="./docs.html" class="nav-dropdown-item" role="menuitem">
+                      <span class="dropdown-item-title">Developer Docs</span>
+                      <span class="dropdown-item-sub">API reference, TypeScript types, and guides</span>
+                    </a>
+                    <a href="./playground.html" class="nav-dropdown-item" role="menuitem">
+                      <span class="dropdown-item-title">SDK Playground</span>
+                      <span class="dropdown-item-sub">Interactive sandbox and code generator</span>
+                    </a>
+                  </div>
+                </div>
               </nav>
               <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-label="Open menu">
                 <span class="nav-toggle-bar nav-toggle-bar-top" aria-hidden="true"></span>
@@ -57,6 +77,10 @@
           <div class="nav-mobile-menu" aria-hidden="true">
             <nav class="nav-mobile-links" aria-label="Sections">
               <a href="./app.html">App</a>
+              <a href="./batch.html">Batch Checker</a>
+              <a href="./memo.html">Memo Lab</a>
+              <a href="./docs.html">Developer Docs</a>
+              <a href="./playground.html">SDK Playground</a>
               <a href="./terms.html">Terms</a>
               <a href="./privacy.html">Privacy</a>
               <a href="{{repo}}" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -75,8 +99,28 @@
             <div class="nav-root">
               <div class="nav-bar">
                 <div class="nav-col-left">
-                  <nav class="nav-links-desktop" aria-label="Sections">
+                  <nav class="nav-links-desktop" aria-label="Main Navigation">
                     <a href="./app.html">App</a>
+                    <a href="./batch.html">Batch</a>
+                    <a href="./memo.html">Memo Lab</a>
+                    <div class="nav-dropdown">
+                      <button type="button" class="nav-dropdown-trigger" aria-expanded="false" aria-haspopup="true">
+                        <span>Developer</span>
+                        <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M6 9l6 6 6-6" />
+                        </svg>
+                      </button>
+                      <div class="nav-dropdown-menu" role="menu">
+                        <a href="./docs.html" class="nav-dropdown-item" role="menuitem">
+                          <span class="dropdown-item-title">Developer Docs</span>
+                          <span class="dropdown-item-sub">API reference, TypeScript types, and guides</span>
+                        </a>
+                        <a href="./playground.html" class="nav-dropdown-item" role="menuitem">
+                          <span class="dropdown-item-title">SDK Playground</span>
+                          <span class="dropdown-item-sub">Interactive sandbox and code generator</span>
+                        </a>
+                      </div>
+                    </div>
                   </nav>
                   <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-label="Open menu">
                     <span class="nav-toggle-bar nav-toggle-bar-top" aria-hidden="true"></span>
@@ -107,6 +151,10 @@
               <div class="nav-mobile-menu" aria-hidden="true">
                 <nav class="nav-mobile-links" aria-label="Sections">
                   <a href="./app.html">App</a>
+                  <a href="./batch.html">Batch Checker</a>
+                  <a href="./memo.html">Memo Lab</a>
+                  <a href="./docs.html">Developer Docs</a>
+                  <a href="./playground.html">SDK Playground</a>
                   <a href="./terms.html">Terms</a>
                   <a href="./privacy.html">Privacy</a>
                   <a href="{{repo}}" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -126,8 +174,9 @@
             </div>
             <span class="notch notch-left" aria-hidden="true"></span>
             <span class="notch notch-right" aria-hidden="true"></span>
+            <div class="hero-base" aria-hidden="true"><span class="base-fill base-left"></span><span class="base-cut"></span><span class="base-fill base-right"></span></div>
+            <a class="hero-down" href="#how" aria-label="Scroll to how it works"><svg aria-hidden="true"><use href="#i-down"/></svg></a>
           </div>
-          <a class="notch notch-bottom" href="#how" aria-label="Scroll to how it works"><svg class="notch-arrow" aria-hidden="true"><use href="#i-down"/></svg></a>
         </div>
 
         <a class="snapshot" href="./app.html?to=GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH" aria-label="Open this Bybit check in Stellagate">
@@ -429,20 +478,7 @@ if (verdict.status === "block") {
         </div>
       </section>
 
-      <footer class="landing-footer">
-        <p class="wordmark-outline" aria-hidden="true"><span>Stellagate</span></p>
-        <div class="footer-base">
-          <div class="footer-icons">
-            <a class="social-btn" href="{{repo}}" target="_blank" rel="noopener noreferrer" aria-label="Stellagate on GitHub"><svg aria-hidden="true"><use href="#i-github"/></svg></a>
-            <a class="social-btn" href="{{repo}}/tree/main/src" target="_blank" rel="noopener noreferrer" aria-label="The Stellagate library"><svg aria-hidden="true"><use href="#i-package"/></svg></a>
-          </div>
-          <nav class="footer-legal" aria-label="Legal">
-            <a href="./terms.html">Terms</a>
-            <a href="./privacy.html">Privacy</a>
-            <a class="legal-icon" href="./cookies.html" aria-label="Cookie policy"><svg aria-hidden="true"><use href="#i-cookie"/></svg></a>
-          </nav>
-        </div>
-      </footer>
+      <!--footer-->
     </main>
     <!--notice-->
   </body>

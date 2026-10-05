@@ -1,5 +1,6 @@
 import "./tokens.css";
 import "./styles.css";
+import "./system.css";
 import type { CheckInput, Reason, Verdict } from "@stellagate/core";
 import { initNotice } from "./notice.ts";
 import { initNav } from "./nav.ts";

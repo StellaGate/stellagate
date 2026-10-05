@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>SDK Playground: Stellagate Interactive Sandbox</title>
+    <meta name="description" content="Interactive browser playground for @stellagate/core. Test addresses, generate TypeScript code, and inspect real-time verdicts." />
+    <link rel="icon" href="data:," />
+    <script type="module" src="./src/playground.ts"></script>
+  </head>
+  <body class="app-body">
+    <a class="skip" href="#main">Skip to content</a>
+
+    <!-- Navigation -->
+    <header class="app-header-wrap">
+      <div class="nav-root">
+        <div class="nav-bar nav-bar-pill">
+          <!-- Left Column -->
+          <div class="nav-col-left">
+            <nav class="nav-links-desktop" aria-label="Main Navigation">
+              <a href="./app.html">App</a>
+              <a href="./batch.html">Batch</a>
+              <a href="./memo.html">Memo Lab</a>
+              <div class="nav-dropdown">
+                <button type="button" class="nav-dropdown-trigger is-active" aria-expanded="false" aria-haspopup="true">
+                  <span>Developer</span>
+                  <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+                <div class="nav-dropdown-menu" role="menu">
+                  <a href="./docs.html" class="nav-dropdown-item" role="menuitem">
+                    <span class="dropdown-item-title">Developer Docs</span>
+                    <span class="dropdown-item-sub">API reference, TypeScript types, and guides</span>
+                  </a>
+                  <a href="./playground.html" class="nav-dropdown-item is-active" role="menuitem">
+                    <span class="dropdown-item-title">SDK Playground</span>
+                    <span class="dropdown-item-sub">Interactive sandbox and code generator</span>
+                  </a>
+                </div>
+              </div>
+            </nav>
+            <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-label="Open menu">
+              <span class="nav-toggle-bar nav-toggle-bar-top" aria-hidden="true"></span>
+              <span class="nav-toggle-bar nav-toggle-bar-mid" aria-hidden="true"></span>
+              <span class="nav-toggle-bar nav-toggle-bar-bot" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <!-- Center Column -->
+          <div class="nav-col-center">
+            <a href="./" class="nav-brand" aria-label="Stellagate home">
+              <img src="./stellagate-navy.png" alt="" aria-hidden="true" class="nav-logo nav-logo-navy" width="28" height="28" />
+              <img src="./stellagate-white.png" alt="" aria-hidden="true" class="nav-logo nav-logo-white" width="28" height="28" />
+              <img src="./stellagate-black.png" alt="" aria-hidden="true" class="nav-logo nav-logo-black" width="28" height="28" />
+              <span class="nav-brand-text">Stellagate</span>
+            </a>
+          </div>
+
+          <!-- Right Column -->
+          <div class="nav-col-right">
+            <a href="{{repo}}" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub repository">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+            </a>
+            <a class="button button-primary" href="./docs.html">Developer docs</a>
+          </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div class="nav-mobile-menu" aria-hidden="true">
+          <nav class="nav-mobile-links" aria-label="Sections">
+            <a href="./app.html">App</a>
+            <a href="./batch.html">Batch Checker</a>
+            <a href="./memo.html">Memo Lab</a>
+            <a href="./docs.html">Developer Docs</a>
+            <a href="./playground.html" class="is-active">SDK Playground</a>
+            <a href="./terms.html">Terms</a>
+            <a href="./privacy.html">Privacy</a>
+            <a href="{{repo}}" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <div class="app-card-head">
+        <h1>SDK Playground &amp; Sandbox</h1>
+        <p class="lede">Test @stellagate/core interactively in your browser. Compose pre-flight inputs, observe real-time verdicts, and generate production TypeScript code.</p>
+      </div>
+
+      <div class="playground-layout">
+        <!-- Left Pane: Parameters & Inputs -->
+        <section class="playground-panel" aria-labelledby="head-params">
+          <div class="playground-panel-head">
+            <h2 id="head-params">1. Request Parameters</h2>
+            <div class="playground-presets-row">
+              <span class="presets-label">Presets:</span>
+              <button type="button" class="preset-chip" id="preset-binance">Binance (blocked)</button>
+              <button type="button" class="preset-chip" id="preset-binance-memo">Binance + memo</button>
+              <button type="button" class="preset-chip" id="preset-contract">Soroban SAC</button>
+              <button type="button" class="preset-chip" id="preset-federation">Federation</button>
+            </div>
+          </div>
+
+          <form id="playground-form" class="playground-form" novalidate>
+            <div class="form-field">
+              <label for="pg-to" class="field-label">Destination Address (to)</label>
+              <input type="text" id="pg-to" class="text-input mono-font" placeholder="G..., M..., C..., or user*domain.com" value="GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6" required />
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-field">
+                <label for="pg-from" class="field-label">Sender account (optional)</label>
+                <input type="text" id="pg-from" class="text-input mono-font" placeholder="Optional G... or C..." />
+              </div>
+              <div class="form-field">
+                <label for="pg-memo" class="field-label">Payment memo (optional)</label>
+                <input type="text" id="pg-memo" class="text-input mono-font" placeholder="Optional text or ID" />
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-field">
+                <label for="pg-asset" class="field-label">Asset</label>
+                <input type="text" id="pg-asset" class="text-input mono-font" value="native" placeholder="native or CODE:ISSUER" />
+              </div>
+              <div class="form-field">
+                <label for="pg-amount" class="field-label">Amount</label>
+                <input type="text" id="pg-amount" class="text-input mono-font" placeholder="e.g. 100" />
+              </div>
+            </div>
+
+            <div class="form-row-network">
+              <span class="field-label">Network Environment</span>
+              <div class="network-toggle-group">
+                <label class="network-radio-label">
+                  <input type="radio" name="pg-network" value="public" checked />
+                  <span>Public Mainnet</span>
+                </label>
+                <label class="network-radio-label">
+                  <input type="radio" name="pg-network" value="testnet" />
+                  <span>Testnet</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-submit-row">
+              <button type="submit" id="pg-run-btn" class="button button-primary">
+                <span>Evaluate check()</span>
+              </button>
+              <span id="pg-status-indicator" class="playground-status-text">Ready</span>
+            </div>
+          </form>
+        </section>
+
+        <!-- Right Pane: Output Sandbox -->
+        <section class="playground-panel" aria-labelledby="head-output">
+          <div class="playground-panel-head playground-panel-head-row">
+            <div class="playground-tabs" role="tablist">
+              <button type="button" class="playground-tab is-active" id="tab-code" role="tab" aria-selected="true" aria-controls="view-code">TypeScript Code</button>
+              <button type="button" class="playground-tab" id="tab-verdict" role="tab" aria-selected="false" aria-controls="view-verdict">Live Verdict</button>
+              <button type="button" class="playground-tab" id="tab-json" role="tab" aria-selected="false" aria-controls="view-json">Raw JSON</button>
+            </div>
+            <button type="button" class="copy-code-btn" id="pg-copy-active-btn">Copy</button>
+          </div>
+
+          <!-- Tab View 1: TypeScript Code -->
+          <div class="playground-view is-active" id="view-code" role="tabpanel" aria-labelledby="tab-code">
+            <pre class="code-pre code-pre-fill"><code id="code-snippet-output"></code></pre>
+          </div>
+
+          <!-- Tab View 2: Formatted Verdict -->
+          <div class="playground-view" id="view-verdict" role="tabpanel" aria-labelledby="tab-verdict" hidden>
+            <div class="verdict-summary-card" id="verdict-summary-card">
+              <div class="verdict-badge-row">
+                <span class="verdict-badge-large badge-block" id="verdict-status-badge">BLOCK</span>
+                <span class="verdict-time" id="verdict-latency-label">0ms</span>
+              </div>
+              <p class="verdict-summary-text" id="verdict-summary-text">Ready to run. Click Evaluate check() or change inputs.</p>
+              
+              <div class="verdict-reasons-container" id="verdict-reasons-container">
+                <!-- Dynamically populated reason rows -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab View 3: Raw JSON -->
+          <div class="playground-view" id="view-json" role="tabpanel" aria-labelledby="tab-json" hidden>
+            <pre class="code-pre code-pre-fill"><code id="json-snippet-output">{\n  "status": "idle"\n}</code></pre>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Minimalist Footer -->
+    <footer class="app-minimal-footer">
+      <span>&copy; 2026 Stellagate. Open source under Apache-2.0.</span>
+      <nav class="app-footer-links" aria-label="Legal and source">
+        <a href="./">Overview</a>
+        <a href="./batch.html">Batch</a>
+        <a href="./memo.html">Memo Lab</a>
+        <a href="./docs.html">Docs</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./terms.html">Terms</a>
+        <a href="./privacy.html">Privacy</a>
+        <a href="{{repo}}" target="_blank" rel="noopener noreferrer" class="footer-link-with-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </nav>
+    </footer>
+    <!--notice-->
+  </body>
+</html>

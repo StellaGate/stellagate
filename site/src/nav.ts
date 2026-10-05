@@ -13,10 +13,61 @@ export interface NavOptions {
 
 export function initNav(options: NavOptions = {}): void {
   initMobileMenus();
+  initDropdowns();
 
   if (options.hasFloatingPill) {
     initLandingPill();
   }
+}
+
+/**
+ * Wire desktop dropdown menus.
+ */
+function initDropdowns(): void {
+  const dropdowns = document.querySelectorAll<HTMLElement>(".nav-dropdown");
+
+  dropdowns.forEach((dd) => {
+    const trigger = dd.querySelector<HTMLButtonElement>(".nav-dropdown-trigger");
+    const menu = dd.querySelector<HTMLElement>(".nav-dropdown-menu");
+    if (!trigger || !menu) return;
+
+    function setOpen(open: boolean) {
+      trigger.setAttribute("aria-expanded", String(open));
+      dd.classList.toggle("is-open", open);
+    }
+
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = trigger.getAttribute("aria-expanded") === "true";
+      // Close other open dropdowns first
+      dropdowns.forEach((other) => {
+        if (other !== dd) {
+          other.querySelector(".nav-dropdown-trigger")?.setAttribute("aria-expanded", "false");
+          other.classList.remove("is-open");
+        }
+      });
+      setOpen(!isOpen);
+    });
+
+    menu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        setOpen(false);
+      });
+    });
+
+    document.addEventListener("pointerdown", (e) => {
+      if (!dd.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && trigger.getAttribute("aria-expanded") === "true") {
+        setOpen(false);
+        trigger.focus();
+      }
+    });
+  });
 }
 
 /**

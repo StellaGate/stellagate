@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Developer Documentation: Stellagate Core SDK</title>
+    <meta name="description" content="Technical documentation, API reference, TypeScript interfaces, and integration guides for @stellagate/core." />
+    <link rel="icon" href="data:," />
+    <script type="module" src="./src/docs.ts"></script>
+  </head>
+  <body class="app-body docs-body">
+    <a class="skip" href="#main">Skip to content</a>
+
+    <!-- Navigation -->
+    <header class="app-header-wrap">
+      <div class="nav-root">
+        <div class="nav-bar nav-bar-pill">
+          <!-- Left Column -->
+          <div class="nav-col-left">
+            <nav class="nav-links-desktop" aria-label="Main Navigation">
+              <a href="./app.html">App</a>
+              <a href="./batch.html">Batch</a>
+              <a href="./memo.html">Memo Lab</a>
+              <div class="nav-dropdown">
+                <button type="button" class="nav-dropdown-trigger is-active" aria-expanded="false" aria-haspopup="true">
+                  <span>Developer</span>
+                  <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+                <div class="nav-dropdown-menu" role="menu">
+                  <a href="./docs.html" class="nav-dropdown-item is-active" role="menuitem">
+                    <span class="dropdown-item-title">Developer Docs</span>
+                    <span class="dropdown-item-sub">API reference, TypeScript types, and guides</span>
+                  </a>
+                  <a href="./playground.html" class="nav-dropdown-item" role="menuitem">
+                    <span class="dropdown-item-title">SDK Playground</span>
+                    <span class="dropdown-item-sub">Interactive sandbox and code generator</span>
+                  </a>
+                </div>
+              </div>
+            </nav>
+            <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-label="Open menu">
+              <span class="nav-toggle-bar nav-toggle-bar-top" aria-hidden="true"></span>
+              <span class="nav-toggle-bar nav-toggle-bar-mid" aria-hidden="true"></span>
+              <span class="nav-toggle-bar nav-toggle-bar-bot" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <!-- Center Column -->
+          <div class="nav-col-center">
+            <a href="./" class="nav-brand" aria-label="Stellagate home">
+              <img src="./stellagate-navy.png" alt="" aria-hidden="true" class="nav-logo nav-logo-navy" width="28" height="28" />
+              <img src="./stellagate-white.png" alt="" aria-hidden="true" class="nav-logo nav-logo-white" width="28" height="28" />
+              <img src="./stellagate-black.png" alt="" aria-hidden="true" class="nav-logo nav-logo-black" width="28" height="28" />
+              <span class="nav-brand-text">Stellagate</span>
+            </a>
+          </div>
+
+          <!-- Right Column -->
+          <div class="nav-col-right">
+            <a href="{{repo}}" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub repository">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+            </a>
+            <a class="button button-primary" href="./playground.html">Try in playground</a>
+          </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div class="nav-mobile-menu" aria-hidden="true">
+          <nav class="nav-mobile-links" aria-label="Sections">
+            <a href="./app.html">App</a>
+            <a href="./batch.html">Batch Checker</a>
+            <a href="./memo.html">Memo Lab</a>
+            <a href="./docs.html" class="is-active">Developer Docs</a>
+            <a href="./playground.html">SDK Playground</a>
+            <a href="./terms.html">Terms</a>
+            <a href="./privacy.html">Privacy</a>
+            <a href="{{repo}}" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <div class="docs-container">
+      <!-- Left Sidebar Navigation -->
+      <aside class="docs-sidebar" aria-label="Documentation Navigation">
+        <div class="docs-sidebar-sticky">
+          <div class="docs-nav-group">
+            <span class="docs-nav-title">Getting Started</span>
+            <ul class="docs-nav-list">
+              <li><a href="#quickstart" class="docs-nav-link is-active">Quick Start</a></li>
+              <li><a href="#architecture" class="docs-nav-link">Decision Architecture</a></li>
+              <li><a href="#supported-addresses" class="docs-nav-link">Supported Address Types</a></li>
+            </ul>
+          </div>
+
+          <div class="docs-nav-group">
+            <span class="docs-nav-title">Core Checks</span>
+            <ul class="docs-nav-list">
+              <li><a href="#memo-verification" class="docs-nav-link">Memo Verification</a></li>
+              <li><a href="#smart-wallets" class="docs-nav-link">Smart Wallets (C-Addresses)</a></li>
+              <li><a href="#asset-holdability" class="docs-nav-link">Asset Holdability &amp; SAC</a></li>
+              <li><a href="#malicious-accounts" class="docs-nav-link">Fraud &amp; Malicious Flags</a></li>
+            </ul>
+          </div>
+
+          <div class="docs-nav-group">
+            <span class="docs-nav-title">API Reference</span>
+            <ul class="docs-nav-list">
+              <li><a href="#check-function" class="docs-nav-link">check() Function</a></li>
+              <li><a href="#check-input" class="docs-nav-link">CheckInput Interface</a></li>
+              <li><a href="#verdict-interface" class="docs-nav-link">Verdict &amp; Reasons</a></li>
+              <li><a href="#custom-sources" class="docs-nav-link">Pluggable Sources</a></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Documentation Content -->
+      <main id="main" class="docs-content">
+        <header class="docs-header">
+          <div class="docs-tag">Developer Reference</div>
+          <h1 class="docs-title">Stellagate Core Documentation</h1>
+          <p class="docs-lede">
+            Pre-flight destination validation engine for the Stellar network. Verify memo mandates, trustlines, SAC compatibility, and malicious account blocks before signing transactions.
+          </p>
+        </header>
+
+        <!-- Section: Quickstart -->
+        <section id="quickstart" class="docs-section">
+          <h2>Quick Start</h2>
+          <p>
+            Stellagate runs client-side in the browser, in Node.js, Cloudflare Workers, and Deno. It has zero external dependencies other than standard fetch and crypto primitives.
+          </p>
+
+          <div class="code-block-wrap">
+            <div class="code-header">
+              <span class="code-tab">Terminal</span>
+              <button type="button" class="copy-code-btn" data-copy="npm install @stellagate/core">Copy</button>
+            </div>
+            <pre class="code-pre"><code>npm install @stellagate/core</code></pre>
+          </div>
+
+          <h3>Verify an Address in 3 Lines</h3>
+          <div class="code-block-wrap">
+            <div class="code-header">
+              <span class="code-tab">TypeScript</span>
+              <button type="button" class="copy-code-btn" data-copy='import { check } from "@stellagate/core";
+
+const verdict = await check({
+  to: "GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6",
+  network: "public"
+});
+
+if (verdict.status === "block") {
+  console.error("Payment rejected:", verdict.reasons[0].message);
+}'>Copy</button>
+            </div>
+            <pre class="code-pre"><code><span class="token-keyword">import</span> { check } <span class="token-keyword">from</span> <span class="token-string">"@stellagate/core"</span>;
+
+<span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check({
+  to: <span class="token-string">"GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6"</span>,
+  network: <span class="token-string">"public"</span>
+});
+
+<span class="token-keyword">if</span> (verdict.status === <span class="token-string">"block"</span>) {
+  console.error(<span class="token-string">"Payment rejected:"</span>, verdict.reasons[0].message);
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- Section: Decision Architecture -->
+        <section id="architecture" class="docs-section">
+          <h2>Decision Architecture</h2>
+          <p>
+            Every pre-flight check produces a deterministic <code>Verdict</code> object containing a single triage status and an array of granular <code>Reason</code> items.
+          </p>
+
+          <div class="batch-table-wrap">
+            <table class="batch-table">
+              <thead>
+                <tr>
+                  <th scope="col">Status</th>
+                  <th scope="col">Visual Badge</th>
+                  <th scope="col">Definition &amp; Wallet Behavior</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ok</code></td>
+                  <td><span class="badge badge-go">GO</span></td>
+                  <td>Payment destination is fully verified. Safe to sign and broadcast.</td>
+                </tr>
+                <tr>
+                  <td><code>warn</code></td>
+                  <td><span class="badge badge-warn">WARN</span></td>
+                  <td>Destination is valid but unconfirmed or unmemoed on a generic exchange. User review strongly advised.</td>
+                </tr>
+                <tr>
+                  <td><code>block</code></td>
+                  <td><span class="badge badge-block">BLOCK</span></td>
+                  <td>Funds will be lost or permanently rejected by network consensus. Wallets must disable the Submit button.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Section: Supported Addresses -->
+        <section id="supported-addresses" class="docs-section">
+          <h2>Supported Address Types</h2>
+          <p>
+            Stellagate automatically parses and normalizes every modern Stellar address standard without requiring manual type hints:
+          </p>
+
+          <ul>
+            <li><strong>Classic Ed25519 (G...):</strong> 56-character standard Stellar public keys.</li>
+            <li><strong>Muxed Accounts (M...):</strong> SEP-23 69-character multiplexed addresses bundling a classic G address and an embedded 64-bit integer ID.</li>
+            <li><strong>Soroban Contracts (C...):</strong> 56-character smart contracts and passkey smart wallet addresses.</li>
+            <li><strong>SEP-2 Federation (user*domain.com):</strong> Resolved transparently over HTTPS federation endpoints into target accounts and memos.</li>
+            <li><strong>Secret Key Refusal (S...):</strong> Immediately catches pasted secret keys, blocking submission and warning the user of private key exposure.</li>
+          </ul>
+        </section>
+
+        <!-- Section: Memo Verification -->
+        <section id="memo-verification" class="docs-section">
+          <h2>Dual-Source Memo Verification</h2>
+          <p>
+            Only 13% of exchange omnibus accounts set the on-chain SEP-29 <code>memo_required</code> flag. Stellagate bridges this gap by cross-referencing both on-chain flags and the public StellarExpert directory of known exchange hot wallets.
+          </p>
+
+          <div class="code-block-wrap">
+            <div class="code-header">
+              <span class="code-tab">TypeScript</span>
+              <button type="button" class="copy-code-btn" data-copy='const verdict = await check({
+  to: "GCLWB6BMNLOKYZT6AH7O2RMMQ225PVIUK72W7X4W654N3VP63625NL6M", // Kraken
+  memo: undefined, // omitted
+});
+
+// verdict.status === "block"
+// verdict.reasons[0].code === "memo_required"
+// verdict.entry.name === "Kraken Deposits"'>Copy</button>
+            </div>
+            <pre class="code-pre"><code><span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check({
+  to: <span class="token-string">"GCLWB6BMNLOKYZT6AH7O2RMMQ225PVIUK72W7X4W654N3VP63625NL6M"</span>, <span class="token-comment">// Kraken</span>
+  memo: <span class="token-keyword">undefined</span>, <span class="token-comment">// omitted</span>
+});
+
+<span class="token-comment">// verdict.status === "block"</span>
+<span class="token-comment">// verdict.reasons[0].code === "memo_required"</span>
+<span class="token-comment">// verdict.entry.name === "Kraken Deposits"</span></code></pre>
+          </div>
+        </section>
+
+        <!-- Section: Smart Wallets -->
+        <section id="smart-wallets" class="docs-section">
+          <h2>Passkeys &amp; Smart Wallet Compatibility</h2>
+          <p>
+            Soroban smart contract accounts (C-addresses) invoke contract functions instead of emitting classic payment operations. Because Soroban operations do not carry memo fields, transfers from contract accounts directly to exchange omnibus addresses result in irreversible loss of funds.
+          </p>
+
+          <p>
+            When <code>from: "C..."</code> is provided, Stellagate flags this incompatibility before the transaction is authored and suggests routing through an intermediate classic account.
+          </p>
+        </section>
+
+        <!-- Section: Asset Holdability -->
+        <section id="asset-holdability" class="docs-section">
+          <h2>Asset Holdability &amp; SAC Verification</h2>
+          <p>
+            Sending a non-native asset (e.g. USDC, EURC, AQUA) requires verifying that the recipient has established a valid trustline with sufficient headroom:
+          </p>
+
+          <div class="code-block-wrap">
+            <div class="code-header">
+              <span class="code-tab">TypeScript</span>
+              <button type="button" class="copy-code-btn" data-copy='const verdict = await check({
+  to: "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+  asset: "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+  amount: "5000",
+  network: "public"
+});'>Copy</button>
+            </div>
+            <pre class="code-pre"><code><span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check({
+  to: <span class="token-string">"GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"</span>,
+  asset: <span class="token-string">"USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"</span>,
+  amount: <span class="token-string">"5000"</span>,
+  network: <span class="token-string">"public"</span>
+});</code></pre>
+          </div>
+        </section>
+
+        <!-- Section: API Reference -->
+        <section id="check-function" class="docs-section">
+          <h2>API Reference: check()</h2>
+          <p>
+            The primary entrypoint. Evaluates all safety checks concurrently with bounded timeouts and offline fallbacks.
+          </p>
+
+          <h3>Signature</h3>
+          <div class="code-block-wrap">
+            <pre class="code-pre"><code><span class="token-keyword">function</span> check(input: CheckInput, options?: CheckOptions): Promise&lt;Verdict&gt;;</code></pre>
+          </div>
+
+          <h3 id="check-input">CheckInput Interface</h3>
+          <div class="code-block-wrap">
+            <pre class="code-pre"><code><span class="token-keyword">interface</span> CheckInput {
+  <span class="token-comment">/** Target address: G, M, C, or user*domain.com */</span>
+  to: <span class="token-keyword">string</span>;
+  <span class="token-comment">/** Optional sender address: G or C account */</span>
+  from?: <span class="token-keyword">string</span>;
+  <span class="token-comment">/** Optional memo entered by the user */</span>
+  memo?: <span class="token-keyword">string</span>;
+  <span class="token-comment">/** 'native' (XLM) or CODE:ISSUER format */</span>
+  asset?: <span class="token-keyword">string</span>;
+  <span class="token-comment">/** Amount string for trustline balance headroom checks */</span>
+  amount?: <span class="token-keyword">string</span>;
+  <span class="token-comment">/** Target network: 'public' or 'testnet' (default: 'public') */</span>
+  network?: <span class="token-string">"public"</span> | <span class="token-string">"testnet"</span>;
+}</code></pre>
+          </div>
+
+          <h3 id="verdict-interface">Verdict Interface</h3>
+          <div class="code-block-wrap">
+            <pre class="code-pre"><code><span class="token-keyword">interface</span> Verdict {
+  <span class="token-comment">/** Overall triage disposition */</span>
+  status: <span class="token-string">"ok"</span> | <span class="token-string">"warn"</span> | <span class="token-string">"block"</span>;
+  <span class="token-comment">/** Human-readable explanation */</span>
+  summary: <span class="token-keyword">string</span>;
+  <span class="token-comment">/** Granular breakdown of individual check results */</span>
+  reasons: Reason[];
+  <span class="token-comment">/** Resolved destination metadata */</span>
+  destination: Destination;
+  <span class="token-comment">/** Directory record if known exchange or entity */</span>
+  entry?: DirectoryEntry;
+  <span class="token-comment">/** Whether a memo is mandatory */</span>
+  memoRequired: <span class="token-keyword">boolean</span>;
+}</code></pre>
+          </div>
+        </section>
+
+        <!-- Section: Custom Sources -->
+        <section id="custom-sources" class="docs-section">
+          <h2>Pluggable Sources &amp; Private Infrastructure</h2>
+          <p>
+            By default, Stellagate uses public Horizon and RPC nodes. In high-volume production deployments, inject your private authenticated RPC endpoints or custom caching layers:
+          </p>
+
+          <div class="code-block-wrap">
+            <div class="code-header">
+              <span class="code-tab">TypeScript</span>
+              <button type="button" class="copy-code-btn" data-copy='import { check, horizonAccountSource, rpcContractSource } from "@stellagate/core";
+
+const verdict = await check(input, {
+  accounts: horizonAccountSource("https://stellar-horizon.my-enterprise.com"),
+  contracts: rpcContractSource("https://stellar-rpc.my-enterprise.com")
+});'>Copy</button>
+            </div>
+            <pre class="code-pre"><code><span class="token-keyword">import</span> { check, horizonAccountSource, rpcContractSource } <span class="token-keyword">from</span> <span class="token-string">"@stellagate/core"</span>;
+
+<span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check(input, {
+  accounts: horizonAccountSource(<span class="token-string">"https://stellar-horizon.my-enterprise.com"</span>),
+  contracts: rpcContractSource(<span class="token-string">"https://stellar-rpc.my-enterprise.com"</span>)
+});</code></pre>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Minimalist Footer -->
+    <footer class="app-minimal-footer">
+      <span>&copy; 2026 Stellagate. Open source under Apache-2.0.</span>
+      <nav class="app-footer-links" aria-label="Legal and source">
+        <a href="./">Overview</a>
+        <a href="./batch.html">Batch</a>
+        <a href="./memo.html">Memo Lab</a>
+        <a href="./docs.html">Docs</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./terms.html">Terms</a>
+        <a href="./privacy.html">Privacy</a>
+        <a href="{{repo}}" target="_blank" rel="noopener noreferrer" class="footer-link-with-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </nav>
+    </footer>
+    <!--notice-->
+  </body>
+</html>

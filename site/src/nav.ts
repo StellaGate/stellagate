@@ -77,7 +77,7 @@ function initDropdowns(): void {
  * Wire all mobile menu toggles on the page.
  */
 function initMobileMenus(): void {
-  const roots = document.querySelectorAll<HTMLElement>(".nav-root");
+  const roots = document.querySelectorAll<HTMLElement>(".nav-root, .app-nav-actions");
 
   roots.forEach((root) => {
     const toggle = root.querySelector<HTMLButtonElement>(".nav-menu-toggle");

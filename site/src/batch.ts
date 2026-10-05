@@ -1,6 +1,7 @@
 import "./tokens.css";
 import "./styles.css";
 import { initNav } from "./nav.ts";
+import { statusIconHtml } from "./status-icon.ts";
 import type { CheckInput, Verdict } from "@stellagate/core";
 
 initNav();
@@ -112,7 +113,7 @@ function renderTable() {
     const tdStatus = document.createElement("td");
     const status = item.verdict?.status || "warn";
     const statusLabel = status === "ok" ? "Ready" : status === "block" ? "Block" : "Check";
-    tdStatus.innerHTML = `<span class="badge badge-${status === "ok" ? "go" : status === "block" ? "stop" : "warn"}">${statusLabel}</span>`;
+    tdStatus.innerHTML = statusIconHtml(status, statusLabel);
     tr.append(tdStatus);
 
     // Destination Column

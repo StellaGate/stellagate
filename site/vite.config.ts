@@ -19,6 +19,7 @@ function sitePartials(isBuild: boolean): Plugin {
       const contact = contactEmail || "CONTACT EMAIL NOT SET";
       return html
         .replace("<!--header-->", partial("header"))
+        .replace("<!--nav-->", partial("nav"))
         .replace("<!--footer-->", partial("footer"))
         .replace("<!--notice-->", partial("notice"))
         .replaceAll("{{contact}}", contact)

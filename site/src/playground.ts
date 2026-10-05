@@ -1,6 +1,7 @@
 import "./tokens.css";
 import "./styles.css";
 import { initNav } from "./nav.ts";
+import { statusIconHtml } from "./status-icon.ts";
 import type { CheckInput, Verdict } from "@stellagate/core";
 
 initNav();
@@ -95,7 +96,7 @@ function updateGeneratedCode() {
   lines.push("});");
   lines.push("");
   lines.push("console.log(verdict.status); // 'ok' | 'warn' | 'block'");
-  lines.push("console.log(verdict.summary);");
+  lines.push("console.log(verdict.reasons[0]?.message, verdict.reasons[0]?.fix);");
 
   codeSnippetOutput.textContent = lines.join("\n");
 }
@@ -106,19 +107,12 @@ function renderVerdict(verdict: Verdict, elapsedMs: number) {
   latestVerdict = verdict;
   verdictLatencyLabel.textContent = `${Math.round(elapsedMs)}ms`;
 
-  verdictStatusBadge.classList.remove("badge-go", "badge-warn", "badge-block");
-  if (verdict.status === "ok") {
-    verdictStatusBadge.textContent = "GO";
-    verdictStatusBadge.classList.add("badge-go");
-  } else if (verdict.status === "warn") {
-    verdictStatusBadge.textContent = "WARN";
-    verdictStatusBadge.classList.add("badge-warn");
-  } else {
-    verdictStatusBadge.textContent = "BLOCK";
-    verdictStatusBadge.classList.add("badge-block");
-  }
+  const label = verdict.status === "ok" ? "Looks fine" : verdict.status === "warn" ? "Check first" : "Stop";
+  verdictStatusBadge.className = "verdict-badge-large";
+  verdictStatusBadge.innerHTML = `${statusIconHtml(verdict.status, label)}<span aria-hidden="true">${label}</span>`;
 
-  verdictSummaryText.textContent = verdict.summary;
+  const top = verdict.reasons.find((r) => r.severity === "block") ?? verdict.reasons.find((r) => r.severity === "warn");
+  verdictSummaryText.textContent = top ? top.message : "Nothing we checked would stop this payment.";
 
   verdictReasonsContainer.innerHTML = "";
   if (verdict.reasons && verdict.reasons.length > 0) {
@@ -224,7 +218,7 @@ copyActiveBtn.addEventListener("click", async () => {
   } else if (!viewJson.hidden) {
     content = jsonSnippetOutput.textContent || "";
   } else {
-    content = `${latestVerdict?.status?.toUpperCase() || ""}\n${latestVerdict?.summary || ""}\n${JSON.stringify(latestVerdict, null, 2)}`;
+    content = `${latestVerdict?.status?.toUpperCase() || ""}\n${latestVerdict?.reasons[0]?.message || ""}\n${JSON.stringify(latestVerdict, null, 2)}`;
   }
 
   if (!content) return;

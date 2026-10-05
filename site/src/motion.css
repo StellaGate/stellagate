@@ -1,0 +1,49 @@
+/* Landing motion. Only transform and opacity move. Arrive with ease-out, leave with ease-in.
+   Everything sits inside no-preference, so reduced motion shows the final state at once. */
+
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+@keyframes settle { from { transform: scale(1.04); } }
+@keyframes caret-blink { 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* 1. Load: painting settles, then nav, headline, lede and actions cascade in */
+  .hero-panel::before { animation: settle var(--duration-scene) var(--ease-arrive) both; }
+  .hero-panel .landing-header,
+  .hero-stage h1,
+  .hero-stage .lede,
+  .hero-actions { animation: rise var(--duration-enter) var(--ease-arrive) both; }
+  .hero-stage h1 { animation-delay: calc(2 * var(--stagger)); }
+  .hero-stage .lede { animation-delay: calc(3 * var(--stagger)); }
+  .hero-actions { animation-delay: calc(4 * var(--stagger)); }
+
+  /* 2. Scroll: each block rises once as it enters; cells cascade by --i, set in motion.ts */
+  .motion-ready [data-reveal] {
+    opacity: 0; transform: translateY(16px);
+    transition: opacity var(--duration-enter) var(--ease-arrive), transform var(--duration-enter) var(--ease-arrive);
+    transition-delay: calc(var(--i, 0) * var(--stagger));
+  }
+  .motion-ready [data-reveal].is-in { opacity: 1; transform: none; }
+
+  /* 3. The mockup plays once: address types in, button presses, backdrop dims, verdict rises */
+  .app-mock.is-armed .mock-scrim { opacity: 0; }
+  .app-mock.is-armed .mock-modal { opacity: 0; transform: translateY(24px) scale(0.97); }
+  .app-mock.is-armed .mock-modal * { animation-play-state: paused; }
+  .mock-scrim { transition: opacity var(--duration-reveal) var(--ease-arrive); }
+  .mock-modal { transition: opacity var(--duration-enter) var(--ease-arrive) 80ms, transform var(--duration-enter) var(--ease-arrive) 80ms; }
+  .app-mock.is-typing .mock-caret { opacity: 1; animation: caret-blink 1s steps(1) infinite; }
+  .mock-button { transition: transform var(--duration-state) var(--ease-arrive); }
+  .app-mock.is-pressed .mock-button { transform: scale(0.96); }
+
+  /* 4. Small interactions */
+  .faq-item[open] p { animation: rise var(--duration-reveal) var(--ease-arrive); }
+  .tab-indicator { transition: clip-path var(--duration-reveal) var(--ease-arrive); }
+}
+
+/* Code tabs: one pill slides between tabs. A full-width bar clipped to the selected tab, so nothing re-lays out */
+.code-tabs { position: relative; }
+.code-tabs button { position: relative; z-index: 1; transition: color var(--duration-state) var(--ease-arrive); }
+.code-tabs.has-indicator button[aria-selected="true"] { background: transparent; }
+.tab-indicator {
+  position: absolute; inset-inline: 0; top: var(--space-3); height: var(--target-min);
+  background: var(--accent); pointer-events: none;
+}

@@ -22,8 +22,9 @@
 @media (prefers-color-scheme: dark) { .brand-mark { background-image: url("./assets/stellagate-white.png"); } }
 
 /* Nav, set inside the hero panel: links light on the painting, brand in the top notch */
-.hero-panel .landing-header { position: relative; z-index: 3; padding: var(--space-3) var(--space-4) 0; }
-.hero-panel .landing-header .nav-bar { background: transparent; border: 0; padding: 0; min-height: 3.5rem; }
+/* Inset past the 24px corner radius; every item centres on the notch's middle line (8 + 44/2 = 30 of 60) */
+.hero-panel .landing-header { position: relative; z-index: 3; padding: var(--space-2) var(--space-8) 0; }
+.hero-panel .landing-header .nav-bar { background: transparent; border: 0; padding: 0; min-height: var(--target-min); }
 .hero-panel .nav-links-desktop a { color: var(--on-image-secondary); }
 .hero-panel .nav-links-desktop a:hover { color: var(--on-image); }
 .hero-panel .nav-dropdown-trigger { color: var(--on-image-secondary); }
@@ -35,9 +36,12 @@
 .hero-panel .nav-logo-navy { display: block; }
 @media (prefers-color-scheme: dark) { .hero-panel .nav-logo-navy { display: none; } .hero-panel .nav-logo-white { display: block; } }
 .hero-panel .nav-icon-btn { color: var(--on-image); border-color: var(--on-image-line); background: transparent; }
-.hero-panel .nav-col-right .button-primary { background: var(--on-image); color: var(--image-base); }
+/* Outline on the hero, where the solid call to action sits below; the floating pill keeps it solid */
+.hero-panel .nav-col-right .button-primary { background: transparent; color: var(--on-image); border: 1px solid var(--on-image-line); }
+.hero-panel .nav-col-right .button-primary:hover { background: rgb(255 255 255 / 0.1); border-color: var(--on-image-secondary); }
 @media (max-width: 40rem) {
   .hero-panel .nav-col-right { display: none; }
+  .hero-panel .landing-header { padding-inline: var(--space-4); }
   .hero-frame .notch-top { width: 13rem; clip-path: path("M0 0H208C176 0 172 60 140 60H68C36 60 32 0 0 0Z"); }
 }
 
@@ -98,6 +102,10 @@
   position: relative; overflow: hidden; border-radius: var(--radius-hero) var(--radius-hero) 0 0; color: var(--on-image);
   min-height: min(44rem, 90vh); display: grid; grid-template-rows: auto auto 1fr;
   background-color: var(--image-base);
+}
+/* The painting sits on its own layer so it can settle in without moving the panel's mask */
+.hero-panel::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background-image:
     radial-gradient(120% 80% at 50% 45%, var(--image-scrim) 0%, rgb(11 21 38 / 0.28) 55%, rgb(11 21 38 / 0) 100%),
     linear-gradient(180deg, rgb(11 21 38 / 0.35) 0%, rgb(11 21 38 / 0.1) 40%, rgb(11 21 38 / 0.5) 100%),
@@ -145,7 +153,7 @@
 
 /* The stage: centred headline, lede and call to action */
 .hero-stage {
-  position: relative; display: grid; align-content: center; justify-items: center; text-align: center;
+  position: relative; z-index: 1; display: grid; align-content: center; justify-items: center; text-align: center;
   padding: var(--space-12) var(--cell-pad) calc(var(--space-16) + var(--space-8));
 }
 .hero-stage h1 {
@@ -204,26 +212,56 @@
   background: var(--field); border: 1px solid var(--separator); border-radius: var(--radius-control);
   padding: var(--space-1) var(--space-3);
 }
-.mock-body { padding: var(--space-6); }
-.mock-label { font-size: var(--text-caption); font-weight: 500; margin-bottom: var(--space-2); }
+/* The scene: the check page dimmed behind the real verdict pop-up, built from the modal's own classes */
+.mock-scene { display: grid; overflow: hidden; }
+.mock-scene > * { grid-area: 1 / 1; }
+.mock-page { min-width: 0; }
+.mock-appbar {
+  display: flex; align-items: center; gap: var(--space-5); padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--separator); font-size: var(--text-footnote); color: var(--label-secondary);
+}
+.mock-brand { display: inline-flex; align-items: center; gap: var(--space-2); font-weight: 600; color: var(--label); }
+.mock-brand .brand-mark { width: 18px; height: 18px; }
+.mock-links { display: flex; gap: var(--space-4); }
+.mock-links .is-on { color: var(--label); font-weight: 500; }
+.mock-net {
+  margin-left: auto; display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-1) var(--space-3); border: 1px solid var(--separator); border-radius: var(--radius-pill);
+  color: var(--label); font-weight: 500;
+}
+.mock-net-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--go); }
+.mock-form { display: grid; justify-items: start; padding: var(--space-8) var(--space-8) var(--space-10); }
+.mock-title { font-size: var(--text-title-2); font-weight: 500; letter-spacing: -0.025em; line-height: 1.1; margin-bottom: var(--space-6); }
+.mock-label { font-size: var(--text-caption); font-weight: 500; margin: var(--space-4) 0 var(--space-2); }
 .mock-field {
-  font-family: var(--font-address); font-size: var(--text-body); line-height: 1.4; overflow-wrap: anywhere;
+  width: 100%; max-width: 32rem; min-height: 4rem; overflow-wrap: anywhere;
+  font-family: var(--font-address); font-size: var(--text-caption); line-height: 1.4;
   border: 1px solid var(--border-control); border-radius: var(--radius-control); padding: var(--space-3);
 }
-.mock-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-4); }
-.mock-segmented { display: inline-flex; border: 1px solid var(--border-control); border-radius: var(--radius-control); overflow: hidden; font-size: var(--text-footnote); }
-.mock-segmented span { padding: var(--space-2) var(--space-3); color: var(--label-secondary); }
-.mock-segmented span + span { border-left: 1px solid var(--border-control); }
-.mock-segmented .is-on { background: var(--label); color: var(--bg); font-weight: 500; }
-.mock-button { padding: var(--space-2) var(--space-5); background: var(--label); color: var(--bg); border-radius: var(--radius-pill); font-size: var(--text-caption); font-weight: 500; }
-.mock-verdict { margin-top: var(--space-6); padding-top: var(--space-5); border-top: 4px solid var(--stop); }
-.mock-word, .frag-word {
+.mock-caret { display: inline-block; width: 1px; height: 1.1em; margin-left: 1px; vertical-align: text-bottom; background: var(--label); opacity: 0; }
+.mock-segmented { display: inline-flex; border: 1px solid var(--border-control); border-radius: var(--radius-pill); overflow: hidden; font-size: var(--text-footnote); }
+.mock-segmented span { padding: var(--space-2) var(--space-4); color: var(--label-secondary); }
+.mock-segmented .is-on { background: var(--label); color: var(--bg); font-weight: 500; border-radius: var(--radius-pill); }
+.mock-button {
+  margin-top: var(--space-6); padding: var(--space-2) var(--space-5); border-radius: var(--radius-pill);
+  background: var(--label); color: var(--bg); font-size: var(--text-caption); font-weight: 500;
+}
+/* Same tint and blur as the real dialog's backdrop */
+.mock-scrim { background: rgb(11 21 38 / 0.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.mock-modal { z-index: 1; align-self: center; justify-self: center; width: min(22.5rem, 100% - 2 * var(--space-4)); margin-block: var(--space-8); }
+.mock-modal .modal-box { box-shadow: 0 28px 72px rgb(0 0 0 / 0.45); }
+.mock-modal .modal-close { display: flex; }
+.mock-modal .modal-dest-pill { cursor: inherit; }
+.mock-modal .modal-pill-btn { display: grid; place-items: center; }
+@media (max-width: 40rem) {
+  .mock-links { display: none; }
+  .mock-form { padding: var(--space-6) var(--space-5); }
+}
+.frag-word {
   display: block; font-weight: 600; font-size: var(--text-title-2); line-height: var(--leading-tight);
   letter-spacing: var(--tracking-display); color: var(--go);
 }
-.mock-word, .frag-word-stop { color: var(--stop); }
-.mock-summary { margin-top: var(--space-2); font-weight: 400; line-height: 1.4; }
-.mock-fix { margin-top: var(--space-2); font-size: var(--text-caption); color: var(--label-secondary); line-height: 1.45; }
+.frag-word-stop { color: var(--stop); }
 
 /* Check-row fragments: the check page's own rows */
 .frag-rows { list-style: none; margin: var(--space-5) 0 0; padding: 0; border-top: 1px solid var(--separator); }

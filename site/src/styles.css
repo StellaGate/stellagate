@@ -150,8 +150,9 @@ input[type="text"]:focus-visible, textarea:focus-visible, .text-input:focus-visi
   min-height: var(--target-min); padding: 0 var(--space-5);
   border-radius: var(--radius-pill); border: 1px solid transparent;
   font: 500 var(--text-body) / 1 var(--font-text); cursor: pointer;
-  transition: background-color var(--duration-state) var(--ease-arrive), opacity var(--duration-state) var(--ease-arrive);
+  transition: background-color var(--duration-state) var(--ease-arrive), opacity var(--duration-state) var(--ease-arrive), transform var(--duration-state) var(--ease-arrive);
 }
+.button:active:not(:disabled) { transform: scale(0.98); }
 a.button { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
 .button-primary { background: var(--label); color: var(--bg); }
 .button-primary:hover { background: color-mix(in srgb, var(--label) 88%, var(--bg)); }
@@ -206,8 +207,7 @@ a.button { display: inline-flex; align-items: center; justify-content: center; t
 .destination-note { margin-top: var(--space-2); font-size: var(--text-caption); color: var(--label-secondary); overflow-wrap: anywhere; }
 
 .rows { list-style: none; margin: var(--space-6) 0 0; padding: 0; border-top: 1px solid var(--separator); }
-.row { display: grid; gap: var(--space-2); padding-block: var(--space-4); border-bottom: 1px solid var(--separator); }
-@media (min-width: 30rem) { .row { grid-template-columns: 6.5rem 1fr; gap: var(--space-3); } }
+.row { display: grid; grid-template-columns: auto 1fr; gap: var(--space-4); padding-block: var(--space-4); border-bottom: 1px solid var(--separator); }
 .row-status { align-self: start; justify-self: start; display: inline-flex; }
 .row-status svg { width: var(--space-8); height: var(--space-8); fill: currentColor; }
 .row-fine .row-status { color: var(--go); }
@@ -399,21 +399,22 @@ body.app-body > main {
   border: 1px solid var(--border-control);
   border-radius: var(--radius-control);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
-  display: none;
+  display: flex;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(6px);
+  transform: translateY(-6px);
   pointer-events: none;
   z-index: 1000;
+  transition: opacity var(--duration-state) var(--ease-leave), transform var(--duration-state) var(--ease-leave), visibility 0s linear var(--duration-state);
   flex-direction: column;
   gap: 2px;
 }
 .nav-dropdown.is-open .nav-dropdown-menu {
-  display: flex;
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
+  transition: opacity var(--duration-reveal) var(--ease-arrive), transform var(--duration-reveal) var(--ease-arrive), visibility 0s;
 }
 @media (prefers-color-scheme: dark) {
   .nav-dropdown-menu {
@@ -608,18 +609,22 @@ body.app-body > main {
   background: var(--field);
   border: 1px solid var(--separator);
   box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.35);
-  display: none;
+  display: flex;
+  visibility: hidden;
   opacity: 0;
-  transform: scale(0.95);
-  transition: opacity 150ms var(--ease-arrive), transform 150ms var(--ease-arrive);
+  transform: translateY(-6px) scale(0.97);
+  transition: opacity var(--duration-state) var(--ease-leave), transform var(--duration-state) var(--ease-leave), visibility 0s linear var(--duration-state);
   pointer-events: none;
 }
 .nav-mobile-menu.is-open {
-  display: flex;
+  visibility: visible;
   opacity: 1;
-  transform: scale(1);
+  transform: none;
   pointer-events: auto;
+  transition: opacity var(--duration-reveal) var(--ease-arrive), transform var(--duration-reveal) var(--ease-arrive), visibility 0s;
 }
+/* Links cascade in; nav.ts sets each one's delay */
+.nav-mobile-menu:not(.is-open) .nav-mobile-links a { opacity: 0; transform: translateY(-4px); }
 @media (min-width: 60rem) {
   .nav-mobile-menu {
     display: none !important;
@@ -754,6 +759,10 @@ body.app-body > main {
 }
 .nav-bar-pill .button-primary:hover {
   background: rgba(255, 255, 255, 0.9);
+}
+/* Phones: menu and logo only, as in the hero; the menu carries the rest */
+@media (max-width: 40rem) {
+  .nav-bar-pill .nav-col-right { display: none; }
 }
 
 /* App Header Container */
@@ -1293,6 +1302,7 @@ body > header.app-header {
   position: relative;
   animation: badgePop 0.38s cubic-bezier(0.16, 1, 0.3, 1);
 }
+@keyframes modalArrive { from { opacity: 0; transform: translateY(var(--space-2)); } }
 @keyframes badgePop {
   0% { transform: scale(0.8); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }

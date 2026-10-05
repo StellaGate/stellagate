@@ -119,22 +119,37 @@
               <span class="mock-dots" aria-hidden="true"><span></span><span></span><span></span></span>
               <span class="mock-url">stellagate.vercel.app/app</span>
             </div>
-            <div class="mock-body">
-              <p class="mock-label">Address you are sending to</p>
-              <p class="mock-field">GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH</p>
-              <div class="mock-controls">
-                <span class="mock-segmented"><span class="is-on">Main network</span><span>Test network</span></span>
-                <span class="mock-button">Check address</span>
+            <div class="mock-scene">
+              <div class="mock-page" aria-hidden="true">
+                <div class="mock-appbar">
+                  <span class="mock-brand"><span class="brand-mark"></span>Stellagate</span>
+                  <span class="mock-links"><span class="is-on">App</span><span>Batch</span><span>Memo Lab</span><span>Developer</span></span>
+                  <span class="mock-net"><span class="mock-net-dot"></span>Mainnet</span>
+                </div>
+                <div class="mock-form">
+                  <p class="mock-title">Check a Stellar address</p>
+                  <p class="mock-label">Destination address</p>
+                  <p class="mock-field"><span class="mock-typed">GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH</span><span class="mock-caret"></span></p>
+                  <p class="mock-label">Network</p>
+                  <span class="mock-segmented"><span class="is-on">Main network</span><span>Test network</span></span>
+                  <span class="mock-button">Check address</span>
+                </div>
               </div>
-              <div class="mock-verdict">
-                <p class="mock-word">Stop.</p>
-                <p class="mock-summary">Bybit requires a memo (SEP-29). Without it, the payment may arrive and never be credited.</p>
-                <p class="mock-fix">Get the memo from the receiver (an exchange shows it next to the deposit address) and include it.</p>
-                <ul class="frag-rows">
-                  <li class="frag-row row-fine"><span class="status"><svg class="status-icon status-fine" aria-hidden="true"><use href="#i-fine"/></svg><span class="sr-only">Fine</span></span><span class="frag-q">Does it exist?</span><span class="frag-a">Yes, it is live on the network.</span></li>
-                  <li class="frag-row row-stop"><span class="status"><svg class="status-icon status-stop" aria-hidden="true"><use href="#i-stop"/></svg><span class="sr-only">Stop</span></span><span class="frag-q">Does it need a memo?</span><span class="frag-a">Yes, and no memo was given.</span></li>
-                  <li class="frag-row row-fine"><span class="status"><svg class="status-icon status-fine" aria-hidden="true"><use href="#i-fine"/></svg><span class="sr-only">Fine</span></span><span class="frag-q">Is it on a warning list?</span><span class="frag-a">No. It is not flagged in the public directory.</span></li>
-                </ul>
+              <div class="mock-scrim" aria-hidden="true"></div>
+              <div class="mock-modal">
+                <div class="modal-box">
+                  <span class="modal-close" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
+                  <div class="modal-result-pane">
+                    <div class="badge-container badge-stop" aria-hidden="true">
+                      <svg class="rosette-svg" viewBox="0 0 96 96"><path class="rosette-shape" d="M 36.29 11.95 A 14.50 14.50 0 0 1 59.71 11.95 A 14.50 14.50 0 0 1 78.66 25.72 A 14.50 14.50 0 0 1 85.90 48.00 A 14.50 14.50 0 0 1 78.66 70.28 A 14.50 14.50 0 0 1 59.71 84.05 A 14.50 14.50 0 0 1 36.29 84.05 A 14.50 14.50 0 0 1 17.34 70.28 A 14.50 14.50 0 0 1 10.10 48.00 A 14.50 14.50 0 0 1 17.34 25.72 A 14.50 14.50 0 0 1 36.29 11.95 Z"/><path class="cross-path cross-path-1" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round" d="M36 36 L60 60"/><path class="cross-path cross-path-2" fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round" d="M60 36 L36 60"/></svg>
+                    </div>
+                    <p class="modal-headline">Stop. Do not send.</p>
+                    <p class="modal-text">Bybit requires a memo (SEP-29). Without it, the payment may arrive and never be credited.</p>
+                    <div class="modal-callout"><p class="modal-callout-msg">Get the memo from the receiver (an exchange shows it next to the deposit address) and include it.</p></div>
+                    <span class="modal-dest-pill"><span class="dest-pill-text">GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH</span><span class="dest-pill-badge">Copy</span></span>
+                    <span class="modal-pill-btn">Edit details</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

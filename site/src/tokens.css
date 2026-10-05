@@ -60,6 +60,9 @@
   --duration-reveal: 280ms;
   --ease-arrive: cubic-bezier(0.2, 0.7, 0.2, 1);
   --ease-leave: cubic-bezier(0.4, 0, 1, 1);
+  --duration-enter: 560ms;  /* content rising into place on load and scroll */
+  --duration-scene: 1200ms; /* the hero painting settling */
+  --stagger: 60ms;          /* gap between items in a cascade */
 
   --measure: 42rem; /* content column, under 80 characters of body text */
   --page-max: 72rem; /* landing frame and header */

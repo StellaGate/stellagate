@@ -47,3 +47,9 @@
   position: absolute; inset-inline: 0; top: var(--space-3); height: var(--target-min);
   background: var(--accent); pointer-events: none;
 }
+/* Phones: the tabs wrap, so the sliding pill gives way to a fill on the selected tab */
+@media (max-width: 40rem) {
+  .code-tabs { flex-wrap: wrap; }
+  .tab-indicator { display: none; }
+  .code-tabs.has-indicator button[aria-selected="true"] { background: var(--accent); color: var(--field); }
+}

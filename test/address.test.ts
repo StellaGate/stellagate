@@ -39,7 +39,10 @@ describe("parseDestination", () => {
     expect(r).toMatchObject({ ok: false, error: "secret_key" });
   });
 
-  it.each(["", "   ", "GABC", "alice*", "*example.com", g.publicKey().slice(0, -1) + "A"])("rejects %j", (input) => {
+  const pk = g.publicKey();
+  const badChecksum = pk.slice(0, -1) + (pk.endsWith("A") ? "B" : "A");
+
+  it.each(["", "   ", "GABC", "alice*", "*example.com", badChecksum])("rejects %j", (input) => {
     expect(parseDestination(input).ok).toBe(false);
   });
 });

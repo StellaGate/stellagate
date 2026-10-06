@@ -8,6 +8,8 @@ built for the payments that go missing today: exchange deposits without a memo, 
 to wallets without a trustline, and passkey smart wallets (C-addresses) paying exchanges
 that only understand memos.
 
+[![Watch the Stellagate demo](https://img.youtube.com/vi/ReI1ffDeX-o/maxresdefault.jpg)](https://youtu.be/ReI1ffDeX-o)
+
 ## The problem
 
 A Stellar address does not say what the receiver needs.

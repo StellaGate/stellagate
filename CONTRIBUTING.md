@@ -23,10 +23,12 @@ The check page is a separate package in `site/`:
 ```bash
 cd site && npm ci
 npm run dev                                # http://localhost:5173
-CONTACT_EMAIL=you@example.org npm run build
+npm run typecheck
+npm run build
 ```
 
-The site build fails without a contact address, because the privacy policy prints one.
+CI runs both packages. The site build reads its contact address from `site/site.config.json`
+and fails if it is empty, because the privacy policy prints it.
 
 ## Where things live
 
@@ -44,8 +46,9 @@ in the README.
 
 These break things quietly, so CI will not always catch them.
 
-1. No Node `Buffer` in `src/`. The library runs in the browser on the check page. Use
-   `Uint8Array` and the SDK's own encoders.
+1. No Node APIs in `src/`. The library runs in the browser on the check page. Its
+   `tsconfig.json` leaves out Node's types, so `Buffer` fails the typecheck; use `Uint8Array`
+   and the SDK's own encoders.
 2. Tests never touch the network. Every `check()` call in a test passes `directory: null`
    and `contracts: null`, or a fake. A test that needs Horizon is a script, not a test.
 3. Stellagate never signs, submits or holds funds. A change that needs a secret key, or

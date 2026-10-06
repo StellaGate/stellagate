@@ -3,175 +3,105 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Developer Documentation: Stellagate Core SDK</title>
-    <meta name="description" content="Technical documentation, API reference, TypeScript interfaces, and integration guides for @stellagate/core." />
+    <title>Developer docs: Stellagate</title>
+    <meta name="description" content="Install @stellagate/core and check a Stellar destination before signing: memo rules, trustlines, smart wallets and flagged accounts." />
     <link rel="icon" href="data:," />
     <script type="module" src="./src/docs.ts"></script>
   </head>
   <body class="app-body docs-body landing-page inner-page">
-    <a class="skip" href="#main">Skip to content</a>
-
-    <!-- In-App Navigation (logo -> navlinks -> buttons) -->
-    <header class="app-header">
-      <div class="app-nav-bar">
-        <!-- 1. Left: Logo -->
-        <a href="./" class="app-brand" aria-label="Stellagate home">
-          <img src="./stellagate-navy.png" alt="" aria-hidden="true" class="nav-logo nav-logo-navy" width="26" height="26" />
-          <img src="./stellagate-white.png" alt="" aria-hidden="true" class="nav-logo nav-logo-white" width="26" height="26" />
-          <img src="./stellagate-black.png" alt="" aria-hidden="true" class="nav-logo nav-logo-black" width="26" height="26" />
-          <span class="app-brand-name">Stellagate</span>
-        </a>
-
-        <!-- 2. Middle: Navlinks -->
-        <nav class="app-nav-links" aria-label="Main Navigation">
-          <a href="./app.html" class="app-nav-link">App</a>
-          <a href="./batch.html" class="app-nav-link">Batch</a>
-          <a href="./memo.html" class="app-nav-link">Memo Lab</a>
-          <div class="nav-dropdown">
-            <button type="button" class="app-nav-link nav-dropdown-trigger is-active" aria-expanded="false" aria-haspopup="true">
-              <span>Developer</span>
-              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </button>
-            <div class="nav-dropdown-menu" role="menu">
-              <a href="./docs.html" class="nav-dropdown-item is-active" role="menuitem">
-                <span class="dropdown-item-title">Developer Docs</span>
-                <span class="dropdown-item-sub">API reference, TypeScript types, and guides</span>
-              </a>
-              <a href="./playground.html" class="nav-dropdown-item" role="menuitem">
-                <span class="dropdown-item-title">SDK Playground</span>
-                <span class="dropdown-item-sub">Interactive sandbox and code generator</span>
-              </a>
-            </div>
-          </div>
-        </nav>
-
-        <!-- 3. Right: Buttons & Controls -->
-        <div class="app-nav-actions">
-          <a href="{{repo}}" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub repository">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-            </svg>
-          </a>
-          <a class="button button-primary" href="./playground.html">SDK Playground</a>
-          <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-label="Open menu">
-            <span class="nav-toggle-bar nav-toggle-bar-top" aria-hidden="true"></span>
-            <span class="nav-toggle-bar nav-toggle-bar-mid" aria-hidden="true"></span>
-            <span class="nav-toggle-bar nav-toggle-bar-bot" aria-hidden="true"></span>
-          </button>
-
-          <!-- Mobile Drawer Menu -->
-          <div class="nav-mobile-menu" aria-hidden="true">
-            <nav class="nav-mobile-links" aria-label="Sections">
-              <a href="./app.html">App</a>
-              <a href="./batch.html">Batch Checker</a>
-              <a href="./memo.html">Memo Lab</a>
-              <a href="./docs.html" class="is-active">Developer Docs</a>
-              <a href="./playground.html">SDK Playground</a>
-              <a href="./terms.html">Terms</a>
-              <a href="./privacy.html">Privacy</a>
-              <a href="{{repo}}" target="_blank" rel="noopener noreferrer">GitHub</a>
-            </nav>
-          </div>
-        </div>
-      </div>
-    </header>
+    <!--header page="docs"-->
 
     <div class="frame">
     <div class="docs-container">
-      <!-- Left Sidebar Navigation -->
       <aside class="docs-sidebar" aria-label="Documentation Navigation">
         <div class="docs-sidebar-sticky">
           <div class="docs-nav-group">
-            <span class="docs-nav-title">Getting Started</span>
+            <span class="docs-nav-title">Getting started</span>
             <ul class="docs-nav-list">
-              <li><a href="#quickstart" class="docs-nav-link is-active">Quick Start</a></li>
-              <li><a href="#architecture" class="docs-nav-link">Decision Architecture</a></li>
-              <li><a href="#supported-addresses" class="docs-nav-link">Supported Address Types</a></li>
+              <li><a href="#quickstart" class="docs-nav-link is-active">Quick start</a></li>
+              <li><a href="#architecture" class="docs-nav-link">Reading a verdict</a></li>
+              <li><a href="#supported-addresses" class="docs-nav-link">Address formats</a></li>
             </ul>
           </div>
 
           <div class="docs-nav-group">
-            <span class="docs-nav-title">Core Checks</span>
+            <span class="docs-nav-title">Checks</span>
             <ul class="docs-nav-list">
-              <li><a href="#memo-verification" class="docs-nav-link">Memo Verification</a></li>
-              <li><a href="#smart-wallets" class="docs-nav-link">Smart Wallets (C-Addresses)</a></li>
-              <li><a href="#asset-holdability" class="docs-nav-link">Asset Holdability &amp; SAC</a></li>
-              <li><a href="#malicious-accounts" class="docs-nav-link">Fraud &amp; Malicious Flags</a></li>
+              <li><a href="#memo-verification" class="docs-nav-link">Memo required</a></li>
+              <li><a href="#smart-wallets" class="docs-nav-link">Smart wallets</a></li>
+              <li><a href="#asset-holdability" class="docs-nav-link">Can it hold the asset?</a></li>
+              <li><a href="#malicious-accounts" class="docs-nav-link">Flagged accounts</a></li>
             </ul>
           </div>
 
           <div class="docs-nav-group">
-            <span class="docs-nav-title">API Reference</span>
+            <span class="docs-nav-title">API</span>
             <ul class="docs-nav-list">
-              <li><a href="#check-function" class="docs-nav-link">check() Function</a></li>
-              <li><a href="#check-input" class="docs-nav-link">CheckInput Interface</a></li>
-              <li><a href="#verdict-interface" class="docs-nav-link">Verdict &amp; Reasons</a></li>
-              <li><a href="#custom-sources" class="docs-nav-link">Pluggable Sources</a></li>
+              <li><a href="#check-function" class="docs-nav-link">check()</a></li>
+              <li><a href="#check-input" class="docs-nav-link">CheckInput</a></li>
+              <li><a href="#verdict-interface" class="docs-nav-link">Verdict and Reason</a></li>
+              <li><a href="#custom-sources" class="docs-nav-link">Your own endpoints</a></li>
             </ul>
           </div>
         </div>
       </aside>
 
-      <!-- Main Documentation Content -->
       <main id="main" class="docs-content">
         <header class="docs-header">
-          <div class="docs-tag">Developer Reference</div>
-          <h1 class="docs-title">Stellagate Core Documentation</h1>
+          <div class="docs-tag">@stellagate/core</div>
+          <h1 class="docs-title">Developer docs</h1>
           <p class="docs-lede">
-            Pre-flight destination validation engine for the Stellar network. Verify memo mandates, trustlines, SAC compatibility, and malicious account blocks before signing transactions.
+            One function, <code>check()</code>, tells you before signing whether a Stellar destination needs a memo, can hold the asset, and can be reached from the sending account.
           </p>
         </header>
 
-        <!-- Section: Quickstart -->
         <section id="quickstart" class="docs-section">
-          <h2>Quick Start</h2>
+          <h2>Quick start</h2>
           <p>
-            Stellagate runs in the browser and in Node.js 20 or later. It is built on <code>@stellar/stellar-sdk</code> and talks only to public Stellar services.
+            Stellagate runs in the browser and in Node.js 20 or later. It is built on <code>@stellar/stellar-sdk</code>, reads only public Stellar services, and never signs or submits anything. It is not on the npm registry yet, so install it from GitHub; npm builds it on install.
           </p>
-
           <div class="code-block-wrap">
             <div class="code-header">
               <span class="code-tab">Terminal</span>
-              <button type="button" class="copy-code-btn" data-copy="npm install github:StellaGate/stellagate">Copy</button>
+              <button type="button" class="copy-code-btn" data-copy='npm install github:StellaGate/stellagate'>Copy</button>
             </div>
             <pre class="code-pre"><code>npm install github:StellaGate/stellagate</code></pre>
           </div>
 
-          <h3>Verify an Address in 3 Lines</h3>
+          <h3>Check an address</h3>
           <div class="code-block-wrap">
             <div class="code-header">
               <span class="code-tab">TypeScript</span>
               <button type="button" class="copy-code-btn" data-copy='import { check } from "@stellagate/core";
 
 const verdict = await check({
-  to: "GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6",
-  network: "public"
+  to: "GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH",
+  network: "public",
 });
 
 if (verdict.status === "block") {
-  console.error("Payment rejected:", verdict.reasons[0].message);
+  const [reason] = verdict.reasons;
+  console.error(reason.message, reason.fix);
 }'>Copy</button>
             </div>
             <pre class="code-pre"><code><span class="token-keyword">import</span> { check } <span class="token-keyword">from</span> <span class="token-string">"@stellagate/core"</span>;
 
 <span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check({
-  to: <span class="token-string">"GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6"</span>,
-  network: <span class="token-string">"public"</span>
+  to: <span class="token-string">"GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH"</span>,
+  network: <span class="token-string">"public"</span>,
 });
 
 <span class="token-keyword">if</span> (verdict.status === <span class="token-string">"block"</span>) {
-  console.error(<span class="token-string">"Payment rejected:"</span>, verdict.reasons[0].message);
+  <span class="token-keyword">const</span> [reason] = verdict.reasons;
+  console.error(reason.message, reason.fix);
 }</code></pre>
           </div>
         </section>
 
-        <!-- Section: Decision Architecture -->
         <section id="architecture" class="docs-section">
-          <h2>Decision Architecture</h2>
+          <h2>Reading a verdict</h2>
           <p>
-            Every pre-flight check produces a deterministic <code>Verdict</code> object containing a single triage status and an array of granular <code>Reason</code> items.
+            A verdict has one <code>status</code> and a list of <code>reasons</code>. Each reason carries a stable <code>code</code> to switch on, a <code>severity</code>, a <code>message</code> written for the person sending, and usually a <code>fix</code>. The status is the most severe reason.
           </p>
 
           <div class="batch-table-wrap">
@@ -179,193 +109,222 @@ if (verdict.status === "block") {
               <thead>
                 <tr>
                   <th scope="col">Status</th>
-                  <th scope="col">Visual Badge</th>
-                  <th scope="col">Definition &amp; Wallet Behavior</th>
+                  <th scope="col">Check page says</th>
+                  <th scope="col">What it means</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><code>ok</code></td>
-                  <td><span class="badge badge-go">GO</span></td>
-                  <td>Payment destination is fully verified. Safe to sign and broadcast.</td>
+                  <td>Looks fine.</td>
+                  <td>Nothing found that would lose or strand the payment.</td>
                 </tr>
                 <tr>
                   <td><code>warn</code></td>
-                  <td><span class="badge badge-warn">WARN</span></td>
-                  <td>Destination is valid but unconfirmed or unmemoed on a generic exchange. User review strongly advised.</td>
+                  <td>Check first.</td>
+                  <td>It might go wrong. Show the reason and let the person decide.</td>
                 </tr>
                 <tr>
                   <td><code>block</code></td>
-                  <td><span class="badge badge-block">BLOCK</span></td>
-                  <td>Funds will be lost or permanently rejected by network consensus. Wallets must disable the Submit button.</td>
+                  <td>Stop.</td>
+                  <td>The network will reject the payment, or it will land and never be credited. Keep the send button disabled.</td>
                 </tr>
               </tbody>
             </table>
           </div>
+          <p>
+            <code>info</code> reasons never change the status. They say what was not checked, for example when the directory could not be reached.
+          </p>
         </section>
 
-        <!-- Section: Supported Addresses -->
         <section id="supported-addresses" class="docs-section">
-          <h2>Supported Address Types</h2>
+          <h2>Address formats</h2>
           <p>
-            Stellagate automatically parses and normalizes every modern Stellar address standard without requiring manual type hints:
+            Pass whatever the person pasted. Stellagate works out the format itself.
           </p>
-
           <ul>
-            <li><strong>Classic Ed25519 (G...):</strong> 56-character standard Stellar public keys.</li>
-            <li><strong>Muxed Accounts (M...):</strong> SEP-23 69-character multiplexed addresses bundling a classic G address and an embedded 64-bit integer ID.</li>
-            <li><strong>Soroban Contracts (C...):</strong> 56-character smart contracts and passkey smart wallet addresses.</li>
-            <li><strong>SEP-2 Federation (user*domain.com):</strong> Resolved transparently over HTTPS federation endpoints into target accounts and memos.</li>
-            <li><strong>Secret Key Refusal (S...):</strong> Immediately catches pasted secret keys, blocking submission and warning the user of private key exposure.</li>
+            <li><code>G...</code> classic accounts, 56 characters.</li>
+            <li><code>M...</code> muxed accounts (SEP-23), 69 characters: a G account plus a 64-bit customer ID, so no memo is needed.</li>
+            <li><code>C...</code> contracts, including passkey smart wallets.</li>
+            <li><code>name*domain</code> federation addresses (SEP-2), resolved to an account and, when the server gives one, a memo.</li>
           </ul>
+          <p>
+            A pasted secret key (<code>S...</code>) is refused with <code>destination_secret_key</code>, and the check page clears the field.
+          </p>
         </section>
 
-        <!-- Section: Memo Verification -->
         <section id="memo-verification" class="docs-section">
-          <h2>Dual-Source Memo Verification</h2>
+          <h2>Memo required</h2>
           <p>
-            Only 13% of exchange omnibus accounts set the on-chain SEP-29 <code>memo_required</code> flag. Stellagate bridges this gap by cross-referencing both on-chain flags and the public StellarExpert directory of known exchange hot wallets.
+            SEP-29 lets an account flag that it needs a memo, but few exchanges set it: of the 107 accounts StellarExpert's directory tags memo-required, 14 carry the flag. Stellagate reads both the on-chain flag and the directory, so an exchange that never set SEP-29 is still caught.
           </p>
-
           <div class="code-block-wrap">
             <div class="code-header">
               <span class="code-tab">TypeScript</span>
               <button type="button" class="copy-code-btn" data-copy='const verdict = await check({
-  to: "GCLWB6BMNLOKYZT6AH7O2RMMQ225PVIUK72W7X4W654N3VP63625NL6M", // Kraken
-  memo: undefined, // omitted
+  to: "GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM", // Kraken
+  network: "public",
 });
 
-// verdict.status === "block"
-// verdict.reasons[0].code === "memo_required"
-// verdict.entry.name === "Kraken Deposits"'>Copy</button>
+// verdict.status          "block"
+// verdict.reasons[0].code "memo_required"
+// verdict.entry.name      "Kraken"'>Copy</button>
             </div>
             <pre class="code-pre"><code><span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check({
-  to: <span class="token-string">"GCLWB6BMNLOKYZT6AH7O2RMMQ225PVIUK72W7X4W654N3VP63625NL6M"</span>, <span class="token-comment">// Kraken</span>
-  memo: <span class="token-keyword">undefined</span>, <span class="token-comment">// omitted</span>
+  to: <span class="token-string">"GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM"</span>, <span class="token-comment">// Kraken</span>
+  network: <span class="token-string">"public"</span>,
 });
 
-<span class="token-comment">// verdict.status === "block"</span>
-<span class="token-comment">// verdict.reasons[0].code === "memo_required"</span>
-<span class="token-comment">// verdict.entry.name === "Kraken Deposits"</span></code></pre>
+<span class="token-comment">// verdict.status          "block"</span>
+<span class="token-comment">// verdict.reasons[0].code "memo_required"</span>
+<span class="token-comment">// verdict.entry.name      "Kraken"</span></code></pre>
           </div>
         </section>
 
-        <!-- Section: Smart Wallets -->
         <section id="smart-wallets" class="docs-section">
-          <h2>Passkeys &amp; Smart Wallet Compatibility</h2>
+          <h2>Smart wallets (C-addresses)</h2>
           <p>
-            Soroban smart contract accounts (C-addresses) invoke contract functions instead of emitting classic payment operations. Because Soroban operations do not carry memo fields, transfers from contract accounts directly to exchange omnibus addresses result in irreversible loss of funds.
+            A contract account pays through Soroban, and Soroban transactions cannot carry a memo. So a smart wallet cannot pay an exchange that credits deposits by memo: the payment lands and is never credited.
           </p>
-
           <p>
-            When <code>from: "C..."</code> is provided, Stellagate flags this incompatibility before the transaction is authored and suggests routing through an intermediate classic account.
+            Pass the sender as <code>from</code> and Stellagate catches this before the transaction is built. A memo-required destination gives <code>contract_sender_cannot_memo</code>, with the fix to send from a classic account or use the receiver's M-address. A muxed destination from a contract sender gives a <code>muxed_from_contract</code> warning, because not every exchange credits those yet.
           </p>
         </section>
 
-        <!-- Section: Asset Holdability -->
         <section id="asset-holdability" class="docs-section">
-          <h2>Asset Holdability &amp; SAC Verification</h2>
+          <h2>Can it hold the asset?</h2>
           <p>
-            Sending a non-native asset (e.g. USDC, EURC, AQUA) requires verifying that the recipient has established a valid trustline with sufficient headroom:
+            Pass <code>asset</code> and, optionally, <code>amount</code>. A classic account needs a trustline the issuer has authorised, with room under its limit. A contract address holds classic assets through the asset's Stellar Asset Contract, so that contract must be deployed and the destination contract must exist.
           </p>
-
           <div class="code-block-wrap">
             <div class="code-header">
               <span class="code-tab">TypeScript</span>
               <button type="button" class="copy-code-btn" data-copy='const verdict = await check({
-  to: "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+  to: "GARSCEEOGZ4MGOTZLQHOKJGOPK455N6SHD7SAEFFHIJDAV445GFWJGHD",
   asset: "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
-  amount: "5000",
-  network: "public"
-});'>Copy</button>
+  amount: "100",
+  network: "public",
+});
+
+// verdict.reasons[0].code "no_trustline"'>Copy</button>
             </div>
             <pre class="code-pre"><code><span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check({
-  to: <span class="token-string">"GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"</span>,
+  to: <span class="token-string">"GARSCEEOGZ4MGOTZLQHOKJGOPK455N6SHD7SAEFFHIJDAV445GFWJGHD"</span>,
   asset: <span class="token-string">"USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"</span>,
-  amount: <span class="token-string">"5000"</span>,
-  network: <span class="token-string">"public"</span>
-});</code></pre>
+  amount: <span class="token-string">"100"</span>,
+  network: <span class="token-string">"public"</span>,
+});
+
+<span class="token-comment">// verdict.reasons[0].code "no_trustline"</span></code></pre>
+          </div>
+          <p>
+            Contract checks read Stellar RPC. On testnet the public endpoint is used by default. On mainnet, pass your own with <code>contracts: rpcContractSource(url)</code>; without it, the verdict includes <code>contract_checks_skipped</code>.
+          </p>
+        </section>
+
+        <section id="malicious-accounts" class="docs-section">
+          <h2>Flagged accounts</h2>
+          <p>
+            Accounts the StellarExpert directory tags <code>malicious</code> or <code>unsafe</code> are blocked with <code>destination_flagged</code>. Some imitate an exchange's domain, so the verdict names the directory entry.
+          </p>
+          <div class="code-block-wrap">
+            <div class="code-header">
+              <span class="code-tab">TypeScript</span>
+              <button type="button" class="copy-code-btn" data-copy='const verdict = await check({ to: "GD5CWQEKH22FMSJHCZ7W2IKPKZO3HGBT6O2LK3AILMGEQA656HLUBVAJ", network: "public" });
+
+// verdict.reasons[0].code "destination_flagged"
+// verdict.entry           { name: "Fraud", domain: "kraken.com.bz", ... }'>Copy</button>
+            </div>
+            <pre class="code-pre"><code><span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check({ to: <span class="token-string">"GD5CWQEKH22FMSJHCZ7W2IKPKZO3HGBT6O2LK3AILMGEQA656HLUBVAJ"</span>, network: <span class="token-string">"public"</span> });
+
+<span class="token-comment">// verdict.reasons[0].code "destination_flagged"</span>
+<span class="token-comment">// verdict.entry           { name: "Fraud", domain: "kraken.com.bz", ... }</span></code></pre>
           </div>
         </section>
 
-        <!-- Section: API Reference -->
         <section id="check-function" class="docs-section">
-          <h2>API Reference: check()</h2>
+          <h2>check()</h2>
           <p>
-            The one function you need. It parses the address, looks up the account and the public directory, and returns a verdict with plain-language reasons. If the directory or RPC cannot be reached, it says so in the reasons rather than failing.
+            Parses the address, reads the account and the directory, and returns a verdict. It does not throw when a service is down: an unreachable directory or RPC becomes an <code>info</code> reason, and the remaining checks still run.
           </p>
-
-          <h3>Signature</h3>
           <div class="code-block-wrap">
             <pre class="code-pre"><code><span class="token-keyword">function</span> check(input: CheckInput): Promise&lt;Verdict&gt;;</code></pre>
           </div>
 
-          <h3 id="check-input">CheckInput Interface</h3>
+          <h3 id="check-input">CheckInput</h3>
           <div class="code-block-wrap">
             <pre class="code-pre"><code><span class="token-keyword">interface</span> CheckInput {
-  <span class="token-comment">/** Target address: G, M, C, or user*domain.com */</span>
-  to: <span class="token-keyword">string</span>;
-  <span class="token-comment">/** Optional sender address: G or C account */</span>
-  from?: <span class="token-keyword">string</span>;
-  <span class="token-comment">/** Optional memo entered by the user */</span>
-  memo?: <span class="token-keyword">string</span>;
-  <span class="token-comment">/** 'native' (XLM) or CODE:ISSUER format */</span>
-  asset?: <span class="token-keyword">string</span>;
-  <span class="token-comment">/** Amount string for trustline balance headroom checks */</span>
-  amount?: <span class="token-keyword">string</span>;
-  <span class="token-comment">/** Target network: 'public' or 'testnet' (default: 'public') */</span>
+  <span class="token-comment">/** What the person pasted: G, M, C or name*domain */</span>
+  to: string;
+  <span class="token-comment">/** The sending account, G or C. Without it, sender checks are skipped */</span>
+  <span class="token-keyword">from</span>?: string;
+  <span class="token-comment">/** A memo the person already entered */</span>
+  memo?: string;
+  <span class="token-comment">/** "native" or CODE:ISSUER. Without it, holdability checks are skipped */</span>
+  asset?: string;
+  <span class="token-comment">/** Amount in units of the asset, up to 7 decimals */</span>
+  amount?: string;
+  <span class="token-comment">/** Default "public" */</span>
   network?: <span class="token-string">"public"</span> | <span class="token-string">"testnet"</span>;
-  <span class="token-comment">/** Optional data sources; defaults use public Horizon, RPC and StellarExpert */</span>
+  <span class="token-comment">/** Default: public Horizon for the network */</span>
   accounts?: AccountSource;
+  <span class="token-comment">/** Default: public RPC on testnet, none on mainnet. null skips */</span>
   contracts?: ContractSource | <span class="token-keyword">null</span>;
+  <span class="token-comment">/** Default: SEP-2 lookup over HTTPS */</span>
   federation?: FederationResolver;
+  <span class="token-comment">/** Default: StellarExpert. null skips */</span>
   directory?: DirectorySource | <span class="token-keyword">null</span>;
 }</code></pre>
           </div>
 
-          <h3 id="verdict-interface">Verdict Interface</h3>
+          <h3 id="verdict-interface">Verdict and Reason</h3>
           <div class="code-block-wrap">
             <pre class="code-pre"><code><span class="token-keyword">interface</span> Verdict {
-  <span class="token-comment">/** Overall result */</span>
   status: <span class="token-string">"ok"</span> | <span class="token-string">"warn"</span> | <span class="token-string">"block"</span>;
-  <span class="token-comment">/** Every finding, each with a code, severity, message and optional fix */</span>
   reasons: Reason[];
   <span class="token-comment">/** The parsed destination */</span>
   destination?: Destination;
-  <span class="token-comment">/** The account the payment will reach, after muxed or federation resolution */</span>
-  account?: <span class="token-keyword">string</span>;
-  <span class="token-comment">/** A memo the destination itself supplied (federation) */</span>
-  memo?: <span class="token-keyword">string</span>;
-  <span class="token-comment">/** Directory record when the account is a known exchange or entity */</span>
+  <span class="token-comment">/** The account the payment reaches, after muxed or federation resolution */</span>
+  account?: string;
+  <span class="token-comment">/** A memo the federation server supplied */</span>
+  memo?: string;
+  <span class="token-comment">/** The directory entry, when the account has one */</span>
   entry?: DirectoryEntry;
+}
+
+<span class="token-keyword">interface</span> Reason {
+  code: string;
+  severity: <span class="token-string">"info"</span> | <span class="token-string">"warn"</span> | <span class="token-string">"block"</span>;
+  message: string;
+  fix?: string;
 }</code></pre>
           </div>
         </section>
 
-        <!-- Section: Custom Sources -->
         <section id="custom-sources" class="docs-section">
-          <h2>Pluggable Sources &amp; Private Infrastructure</h2>
+          <h2>Your own endpoints</h2>
           <p>
-            By default, Stellagate uses public Horizon and RPC nodes. In high-volume production deployments, inject your private authenticated RPC endpoints or custom caching layers:
+            Every network read goes through a source you can replace: your own Horizon, your own RPC, or a fake in tests.
           </p>
-
           <div class="code-block-wrap">
             <div class="code-header">
               <span class="code-tab">TypeScript</span>
               <button type="button" class="copy-code-btn" data-copy='import { check, horizonAccountSource, rpcContractSource } from "@stellagate/core";
 
 const verdict = await check({
-  ...input,
-  accounts: horizonAccountSource("https://stellar-horizon.my-enterprise.com"),
-  contracts: rpcContractSource("https://stellar-rpc.my-enterprise.com"),
+  to,
+  network: "public",
+  accounts: horizonAccountSource("https://horizon.example.org"),
+  contracts: rpcContractSource("https://rpc.example.org"),
 });'>Copy</button>
             </div>
             <pre class="code-pre"><code><span class="token-keyword">import</span> { check, horizonAccountSource, rpcContractSource } <span class="token-keyword">from</span> <span class="token-string">"@stellagate/core"</span>;
 
 <span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check({
-  ...input,
-  accounts: horizonAccountSource(<span class="token-string">"https://stellar-horizon.my-enterprise.com"</span>),
-  contracts: rpcContractSource(<span class="token-string">"https://stellar-rpc.my-enterprise.com"</span>),
+  to,
+  network: <span class="token-string">"public"</span>,
+  accounts: horizonAccountSource(<span class="token-string">"https://horizon.example.org"</span>),
+  contracts: rpcContractSource(<span class="token-string">"https://rpc.example.org"</span>),
 });</code></pre>
           </div>
         </section>

@@ -37,6 +37,10 @@ A wallet that relies on SEP-29 alone misses 87% of them.
 
 ## What Stellagate checks
 
+```bash
+npm install github:StellaGate/stellagate
+```
+
 ```ts
 import { check } from '@stellagate/core'
 
@@ -73,7 +77,7 @@ verdict.reasons  // [{ code: 'contract_sender_cannot_memo', severity: 'block',
 
 Stellagate never signs, submits or holds funds.
 
-Try it without installing anything at [stellagate.vercel.app](https://stellagate.vercel.app).
+Try it without installing anything at [stellagate.namite.xyz](https://stellagate.namite.xyz).
 The check runs in your browser.
 
 ## Status
@@ -86,7 +90,7 @@ The check runs in your browser.
 | Malicious and unsafe account flags | Done, tested |
 | Contract-account sender compatibility | Done, tested |
 | Trustline and SAC holdability check | Done, tested, exercised on testnet |
-| Public check page, with terms, privacy and cookie pages | Live at [stellagate.vercel.app](https://stellagate.vercel.app) and [stellagate.github.io/stellagate](https://stellagate.github.io/stellagate/) |
+| Public check page, with terms, privacy and cookie pages | Live at [stellagate.namite.xyz](https://stellagate.namite.xyz) and [stellagate.github.io/stellagate](https://stellagate.github.io/stellagate/) |
 | Exchange records with deposit evidence | Planned |
 | npm release | Planned, not yet published |
 | Upstream proposal to js-stellar-sdk | Planned |

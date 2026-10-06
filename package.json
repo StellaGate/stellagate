@@ -44,5 +44,12 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "homepage": "https://stellagate.namite.xyz",
+  "bugs": {
+    "url": "https://github.com/StellaGate/stellagate/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -95,10 +95,11 @@ The check runs in your browser.
   memo-required against Horizon. On 2026-10-02: 107 accounts, 14 with SEP-29 set.
 - `scripts/testnet-evidence.mjs` creates fresh testnet accounts, runs each check, then makes
   the real payment anyway. Every `block` below matches a payment the network refused, and
-  every `ok` matches one it accepted. The one exception is the last row. A token transfer to
-  a contract address with nothing deployed succeeds, and the tokens sit at that address
-  until someone deploys a contract there. The network will not stop that payment, so
-  Stellagate does.
+  every `ok` matches one it accepted, with two exceptions. The two memo `block` rows were
+  not sent, because the network accepts a payment with no memo and the exchange never
+  credits it. And in the last row, a token transfer to a contract address with nothing
+  deployed succeeds, and the tokens sit at that address until someone deploys a contract
+  there. The network will not stop that payment, so Stellagate does.
 - The contract destination is a deployed contract (the KYC asset's own Stellar Asset
   Contract) standing in for a smart wallet.
 - Testnet is reset from time to time, which breaks these links. The script reproduces the
@@ -179,7 +180,7 @@ infrastructure, Soroban contracts and SDKs.
 ## Contributing
 
 Issues are scoped so each one can be picked up independently. See
-[CONTRIBUTING.md](CONTRIBUTING.md) once it lands.
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

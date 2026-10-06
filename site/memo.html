@@ -129,7 +129,7 @@
                 <h2 id="head-id">2. Memo ID (64-bit Unsigned Integer)</h2>
                 <span id="badge-id" class="badge badge-go">Valid uint64</span>
               </div>
-              <p class="memo-desc">Exchanges (Binance, Coinbase, Kraken) use 64-bit integers (`0` to `18,446,744,073,709,551,615`). Negatives, decimals, and numbers above 2^64-1 fail.</p>
+              <p class="memo-desc">A memo ID is an unsigned 64-bit integer, from <code>0</code> to <code>18,446,744,073,709,551,615</code>. Negatives, decimals and anything larger fail.</p>
 
               <div class="memo-input-wrap">
                 <label for="memo-id-input" class="field-label">Memo ID integer</label>
@@ -189,59 +189,6 @@
                 <span class="presets-label">Presets:</span>
                 <button type="button" class="preset-chip" id="sample-hash-sha">SHA-256 of empty string</button>
                 <button type="button" class="preset-chip" id="sample-hash-random">Generate random 32-byte hash</button>
-              </div>
-            </section>
-
-            <!-- 4. Exchange Memo Cheatsheet -->
-            <section class="memo-card memo-card-wide" aria-labelledby="head-cheatsheet">
-              <div class="memo-card-head">
-                <h2 id="head-cheatsheet">Exchange Memo Rules &amp; Directory Guide</h2>
-              </div>
-              <p class="memo-desc">Centralized exchanges use shared omnibus accounts. If you omit or miss your account memo, funds pool in the exchange wallet and require manual proof-of-ownership recovery.</p>
-
-              <div class="batch-table-wrap">
-                <table class="batch-table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Destination</th>
-                      <th scope="col">Required Memo Type</th>
-                      <th scope="col">Format</th>
-                      <th scope="col">Common Risk</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>Binance</strong></td>
-                      <td><span class="badge badge-go">Memo ID</span></td>
-                      <td>9 to 10 digit positive integer</td>
-                      <td>Omitting memo requires deposit recovery fee and video proof</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Coinbase</strong></td>
-                      <td><span class="badge badge-go">Memo ID</span></td>
-                      <td>Numeric routing ID</td>
-                      <td>Payments without memo stay pending in Coinbase custody</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Kraken</strong></td>
-                      <td><span class="badge badge-go">Memo ID</span></td>
-                      <td>Numeric user ID</td>
-                      <td>Kraken hot wallet rejects unmemoed deposits</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Bybit</strong></td>
-                      <td><span class="badge badge-go">Memo ID</span></td>
-                      <td>Numeric integer ID</td>
-                      <td>Requires support ticket and transaction hash to allocate</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Personal Wallets (Lobstr, Freighter)</strong></td>
-                      <td><span class="badge badge-soft">Optional</span></td>
-                      <td>None required</td>
-                      <td>You own the secret key, no memo needed</td>
-                    </tr>
-                  </tbody>
-                </table>
               </div>
             </section>
           </div>

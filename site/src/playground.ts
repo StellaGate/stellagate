@@ -234,8 +234,14 @@ copyActiveBtn.addEventListener("click", async () => {
   }, 1400);
 });
 
+function setNetwork(network: "public" | "testnet") {
+  const radio = document.querySelector<HTMLInputElement>(`input[name="pg-network"][value="${network}"]`);
+  if (radio) radio.checked = true;
+}
+
 // Preset button handlers
 presetBinance?.addEventListener("click", () => {
+  setNetwork("public");
   toInput.value = "GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6";
   memoInput.value = "";
   fromInput.value = "";
@@ -247,6 +253,7 @@ presetBinance?.addEventListener("click", () => {
 });
 
 presetBinanceMemo?.addEventListener("click", () => {
+  setNetwork("public");
   toInput.value = "GABFQIK63R2NETJM7T673EAMZN4RJLLGP3OFUEJU5SZVTGWUKULZJNL6";
   memoInput.value = "109283741";
   fromInput.value = "";
@@ -258,6 +265,7 @@ presetBinanceMemo?.addEventListener("click", () => {
 });
 
 presetContract?.addEventListener("click", () => {
+  setNetwork("testnet");
   toInput.value = "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
   memoInput.value = "";
   fromInput.value = "";
@@ -269,7 +277,8 @@ presetContract?.addEventListener("click", () => {
 });
 
 presetFederation?.addEventListener("click", () => {
-  toInput.value = "jed*stellar.org";
+  setNetwork("public");
+  toInput.value = "lobstr*lobstr.co";
   memoInput.value = "";
   fromInput.value = "";
   assetInput.value = "native";

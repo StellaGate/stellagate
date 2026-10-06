@@ -4,7 +4,6 @@ import "./landing.css";
 import "./system.css";
 import "./inner.css";
 import type { CheckInput, Reason, Verdict } from "@stellagate/core";
-import { initNotice } from "./notice.ts";
 import { initNav } from "./nav.ts";
 
 let core: Promise<typeof import("@stellagate/core")> | undefined;
@@ -496,5 +495,4 @@ if (["memo", "asset", "amount", "from"].some((f) => params.get(f))) (document.qu
 
 form.addEventListener("focusin", () => void loadCore().catch(() => (core = undefined)), { once: true });
 initNav();
-initNotice();
 if (params.get("to")) void run();

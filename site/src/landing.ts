@@ -4,7 +4,6 @@ import "./system.css";
 import "./landing.css";
 import "./motion.css";
 import { drawGuilloche } from "./guilloche.ts";
-import { initNotice } from "./notice.ts";
 import { initNav } from "./nav.ts";
 import { initMotion } from "./motion.ts";
 
@@ -51,4 +50,3 @@ if (current) {
 }
 
 initMotion();
-initNotice();

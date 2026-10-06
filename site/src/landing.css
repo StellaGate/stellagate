@@ -1,4 +1,4 @@
-/* Landing page: Spidra's ruled layout and type sizes, Xenia's painted hero panel, our colours.
+/* Landing page: ruled layout, painted hero panel, product shot.
    Values come from tokens.css only. Rules in ../DESIGN.md.
    Type standard: hero 64/500, section 48/500, card title 19/500, lead 18/400, body 16/400,
    caption 14/400, labels and status 13-14/500. Only "Stop." style verdict words reach 600. */
@@ -10,18 +10,11 @@
 }
 
 /* Brand (used in footer) */
-.brand {
-  display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--target-min);
-  font-weight: 600; font-size: var(--text-title-3); letter-spacing: -0.02em;
-  color: var(--label); text-decoration: none;
-}
 .brand-mark {
   width: 28px; height: 28px;
   background: url("./assets/stellagate-navy.png") center / contain no-repeat;
 }
 @media (prefers-color-scheme: dark) { .brand-mark { background-image: url("./assets/stellagate-white.png"); } }
-
-/* Nav, set inside the hero panel: links light on the painting, brand in the top notch */
 /* Inset past the 24px corner radius; every item centres on the notch's middle line (8 + 44/2 = 30 of 60) */
 .hero-panel .landing-header { position: relative; z-index: 3; padding: var(--space-2) var(--space-8) 0; }
 .hero-panel .landing-header .nav-bar { background: transparent; border: 0; padding: 0; min-height: var(--target-min); }
@@ -52,7 +45,7 @@
   pointer-events: none;
 }
 
-/* Fixed Floating Pill Navbar (Echonome scroll-triggered pill) */
+/* Floating pill nav, shown once the hero nav scrolls away */
 .landing-pill-wrap {
   position: fixed;
   inset-inline: 0;
@@ -76,8 +69,6 @@
 }
 
 .landing-page .button { font-size: var(--text-caption); font-weight: 500; }
-.header-ghost { display: none; color: var(--label); }
-@media (min-width: 40rem) { .header-ghost { display: inline-flex; } }
 
 /* The frame: side rules the whole way down; horizontal rules run the full screen width */
 .frame { --cell-pad: var(--space-6); position: relative; margin-top: 0; padding-top: var(--space-4); }
@@ -91,7 +82,7 @@
 }
 .band { height: var(--space-20); }
 
-/* Hero: the painting inside a light frame with notches, after the Forma Studio reference */
+/* Hero: the painting inside a light frame with notches */
 .hero-wrap { padding: var(--space-4) 0 0; }
 .hero-frame {
   --frame: var(--field); --notch-r: var(--space-6); --base-d: 2.25rem;
@@ -113,13 +104,12 @@
   background-position: center; background-size: cover; background-repeat: no-repeat;
 }
 
-/* Notches: frame-coloured shapes that curve smoothly into the panel, as in the reference */
+/* Notches: frame-coloured shapes that curve smoothly into the panel */
 .notch { position: absolute; z-index: 2; background: var(--frame); }
 .notch-top {
   top: 0; left: 50%; width: 22rem; height: 3.75rem; transform: translateX(-50%);
   clip-path: path("M0 0H352C302 0 296 60 248 60H104C56 60 50 0 0 0Z");
 }
-/* Bottom: the panel dips down into a thick frame band in a rounded U, with the arrow inside it */
 /* The panel itself is cut by a mask: body with rounded bottom corners, plus a U that dips into the band.
    Layers overlap by a pixel so their edges never leave a seam. */
 .hero-base { display: none; }
@@ -166,7 +156,6 @@
 .hero-actions { display: grid; justify-items: center; gap: var(--space-3); margin-top: var(--space-8); }
 .hero-cta { padding-inline: var(--space-8); font-size: var(--text-body) !important; }
 .hero-note { font-size: var(--text-caption); color: var(--on-image-secondary); }
-
 
 /* Product shot under the hero, framed by accent corner marks */
 .snapshot {
@@ -264,13 +253,11 @@
 .frag-word-stop { color: var(--stop); }
 
 /* Check-row fragments: the check page's own rows */
-.frag-rows { list-style: none; margin: var(--space-5) 0 0; padding: 0; border-top: 1px solid var(--separator); }
 .frag-row {
   display: grid; grid-template-columns: auto 1fr; gap: 0 var(--space-3); align-items: start;
   padding-block: var(--space-3); border-bottom: 1px solid var(--separator);
   font-size: var(--text-footnote); line-height: 1.35; text-align: left;
 }
-.frag-rows .frag-row { grid-template-columns: auto 1fr; }
 .frag-row > .status { grid-row: span 2; align-self: center; }
 .frag-q { font-weight: 500; color: var(--label); }
 .frag-a { color: var(--label-secondary); }
@@ -283,7 +270,7 @@
 .status-check { color: var(--caution); }
 .use > .status .status-icon { width: var(--space-8); height: var(--space-8); }
 
-/* Grey shot panel holding a fragment, as Spidra's step cells */
+/* Grey shot panel holding a fragment */
 .shot { display: grid; align-content: center; min-height: 9rem; padding: var(--space-6); background: color-mix(in srgb, var(--bg) 60%, var(--separator)); border-radius: var(--radius-control); }
 .shot > *, .visual-short > .frag-row, .visual-short > .frag-verdict {
   background: var(--field); border: 1px solid var(--separator); border-radius: var(--radius-control); padding: var(--space-3);

@@ -28,8 +28,6 @@
 .footer-legal .legal-icon { width: var(--target-min); justify-content: center; }
 .legal-icon svg { width: var(--space-5); height: var(--space-5); fill: currentColor; }
 
-
-
 .social-btn {
   display: grid; place-items: center; width: var(--target-min); height: var(--target-min);
   border: 1px solid var(--separator); border-radius: var(--radius-pill); color: var(--label);
@@ -52,10 +50,6 @@ body.page-frame > main > .verdict, body.page-frame > main > .check-form, body.pa
 body.page-frame > .landing-footer { padding-inline: var(--space-6); }
 @media (min-width: 48rem) { body.page-frame > .landing-footer { padding-inline: var(--space-10); } }
 
-/* Inner page header: the pill nav, inside the frame width */
-.page-header { position: relative; z-index: 20; width: min(80rem, 100% - 2 * max(var(--space-4), env(safe-area-inset-left))); margin-inline: auto; padding: max(var(--space-4), env(safe-area-inset-top)) 0 var(--space-4); }
-.page-header .nav-bar { max-width: 52rem; margin-inline: auto; }
-
 /* Type: one standard across pages */
 body.page-frame h1 { font-weight: 500; letter-spacing: -0.03em; font-size: var(--text-large-title); line-height: 1.1; }
 @media (min-width: 48rem) { body.page-frame h1 { font-size: var(--text-section); } }
@@ -63,9 +57,7 @@ body.page-frame h2 { font-weight: 500; letter-spacing: -0.01em; }
 body.page-frame .field-label, body.page-frame .row-question, body.page-frame .presets-label { font-weight: 500; }
 body.page-frame .segmented input:checked + span { font-weight: 500; }
 body.page-frame .verdict-word { font-weight: 600; letter-spacing: -0.03em; }
-body.page-frame .wordmark { font-weight: 600; }
 body.page-frame .legal p, body.page-frame .legal li { font-weight: 400; }
 
 /* Fully rounded controls everywhere */
 body.page-frame .preset-chip, body.page-frame .segmented { border-radius: var(--radius-pill); }
-@media (max-width: 40rem) { .page-header .nav-col-right .button { display: none; } }

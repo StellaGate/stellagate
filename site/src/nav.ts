@@ -1,12 +1,5 @@
-/**
- * Shared navigation behavior adapted from Echonome.
- *
- * Provides:
- * 1. Mobile menu toggles (morphing hamburger toggle, revealing origin-top-left menu).
- * 2. Escape key and outside-click dismiss for any open mobile menu.
- * 3. Landing page scroll observer (shows floating pill when scrolled past zero-height sentinel).
- */
-
+// Navigation: mobile menu toggles, dropdowns, Escape and outside-click dismiss, and the
+// landing page's floating pill once the hero nav scrolls away.
 import { initNotice } from "./notice.ts";
 
 export interface NavOptions {
@@ -34,10 +27,10 @@ function initDropdowns(): void {
     const menu = dd.querySelector<HTMLElement>(".nav-dropdown-menu");
     if (!trigger || !menu) return;
 
-    function setOpen(open: boolean) {
+    const setOpen = (open: boolean) => {
       trigger.setAttribute("aria-expanded", String(open));
       dd.classList.toggle("is-open", open);
-    }
+    };
 
     trigger.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -86,7 +79,7 @@ function initMobileMenus(): void {
 
     const links = [...menu.querySelectorAll<HTMLAnchorElement>(".nav-mobile-links a")];
 
-    function setOpen(open: boolean) {
+    const setOpen = (open: boolean) => {
       toggle.setAttribute("aria-expanded", String(open));
       menu.setAttribute("aria-hidden", String(!open));
       menu.classList.toggle("is-open", open);
@@ -96,7 +89,7 @@ function initMobileMenus(): void {
         const delay = open ? `${60 + i * 40}ms` : `${(links.length - 1 - i) * 30}ms`;
         link.style.transitionDelay = delay;
       });
-    }
+    };
 
     toggle.addEventListener("click", (e) => {
       e.stopPropagation();

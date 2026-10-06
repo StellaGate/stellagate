@@ -1,16 +1,12 @@
 <a class="skip" href="#main">Skip to content</a>
-<!-- In-App Navigation (logo -> navlinks -> buttons) -->
 <header class="app-header">
   <div class="app-nav-bar">
-    <!-- 1. Left: Logo -->
     <a href="./" class="app-brand" aria-label="Stellagate home">
       <img src="./stellagate-navy.png" alt="" aria-hidden="true" class="nav-logo nav-logo-navy" width="26" height="26" />
       <img src="./stellagate-white.png" alt="" aria-hidden="true" class="nav-logo nav-logo-white" width="26" height="26" />
       <img src="./stellagate-black.png" alt="" aria-hidden="true" class="nav-logo nav-logo-black" width="26" height="26" />
       <span class="app-brand-name">Stellagate</span>
     </a>
-
-    <!-- 2. Middle: Navlinks -->
     <nav class="app-nav-links" aria-label="Main Navigation">
       <a href="./app.html" class="app-nav-link">App</a>
       <a href="./batch.html" class="app-nav-link">Batch</a>
@@ -34,23 +30,20 @@
         </div>
       </div>
     </nav>
-
-    <!-- 3. Right: Buttons & Controls -->
     <div class="app-nav-actions">
       <a href="{{repo}}" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub repository">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
         </svg>
       </a>
-      <a class="button button-primary" href="./app.html">Single check</a>
+      <!--header-action-->
       <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-label="Open menu">
         <span class="nav-toggle-bar nav-toggle-bar-top" aria-hidden="true"></span>
         <span class="nav-toggle-bar nav-toggle-bar-mid" aria-hidden="true"></span>
         <span class="nav-toggle-bar nav-toggle-bar-bot" aria-hidden="true"></span>
       </button>
 
-      <!-- Mobile Drawer Menu -->
-      <div class="nav-mobile-menu" aria-hidden="true">
+            <div class="nav-mobile-menu" aria-hidden="true">
         <nav class="nav-mobile-links" aria-label="Sections">
           <a href="./app.html">App</a>
           <a href="./batch.html">Batch Checker</a>

@@ -20,7 +20,7 @@
   --text-caption: 0.875rem;     /* 14 */
   --text-footnote: 0.8125rem;   /* 13, the floor for anything read */
 
-  /* Landing page only: Spidra's marketing scale. Taste overrides the HIG scale here; targets stay 44px. */
+  /* Landing page only: a marketing scale. Taste overrides the HIG scale here; targets stay 44px. */
   --text-hero: 4rem;       /* 64 */
   --text-section: 3rem;    /* 48 */
   --text-lead: 1.125rem;   /* 18 */

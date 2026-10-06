@@ -43,13 +43,13 @@ let currentItems: BatchItem[] = [];
 let currentFilter: "all" | "block" | "ok" = "all";
 
 const SAMPLE_BATCH = [
-  "# 1. Binance hot wallet (blocked without memo)",
+  "# Bybit deposit account, no memo",
   "GDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMTIH",
-  "# 2. USDC payment to account with missing trustline",
+  "# USDC to an account with no USDC trustline",
   "GARSCEEOGZ4MGOTZLQHOKJGOPK455N6SHD7SAEFFHIJDAV445GFWJGHD, USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN, 100",
-  "# 3. Muxed customer ID destination (valid, memo embedded)",
+  "# Bybit M-address, customer ID built in",
   "MDT7ARDYZRBXXYOCSQ3MUMISTITSSRWZI6KR2A5L5Q3KB4QIZHGYMAAAAAAAMQDC4FFIQ",
-  "# 4. Active funded account (valid destination)",
+  "# USDC issuer account, no memo needed",
   "GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
 ].join("\n");
 
@@ -290,7 +290,7 @@ form.addEventListener("submit", async (e) => {
         item.verdict = {
           status: "block",
           account: item.input.to,
-          reasons: [{ code: "network_error", status: "block", message: "Network query failed" }],
+          reasons: [{ code: "network_error", severity: "block", message: "Network query failed" }],
         };
       }
       completed++;

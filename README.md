@@ -173,9 +173,8 @@ deposits from the maintainer's own accounts and recorded with the transaction ha
 
 ## Maintainer
 
-[@jadonamite](https://github.com/jadonamite), a Stellar Wave contributor since January 2026
-with roughly a hundred resolved issues across Stellar projects, including payment
-infrastructure, Soroban contracts and SDKs.
+[@jadonamite](https://github.com/jadonamite), an open-source contributor to Stellar projects
+since January 2026, working on payment infrastructure, Soroban contracts and SDKs.
 
 ## Contributing
 

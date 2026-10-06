@@ -245,7 +245,7 @@ if (verdict.status === "block") {
         <section id="check-function" class="docs-section">
           <h2>check()</h2>
           <p>
-            Parses the address, reads the account and the directory, and returns a verdict. It does not throw when a service is down: an unreachable directory or RPC becomes an <code>info</code> reason, and the remaining checks still run.
+            Parses the address, reads the account and the directory, and returns a verdict. An unreachable directory or RPC becomes an <code>info</code> reason and the remaining checks still run. If Horizon cannot be reached, <code>check()</code> throws, because without the account there is nothing to check.
           </p>
           <div class="code-block-wrap">
             <pre class="code-pre"><code><span class="token-keyword">function</span> check(input: CheckInput): Promise&lt;Verdict&gt;;</code></pre>

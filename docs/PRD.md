@@ -1,9 +1,9 @@
 # Stellagate product requirements
 
-Status: 2026-10-03. Milestones 1 to 3 are built: address parsing, memo checks, trustline and
-Stellar Asset Contract holdability, and sender-type compatibility, with testnet evidence in the
-README. Milestone 4, the public check page with its legal pages, is live at
-stellagate.namite.xyz and stellagate.github.io/stellagate. The rest is planned.
+Status: 2026-10-07. Milestones 1 to 4 are built: address parsing, memo checks, trustline and
+Stellar Asset Contract holdability, sender-type compatibility, and the public check page with its
+legal pages, live at stellagate.namite.xyz. Testnet evidence is in the README. Milestone 5 is open
+as issues #7 to #10; milestone 6 is planned.
 
 ## Problem
 
@@ -80,16 +80,16 @@ takes custody. A relay for smart-wallet deposits would take custody and is ruled
 5. First ten exchange records, each with deposit evidence.
 6. Upstream proposal to js-stellar-sdk.
 
-## Success and kill criteria
+## Success measures
 
-Success: within 10 weeks of the check page going live, the C-address check is accepted
-upstream or two wallets or dapps ship it, and the page runs 500 checks.
+Each one can be checked by anyone, without analytics:
 
-Fail: in the same 10 weeks, no integration, no upstream acceptance, and fewer than 100
-checks. At that point ask whether, starting today, this is still the right build.
+- The C-address check is accepted into js-stellar-sdk, or two wallets or dapps ship Stellagate.
+- Ten exchange records are published, each backed by deposit transactions on StellarExpert.
+- Contributors outside the maintainer have merged fixes to the library.
 
 ## Open questions
 
-- Do exchanges credit SAC transfers that carry a muxed ID (CAP-67)? Unknown until tested.
+- Do exchanges credit SAC transfers that carry a muxed ID (CAP-67)? Unknown until tested; see #10.
 - Will the SDK team accept the C-address check upstream, or prefer a separate package?
 - Should the exchange record be community-editable, and who reviews entries?

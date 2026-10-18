@@ -138,14 +138,19 @@ function renderTable() {
 
     // Verdict / Details Column
     const tdVerdict = document.createElement("td");
-    const topReason = item.verdict?.reasons?.[0]?.message || (item.verdict?.status === "ok" ? "Destination valid and ready to receive" : "Check passed");
-    const fixText = item.verdict?.reasons?.[0]?.fix ? `<span class="row-fix">${item.verdict.reasons[0].fix}</span>` : "";
+    const reasons = item.verdict?.reasons ?? [];
+    const primaryReason = reasons.find((reason) => reason.severity === "block")
+      ?? reasons.find((reason) => reason.severity === "warn")
+      ?? reasons[0];
+    const topReason = primaryReason?.message || (item.verdict?.status === "ok" ? "Destination valid and ready to receive" : "Waiting for check");
+    const fixText = primaryReason?.fix ? `<span class="row-fix">${primaryReason.fix}</span>` : "";
     tdVerdict.innerHTML = `
       <div class="row-details">
         <span class="row-message">${topReason}</span>
         ${fixText}
       </div>
     `;
+    if (item.error) tdVerdict.textContent = item.error;
     tr.append(tdVerdict);
 
     // Actions Column
@@ -180,7 +185,7 @@ function updateKPIs() {
   const total = currentItems.length;
   const okCount = currentItems.filter((i) => i.verdict?.status === "ok").length;
   const blockCount = currentItems.filter((i) => i.verdict?.status === "block").length;
-  const warnCount = currentItems.filter((i) => i.verdict?.status === "warn").length;
+  const warnCount = currentItems.filter((i) => i.verdict?.status === "warn" || i.error).length;
 
   kpiTotal.textContent = String(total);
   kpiOk.textContent = String(okCount);
@@ -211,7 +216,7 @@ exportCsvBtn.addEventListener("click", () => {
       `"${i.input.to}"`,
       `"${i.verdict?.status || "unknown"}"`,
       `"${i.verdict?.destination?.kind || ""}"`,
-      `"${(i.verdict?.reasons?.[0]?.message || "Ready").replaceAll('"', '""')}"`,
+      `"${(i.error || i.verdict?.reasons?.[0]?.message || "Ready").replaceAll('"', '""')}"`,
       `"${(i.verdict?.reasons?.[0]?.fix || "").replaceAll('"', '""')}"`,
     ].join(",")),
   ];
@@ -285,13 +290,8 @@ form.addEventListener("submit", async (e) => {
       const item = items[idx];
       try {
         item.verdict = await check(item.input);
-      } catch (err) {
-        item.error = (err as Error).message;
-        item.verdict = {
-          status: "block",
-          account: item.input.to,
-          reasons: [{ code: "network_error", severity: "block", message: "Network query failed" }],
-        };
+      } catch {
+        item.error = "The check could not be completed. Try again before sending.";
       }
       completed++;
       progressText.textContent = `Checking ${completed} of ${items.length}...`;
@@ -303,6 +303,9 @@ form.addEventListener("submit", async (e) => {
   const workers = Array.from({ length: Math.min(poolLimit, items.length) }, () => worker());
   await Promise.all(workers);
 
-  progressText.textContent = `Complete: ${items.length} destinations checked.`;
+  const incomplete = currentItems.filter((item) => item.error).length;
+  progressText.textContent = incomplete
+    ? `Finished with ${incomplete} incomplete ${incomplete === 1 ? "check" : "checks"}. Try again before sending.`
+    : `Complete: ${items.length} destinations checked.`;
   submitBtn.disabled = false;
 });

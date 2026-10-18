@@ -11,6 +11,7 @@ import {
   sep2Federation,
   stellarExpertDirectory,
   type AccountSource,
+  type AccountState,
   type ContractSource,
   type DirectoryEntry,
   type DirectorySource,
@@ -204,7 +205,18 @@ export async function check(input: CheckInput): Promise<Verdict> {
     return { status: statusOf(reasons), destination, entry, reasons };
   }
 
-  const state = await accounts.loadAccount(account!);
+  let state: AccountState;
+  try {
+    state = await accounts.loadAccount(account!);
+  } catch {
+    reasons.push({
+      code: "account_unavailable",
+      severity: "warn",
+      message: "The account could not be loaded, so its existence, memo requirement and ability to hold the asset could not be checked.",
+      fix: "Try again before sending.",
+    });
+    return { status: statusOf(reasons), destination, account, memo: federationMemo, entry, reasons };
+  }
   const memoBySep29 = requiresMemo(state);
   const memoByDirectory = entry?.tags.includes("memo-required") ?? false;
   const who = entry?.name ? `${entry.name} ` : "This account ";

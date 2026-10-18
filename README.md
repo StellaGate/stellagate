@@ -97,6 +97,15 @@ The check runs in your browser.
 
 ## Evidence
 
+- Account lookup failures are reproduced offline in `test/check.test.ts` with a failing
+  `AccountSource`. Run `npm test -- test/check.test.ts`. The result includes an
+  `account_unavailable` warning and preserves earlier blocks. This tests an unavailable
+  data source, so no payment is submitted and there is no transaction hash.
+
+| Scenario | Evidence | Verdict | Reason |
+|---|---|---|---|
+| Account lookup fails | Offline failing `AccountSource` in `test/check.test.ts` | warn, or block if already blocked | `account_unavailable` |
+
 - `scripts/survey-memo-required.mjs` checks every account the StellarExpert directory tags
   memo-required against Horizon. On 2026-10-02: 107 accounts, 14 with SEP-29 set.
 - `scripts/testnet-evidence.mjs` creates fresh testnet accounts, runs each check, then makes

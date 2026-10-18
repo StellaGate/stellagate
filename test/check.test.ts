@@ -1,8 +1,9 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Account, Keypair, MuxedAccount, StrKey } from "@stellar/stellar-sdk";
 import { check } from "../src/check.js";
 import { requiresMemo } from "../src/memo.js";
 import type { AccountSource, AccountState, DirectorySource, FederationResolver } from "../src/sources.js";
+import { horizonAccountSource } from "../src/sources.js";
 
 const MEMO_REQUIRED = { "config.memo_required": Buffer.from("1").toString("base64") };
 
@@ -36,6 +37,42 @@ describe("requiresMemo", () => {
 });
 
 describe("check", () => {
+  it("warns when the account source fails instead of rejecting", async () => {
+    const failing: AccountSource = { loadAccount: async () => { throw new Error("Horizon unavailable"); } };
+    const v = await check({ to: friend, asset: `USD:${exchange}`, accounts: failing, directory: null, contracts: null });
+    expect(v).toMatchObject({
+      status: "warn",
+      destination: { kind: "account", account: friend },
+      account: friend,
+      reasons: [{ code: "account_unavailable", severity: "warn", fix: "Try again before sending." }],
+    });
+    expect(v.reasons[0].message).toMatch(/existence, memo requirement and ability to hold the asset could not be checked/);
+  });
+
+  it.each(["timeout", null, undefined, 503])("handles a non-Error account source rejection: %s", async (failure) => {
+    const failing: AccountSource = { loadAccount: async () => { throw failure; } };
+    const v = await check({ to: friend, accounts: failing, directory: null, contracts: null });
+    expect(v.status).toBe("warn");
+    expect(v.reasons.map((r) => r.code)).toEqual(["account_unavailable"]);
+    expect(v.reasons[0].message).not.toContain("undefined");
+  });
+
+  it("preserves an earlier sender block and federation metadata when the account source fails", async () => {
+    const failing: AccountSource = { loadAccount: async () => { throw new Error("timeout"); } };
+    const federation: FederationResolver = { resolve: async () => ({ account: friend, memoType: "id", memo: "77" }) };
+    const v = await check({ to: "alice*example.com", from: contractSender, accounts: failing, federation, directory: null, contracts: null });
+    expect(v).toMatchObject({ status: "block", account: friend, memo: "77", destination: { kind: "federation" } });
+    expect(v.reasons.map((r) => r.code)).toEqual(["contract_sender_cannot_memo", "account_unavailable"]);
+  });
+
+  it("preserves earlier informational reasons when the account source fails", async () => {
+    const failing: AccountSource = { loadAccount: async () => { throw new Error("timeout"); } };
+    const directory: DirectorySource = { lookup: async () => { throw new Error("timeout"); } };
+    const v = await check({ to: friend, accounts: failing, directory, contracts: null });
+    expect(v.status).toBe("warn");
+    expect(v.reasons.map((r) => r.code)).toEqual(["directory_unavailable", "account_unavailable"]);
+  });
+
   it("passes a plain payment to an ordinary funded account", async () => {
     const v = await check({ to: friend, from: classicSender, accounts, directory: null });
     expect(v.status).toBe("ok");
@@ -82,6 +119,18 @@ describe("check", () => {
     const v = await check({ to: unfunded, accounts, directory: null });
     expect(v.status).toBe("warn");
     expect(v.reasons[0].code).toBe("destination_unfunded");
+  });
+
+  it("keeps a Horizon 404 as an unfunded account rather than a lookup failure", async () => {
+    const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null, { status: 404 }));
+    try {
+      const v = await check({ to: unfunded, accounts: horizonAccountSource("https://horizon.invalid"), directory: null, contracts: null });
+      expect(fetch).toHaveBeenCalledOnce();
+      expect(v.status).toBe("warn");
+      expect(v.reasons.map((r) => r.code)).toEqual(["destination_unfunded"]);
+    } finally {
+      fetch.mockRestore();
+    }
   });
 
   it("blocks input that is not an address", async () => {
@@ -152,6 +201,13 @@ describe("check with the public directory", () => {
     const v = await check({ to: scam, accounts: plainAccounts, directory });
     expect(v.status).toBe("block");
     expect(v.reasons.map((r) => r.code)).toContain("destination_flagged");
+  });
+
+  it("preserves the malicious directory block when the account source fails", async () => {
+    const failing: AccountSource = { loadAccount: async () => { throw new Error("timeout"); } };
+    const v = await check({ to: scam, accounts: failing, directory, contracts: null });
+    expect(v).toMatchObject({ status: "block", account: scam, entry: { name: "Fake airdrop", tags: ["malicious"] } });
+    expect(v.reasons.map((r) => r.code)).toEqual(["destination_flagged", "account_unavailable"]);
   });
 
   it("blocks a contract destination flagged as malicious", async () => {

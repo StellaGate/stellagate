@@ -117,10 +117,18 @@ function buildRows(v: Verdict, q: CheckInput): Row[] {
   const find = (codes: readonly string[]) => v.reasons.find((r) => codes.includes(r.code));
   const kind = v.destination?.kind;
   const rows: Row[] = [];
+  const accountUnavailable = find(["account_unavailable"]);
+  const unchecked = (question: string): Row => ({
+    question,
+    status: "skipped",
+    answer: "Not checked, because the account could not be loaded. Try again before sending.",
+  });
 
   const exists = find(ROWS.exists);
   rows.push(
-    exists
+    accountUnavailable
+      ? unchecked("Does it exist?")
+      : exists
       ? fromReason("Does it exist?", exists)
       : { question: "Does it exist?", status: "fine", answer: kind === "contract" && !q.asset ? "It is a contract address. Add the asset to check it is deployed." : "Yes, it is live on the network." },
   );
@@ -128,6 +136,7 @@ function buildRows(v: Verdict, q: CheckInput): Row[] {
   const memo = find(ROWS.memo);
   let memoRow: Row;
   if (memo) memoRow = fromReason("Does it need a memo?", memo);
+  else if (accountUnavailable) memoRow = unchecked("Does it need a memo?");
   else if (kind === "contract") memoRow = { question: "Does it need a memo?", status: "fine", answer: "No. Contracts do not take memos." };
   else if (kind === "muxed") memoRow = { question: "Does it need a memo?", status: "fine", answer: "No. The customer ID is built into this address." };
   else if (exists) memoRow = { question: "Does it need a memo?", status: "skipped", answer: "Not checked, because the account does not exist." };
@@ -137,11 +146,13 @@ function buildRows(v: Verdict, q: CheckInput): Row[] {
 
   const hold = find(ROWS.hold);
   if (hold) rows.push(fromReason("Can it hold the asset?", hold));
+  else if (accountUnavailable && q.asset) rows.push(unchecked("Can it hold the asset?"));
   else if (!q.asset) rows.push({ question: "Can it hold the asset?", status: "skipped", answer: "Add the asset under the fuller check to find out." });
   else if (!exists) rows.push({ question: "Can it hold the asset?", status: "fine", answer: "Yes." });
 
   const wallet = find(ROWS.wallet);
   if (wallet) rows.push(fromReason("Can your wallet send to it?", wallet));
+  else if (accountUnavailable && q.from) rows.push(unchecked("Can your wallet send to it?"));
   else if (!q.from) rows.push({ question: "Can your wallet send to it?", status: "skipped", answer: "Add your wallet address under the fuller check to find out." });
   else rows.push({ question: "Can your wallet send to it?", status: "fine", answer: "Yes." });
 

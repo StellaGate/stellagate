@@ -115,6 +115,17 @@ function buildRows(v: Verdict, q: CheckInput): Row[] {
     return r === top && SHORT[r.code] ? { question, status, answer: SHORT[r.code] } : { question, status, answer: r.message, fix: r.fix };
   };
   const find = (codes: readonly string[]) => v.reasons.find((r) => codes.includes(r.code));
+  const invalidMemo = find(["memo_invalid"]);
+  if (invalidMemo) {
+    const skipped = (question: string): Row => ({ question, status: "skipped", answer: "Not checked. Correct the memo and check again." });
+    return [
+      skipped("Does it exist?"),
+      fromReason("Is the memo valid?", invalidMemo),
+      skipped("Can it hold the asset?"),
+      skipped("Can your wallet send to it?"),
+      skipped("Is it on a warning list?"),
+    ];
+  }
   const kind = v.destination?.kind;
   const rows: Row[] = [];
   const accountUnavailable = find(["account_unavailable"]);
@@ -393,7 +404,7 @@ form.querySelectorAll('input[name="network"]').forEach((r) => r.addEventListener
 function readInput(): CheckInput {
   const val = (n: string) => input(n).value.trim() || undefined;
   const network = (form.elements.namedItem("network") as RadioNodeList).value as "public" | "testnet";
-  return { to: val("to") ?? "", memo: val("memo"), asset: val("asset"), amount: val("amount"), from: val("from"), network };
+  return { to: val("to") ?? "", memo: input("memo").value || undefined, asset: val("asset"), amount: val("amount"), from: val("from"), network };
 }
 
 function syncUrl(q: CheckInput) {

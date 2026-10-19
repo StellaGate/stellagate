@@ -252,6 +252,9 @@ if (verdict.status === "block") {
           </div>
 
           <h3 id="check-input">CheckInput</h3>
+          <p>
+            A supplied memo is validated before any network request. Text is limited to 28 UTF-8 bytes, IDs use decimal digits from 0 to 18446744073709551615, and hashes use exactly 64 hexadecimal characters. Values are not trimmed. An invalid memo returns a <code>memo_invalid</code> block with an instruction to correct it. Omitting <code>memoType</code> treats the memo as text, so <code>"-5"</code> is valid text but an invalid ID.
+          </p>
           <div class="code-block-wrap">
             <pre class="code-pre"><code><span class="token-keyword">interface</span> CheckInput {
   <span class="token-comment">/** What the person pasted: G, M, C or name*domain */</span>
@@ -260,6 +263,8 @@ if (verdict.status === "block") {
   <span class="token-keyword">from</span>?: string;
   <span class="token-comment">/** A memo the person already entered */</span>
   memo?: string;
+  <span class="token-comment">/** Default: text. Hash values are 64 hexadecimal characters. */</span>
+  memoType?: "text" | "id" | "hash";
   <span class="token-comment">/** "native" or CODE:ISSUER. Without it, holdability checks are skipped */</span>
   asset?: string;
   <span class="token-comment">/** Amount in units of the asset, up to 7 decimals */</span>

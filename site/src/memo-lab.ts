@@ -4,6 +4,7 @@ import "./landing.css";
 import "./system.css";
 import "./inner.css";
 import { initNav } from "./nav.ts";
+import { validateMemo } from "@stellagate/core";
 
 initNav();
 
@@ -48,7 +49,7 @@ function updateTextValidator() {
   if (bytes === 0) {
     badgeText.textContent = "Empty (Optional)";
     badgeText.classList.add("badge-soft");
-  } else if (bytes <= 28) {
+  } else if (validateMemo(val).ok) {
     badgeText.textContent = `Valid (${bytes} bytes)`;
     badgeText.classList.add("badge-go");
   } else {
@@ -91,11 +92,9 @@ const sampleIdBinance = document.querySelector<HTMLButtonElement>("#sample-id-bi
 const sampleIdMax = document.querySelector<HTMLButtonElement>("#sample-id-max");
 const sampleIdOverflow = document.querySelector<HTMLButtonElement>("#sample-id-overflow");
 
-const MAX_UINT64 = 18446744073709551615n;
-
 function updateIdValidator() {
   if (!idInput || !badgeId || !idValDec || !idValHex || !idValStatus) return;
-  const raw = idInput.value.trim();
+  const raw = idInput.value;
 
   badgeId.classList.remove("badge-go", "badge-block", "badge-warn", "badge-soft");
 
@@ -109,12 +108,13 @@ function updateIdValidator() {
     return;
   }
 
-  if (!/^\d+$/.test(raw)) {
-    badgeId.textContent = "Invalid format";
+  const validation = validateMemo(raw, "id");
+  if (!validation.ok) {
+    badgeId.textContent = "Invalid memo ID";
     badgeId.classList.add("badge-block");
-    idValDec.textContent = "Invalid (non-digit characters)";
+    idValDec.textContent = "Invalid";
     idValHex.textContent = "N/A";
-    idValStatus.textContent = "Only positive integer digits 0-9 allowed (no decimals, negatives, or symbols)";
+    idValStatus.textContent = validation.message;
     idValStatus.style.color = "var(--color-block)";
     return;
   }
@@ -125,17 +125,10 @@ function updateIdValidator() {
     const hexStr = val.toString(16);
     idValHex.textContent = "0x" + hexStr.padStart(hexStr.length % 2 === 0 ? hexStr.length : hexStr.length + 1, "0");
 
-    if (val <= MAX_UINT64) {
-      badgeId.textContent = "Valid uint64";
-      badgeId.classList.add("badge-go");
-      idValStatus.textContent = "Within valid 64-bit unsigned integer range (0 to 18,446,744,073,709,551,615)";
-      idValStatus.style.color = "var(--color-go)";
-    } else {
-      badgeId.textContent = "Exceeds 64-bit limit";
-      badgeId.classList.add("badge-block");
-      idValStatus.textContent = "Exceeds uint64 maximum. Stellar network will reject this transaction.";
-      idValStatus.style.color = "var(--color-block)";
-    }
+    badgeId.textContent = "Valid uint64";
+    badgeId.classList.add("badge-go");
+    idValStatus.textContent = "Within valid 64-bit unsigned integer range (0 to 18,446,744,073,709,551,615)";
+    idValStatus.style.color = "var(--color-go)";
   } catch {
     badgeId.textContent = "Parse error";
     badgeId.classList.add("badge-block");
@@ -185,11 +178,10 @@ function uint8ToHex(bytes: Uint8Array): string {
 }
 
 function hexToUint8(hex: string): Uint8Array | null {
-  const clean = hex.replace(/\s+/g, "").toLowerCase();
-  if (clean.length % 2 !== 0 || !/^[0-9a-f]*$/.test(clean)) return null;
-  const out = new Uint8Array(clean.length / 2);
-  for (let i = 0; i < clean.length; i += 2) {
-    out[i / 2] = parseInt(clean.slice(i, i + 2), 16);
+  if (!validateMemo(hex, "hash").ok) return null;
+  const out = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < hex.length; i += 2) {
+    out[i / 2] = parseInt(hex.slice(i, i + 2), 16);
   }
   return out;
 }
@@ -217,25 +209,21 @@ function base64ToUint8(b64: string): Uint8Array | null {
 
 function syncFromHex() {
   if (!hashHexInput || !hashB64Input || !badgeHash) return;
-  const rawHex = hashHexInput.value.replace(/\s+/g, "").toLowerCase();
+  const rawHex = hashHexInput.value;
+  const validation = validateMemo(rawHex, "hash");
   const bytes = hexToUint8(rawHex);
 
   badgeHash.classList.remove("badge-go", "badge-block", "badge-warn", "badge-soft");
 
-  if (!bytes) {
-    badgeHash.textContent = "Invalid hex format";
+  if (!validation.ok || !bytes) {
+    badgeHash.textContent = validation.ok ? "Invalid hex format" : validation.message;
     badgeHash.classList.add("badge-block");
     return;
   }
 
-  if (bytes.length === 32) {
-    badgeHash.textContent = "Valid 32-byte Hash";
-    badgeHash.classList.add("badge-go");
-    hashB64Input.value = uint8ToBase64(bytes);
-  } else {
-    badgeHash.textContent = `${bytes.length} / 32 bytes`;
-    badgeHash.classList.add("badge-block");
-  }
+  badgeHash.textContent = "Valid 32-byte Hash";
+  badgeHash.classList.add("badge-go");
+  hashB64Input.value = uint8ToBase64(bytes);
 }
 
 function syncFromB64() {
@@ -251,12 +239,13 @@ function syncFromB64() {
     return;
   }
 
-  if (bytes.length === 32) {
+  const validation = validateMemo(uint8ToHex(bytes), "hash");
+  if (validation.ok) {
     badgeHash.textContent = "Valid 32-byte Hash";
     badgeHash.classList.add("badge-go");
     hashHexInput.value = uint8ToHex(bytes);
   } else {
-    badgeHash.textContent = `${bytes.length} / 32 bytes`;
+    badgeHash.textContent = validation.message;
     badgeHash.classList.add("badge-block");
   }
 }

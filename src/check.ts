@@ -2,7 +2,7 @@ import { Networks, type Asset } from "@stellar/stellar-sdk";
 import { isContractAddress, parseDestination, type Destination } from "./address.js";
 import { parseAsset, toStroops } from "./asset.js";
 import { classicHoldability, contractHoldability } from "./holdability.js";
-import { requiresMemo } from "./memo.js";
+import { requiresMemo, validateMemo, type MemoType } from "./memo.js";
 import {
   HORIZON_URLS,
   RPC_URLS,
@@ -35,6 +35,8 @@ export interface CheckInput {
   from?: string;
   /** A memo the user already intends to attach. */
   memo?: string;
+  /** The memo format. Defaults to text; hash values use 64 hexadecimal characters. */
+  memoType?: MemoType;
   /** The asset being sent: "native" or CODE:ISSUER. Without it, holdability checks are skipped. */
   asset?: string;
   /** The amount being sent, in units of the asset (up to 7 decimals). Used for trustline limits. */
@@ -84,6 +86,10 @@ export async function check(input: CheckInput): Promise<Verdict> {
   const amount = input.amount === undefined ? undefined : toStroops(input.amount);
   if (amount === null || amount === 0n) {
     reasons.push({ code: "amount_invalid", severity: "block", message: `Not a valid amount: ${JSON.stringify(input.amount)}.` });
+  }
+  if (input.memo !== undefined) {
+    const memo = validateMemo(input.memo, input.memoType);
+    if (!memo.ok) reasons.push({ code: "memo_invalid", severity: "block", message: memo.message });
   }
   if (reasons.length) return { status: "block", reasons };
 

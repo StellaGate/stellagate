@@ -4,6 +4,7 @@ import { check } from "../src/check.js";
 import { requiresMemo } from "../src/memo.js";
 import type { AccountSource, AccountState, DirectorySource, FederationResolver } from "../src/sources.js";
 import { horizonAccountSource } from "../src/sources.js";
+import type { CheckInput } from "../src/check.js";
 
 const MEMO_REQUIRED = { "config.memo_required": Buffer.from("1").toString("base64") };
 
@@ -37,6 +38,53 @@ describe("requiresMemo", () => {
 });
 
 describe("check", () => {
+  it.each([
+    { memo: "x".repeat(29) },
+    { memo: "é".repeat(14) + "x" },
+    { memo: "18446744073709551616", memoType: "id" },
+    { memo: "-5", memoType: "id" },
+    { memo: "1.5", memoType: "id" },
+    { memo: " 5", memoType: "id" },
+    { memo: "5\n", memoType: "id" },
+    { memo: "", memoType: "id" },
+    { memo: "a".repeat(63), memoType: "hash" },
+    { memo: "a".repeat(65), memoType: "hash" },
+    { memo: "a".repeat(64) + "\n", memoType: "hash" },
+    { memo: "g".repeat(64), memoType: "hash" },
+    { memo: "", memoType: "hash" },
+    { memo: "5", memoType: "return" as CheckInput["memoType"] },
+  ] satisfies Partial<CheckInput>[])("blocks invalid memo before any network read: %j", async (input) => {
+    const read = vi.fn(async () => { throw new Error("Unexpected network read"); });
+    const v = await check({
+      to: "alice*example.com",
+      ...input,
+      accounts: { loadAccount: read },
+      federation: { resolve: read },
+      directory: { lookup: read },
+      contracts: { contractExists: read, sacBalance: read },
+    });
+    expect(v).toMatchObject({ status: "block", reasons: [{ code: "memo_invalid", severity: "block" }] });
+    expect(v.reasons).toHaveLength(1);
+    expect(v.reasons[0].message.length).toBeGreaterThan(0);
+    expect(read).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    {},
+    { memo: "" },
+    { memo: "-5" },
+    { memo: "é".repeat(14) },
+    { memo: "0", memoType: "id" },
+    { memo: "18446744073709551615", memoType: "id" },
+    { memo: "aB09".repeat(16), memoType: "hash" },
+  ] satisfies Partial<CheckInput>[])("continues checks for a valid or omitted memo: %j", async (input) => {
+    const loadAccount = vi.fn(async () => funded());
+    const v = await check({ to: friend, ...input, accounts: { loadAccount }, directory: null, contracts: null });
+    expect(v.status).toBe("ok");
+    expect(v.reasons).toEqual([]);
+    expect(loadAccount).toHaveBeenCalledWith(friend);
+  });
+
   it("warns when the account source fails instead of rejecting", async () => {
     const failing: AccountSource = { loadAccount: async () => { throw new Error("Horizon unavailable"); } };
     const v = await check({ to: friend, asset: `USD:${exchange}`, accounts: failing, directory: null, contracts: null });

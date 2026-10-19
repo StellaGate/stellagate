@@ -10,9 +10,11 @@ export type { CheckInput, Reason, Severity, Status, Verdict } from "./check.js";
 export {
   HORIZON_URLS,
   RPC_URLS,
+  DEFAULT_TIMEOUT_MS,
   horizonAccountSource,
   rpcContractSource,
   sep2Federation,
+  sep2FederationResolver,
   stellarExpertDirectory,
 } from "./sources.js";
 export type {
@@ -24,5 +26,7 @@ export type {
   DirectorySource,
   FederationRecord,
   FederationResolver,
+  NetworkOptions,
+  FetchSourceOptions,
   Trustline,
 } from "./sources.js";

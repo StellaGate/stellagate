@@ -77,6 +77,38 @@ verdict.reasons  // [{ code: 'contract_sender_cannot_memo', severity: 'block',
 
 Stellagate never signs, submits or holds funds.
 
+Network requests time out after 8 seconds by default, including response body reads.
+The limit applies to each request, so a full check can take longer. Federation may
+make separate TOML and federation requests. Configure the sources when you need a
+different limit:
+
+```ts
+import { check, horizonAccountSource, stellarExpertDirectory,
+  sep2FederationResolver, rpcContractSource } from '@stellagate/core'
+
+const options = { timeoutMs: 5000 }
+const verdict = await check({
+  to: 'alice*example.com',
+  accounts: horizonAccountSource('https://horizon.stellar.org', options),
+  directory: stellarExpertDirectory('public', options),
+  federation: sep2FederationResolver(options),
+  contracts: rpcContractSource('https://rpc.example.org', options),
+})
+```
+
+`timeoutMs` must be an integer from 1 to 2147483647 milliseconds; invalid values
+throw a `RangeError` when a source is created. Zero cannot disable the timeout.
+Horizon and directory options also accept `fetchImpl`. Existing positional fetch
+injection, such as `horizonAccountSource(url, fetchImpl)`, still works with the
+default timeout. Injected fetch implementations must honor the supplied abort
+signal, including while reading the response body. Custom source implementations
+control their own deadlines.
+
+An account timeout returns an `account_unavailable` warning; a directory timeout
+adds `directory_unavailable` information and account checks continue. Federation
+timeouts return `federation_failed`, and RPC timeouts add `rpc_unavailable`.
+Earlier blocking reasons remain blocks.
+
 Try it without installing anything at [stellagate.namite.xyz](https://stellagate.namite.xyz).
 The check runs in your browser.
 
@@ -110,12 +142,17 @@ The check runs in your browser.
   `test/check.test.ts`. Run `npm test -- test/check.test.ts`. ID, text and hash memo
   types survive account lookup failures; missing types are not guessed. These tests
   check returned metadata, so no payment is submitted and there is no transaction hash.
+- `test/sources.test.ts` stalls fake HTTP requests and response bodies until the
+  timeout signal aborts them. Run `npm test -- test/sources.test.ts` for deadlines,
+  retries, HTTP status handling, SDK federation/RPC reads and timeout verdicts.
+  This is offline availability evidence; no payment or transaction hash is involved.
 
 | Scenario | Evidence | Verdict | Reason |
 |---|---|---|---|
 | Account lookup fails | Offline failing `AccountSource` in `test/check.test.ts` | warn, or block if already blocked | `account_unavailable` |
 | Text exceeds 28 UTF-8 bytes, ID exceeds uint64 or hash is malformed | Offline SDK/XDR boundary tests in `test/memo.test.ts` | block | `memo_invalid` |
 | Federation returns a memo and its type | Offline resolver fixtures in `test/check.test.ts` | ok, or warn if the account lookup fails | Server memo and type preserved |
+| Network request or response body stalls | Offline abort-aware HTTP fixtures in `test/sources.test.ts` | Existing source failure outcome | Configured timeout aborts the read |
 
 - `scripts/survey-memo-required.mjs` checks every account the StellarExpert directory tags
   memo-required against Horizon. On 2026-10-02: 107 accounts, 14 with SEP-29 set.

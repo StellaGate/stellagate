@@ -1,5 +1,29 @@
 import { Address, Federation, rpc, scValToNative, xdr } from "@stellar/stellar-sdk";
 
+export const DEFAULT_TIMEOUT_MS = 8000;
+
+export interface NetworkOptions {
+  /** Per-request deadline in milliseconds. Defaults to 8000. */
+  timeoutMs?: number;
+}
+
+export interface FetchSourceOptions extends NetworkOptions {
+  fetchImpl?: typeof fetch;
+}
+
+function timeoutOf(options: NetworkOptions): number {
+  const timeout = options.timeoutMs === undefined ? DEFAULT_TIMEOUT_MS : options.timeoutMs;
+  if (!Number.isInteger(timeout) || timeout < 1 || timeout > 2147483647) {
+    throw new RangeError("timeoutMs must be an integer from 1 to 2147483647 milliseconds.");
+  }
+  return timeout;
+}
+
+function fetchOptions(options: typeof fetch | FetchSourceOptions) {
+  const config = typeof options === "function" ? { fetchImpl: options } : options;
+  return { fetchImpl: config.fetchImpl ?? fetch, timeoutMs: timeoutOf(config) };
+}
+
 /** A trustline to a classic asset. Amounts are decimal strings, as Horizon returns them. */
 export interface Trustline {
   code: string;
@@ -49,11 +73,12 @@ export interface DirectorySource {
 
 export function stellarExpertDirectory(
   network: "public" | "testnet" = "public",
-  fetchImpl: typeof fetch = fetch,
+  options: typeof fetch | FetchSourceOptions = {},
 ): DirectorySource {
+  const { fetchImpl, timeoutMs } = fetchOptions(options);
   return {
     async lookup(address) {
-      const res = await fetchImpl(`https://api.stellar.expert/explorer/${network}/directory/${address}`);
+      const res = await fetchImpl(`https://api.stellar.expert/explorer/${network}/directory/${address}`, { signal: AbortSignal.timeout(timeoutMs) });
       if (res.status === 404) return null;
       if (!res.ok) throw new Error(`StellarExpert directory returned ${res.status}`);
       const body = (await res.json()) as { name?: string; domain?: string; tags?: string[] };
@@ -81,11 +106,12 @@ export const HORIZON_URLS = {
   testnet: "https://horizon-testnet.stellar.org",
 } as const;
 
-export function horizonAccountSource(baseUrl: string, fetchImpl: typeof fetch = fetch): AccountSource {
+export function horizonAccountSource(baseUrl: string, options: typeof fetch | FetchSourceOptions = {}): AccountSource {
+  const { fetchImpl, timeoutMs } = fetchOptions(options);
   const root = baseUrl.replace(/\/+$/, "");
   return {
     async loadAccount(accountId) {
-      const res = await fetchImpl(`${root}/accounts/${accountId}`);
+      const res = await fetchImpl(`${root}/accounts/${accountId}`, { signal: AbortSignal.timeout(timeoutMs) });
       if (res.status === 404) return { exists: false };
       if (!res.ok) throw new Error(`Horizon returned ${res.status} for ${accountId}`);
       const body = (await res.json()) as HorizonAccount;
@@ -108,16 +134,21 @@ export function horizonAccountSource(baseUrl: string, fetchImpl: typeof fetch = 
   };
 }
 
-export const sep2Federation: FederationResolver = {
-  async resolve(address) {
-    const r = await Federation.Server.resolve(address);
-    return {
-      account: r.account_id,
-      memoType: r.memo_type as FederationRecord["memoType"],
-      memo: r.memo === undefined ? undefined : String(r.memo),
-    };
-  },
-};
+export function sep2FederationResolver(options: NetworkOptions = {}): FederationResolver {
+  const timeout = timeoutOf(options);
+  return {
+    async resolve(address) {
+      const r = await Federation.Server.resolve(address, { timeout });
+      return {
+        account: r.account_id,
+        memoType: r.memo_type as FederationRecord["memoType"],
+        memo: r.memo === undefined ? undefined : String(r.memo),
+      };
+    },
+  };
+}
+
+export const sep2Federation: FederationResolver = sep2FederationResolver();
 
 /** A Stellar Asset Contract balance held by a contract address. */
 export interface ContractBalance {
@@ -147,8 +178,10 @@ function persistentKey(contractId: string, key: xdr.ScVal): xdr.LedgerKey {
   );
 }
 
-export function rpcContractSource(url: string): ContractSource {
+export function rpcContractSource(url: string, options: NetworkOptions = {}): ContractSource {
+  const timeout = timeoutOf(options);
   const server = new rpc.Server(url, { allowHttp: url.startsWith("http://") });
+  server.httpClient.defaults.timeout = timeout;
   async function read(key: xdr.LedgerKey): Promise<xdr.ScVal | null> {
     const { entries } = await server.getLedgerEntries(key);
     const data = entries[0]?.val;

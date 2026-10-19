@@ -316,25 +316,37 @@ if (verdict.status === "block") {
           <p>
             Every network read goes through a source you can replace: your own Horizon, your own RPC, or a fake in tests.
           </p>
+          <p>
+            Sources use an 8000 ms timeout per request, including response body reads. A full check can take longer because sources run in sequence; federation can read both a TOML file and a federation endpoint. Set <code>timeoutMs</code> on each source to change its limit. It must be an integer from 1 to 2147483647 milliseconds; invalid values throw a <code>RangeError</code> when the source is created. Custom sources control their own deadlines.
+          </p>
+          <p>
+            Horizon and directory factories also accept <code>fetchImpl</code> in the options object. Their existing second-argument fetch function still works with the default timeout. An injected fetch must honor the abort signal during the request and body read. The default <code>sep2Federation</code> object remains available; <code>sep2FederationResolver</code> creates a resolver with a custom timeout.
+          </p>
           <div class="code-block-wrap">
             <div class="code-header">
               <span class="code-tab">TypeScript</span>
-              <button type="button" class="copy-code-btn" data-copy='import { check, horizonAccountSource, rpcContractSource } from "@stellagate/core";
+              <button type="button" class="copy-code-btn" data-copy='import { check, horizonAccountSource, stellarExpertDirectory, sep2FederationResolver, rpcContractSource } from "@stellagate/core";
 
+const options = { timeoutMs: 5000 };
 const verdict = await check({
   to,
   network: "public",
-  accounts: horizonAccountSource("https://horizon.example.org"),
-  contracts: rpcContractSource("https://rpc.example.org"),
+  accounts: horizonAccountSource("https://horizon.example.org", options),
+  directory: stellarExpertDirectory("public", options),
+  federation: sep2FederationResolver(options),
+  contracts: rpcContractSource("https://rpc.example.org", options),
 });'>Copy</button>
             </div>
-            <pre class="code-pre"><code><span class="token-keyword">import</span> { check, horizonAccountSource, rpcContractSource } <span class="token-keyword">from</span> <span class="token-string">"@stellagate/core"</span>;
+            <pre class="code-pre"><code><span class="token-keyword">import</span> { check, horizonAccountSource, stellarExpertDirectory, sep2FederationResolver, rpcContractSource } <span class="token-keyword">from</span> <span class="token-string">"@stellagate/core"</span>;
 
+<span class="token-keyword">const</span> options = { timeoutMs: 5000 };
 <span class="token-keyword">const</span> verdict = <span class="token-keyword">await</span> check({
   to,
   network: <span class="token-string">"public"</span>,
-  accounts: horizonAccountSource(<span class="token-string">"https://horizon.example.org"</span>),
-  contracts: rpcContractSource(<span class="token-string">"https://rpc.example.org"</span>),
+  accounts: horizonAccountSource(<span class="token-string">"https://horizon.example.org"</span>, options),
+  directory: stellarExpertDirectory(<span class="token-string">"public"</span>, options),
+  federation: sep2FederationResolver(options),
+  contracts: rpcContractSource(<span class="token-string">"https://rpc.example.org"</span>, options),
 });</code></pre>
           </div>
         </section>
